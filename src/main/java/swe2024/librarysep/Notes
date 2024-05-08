@@ -16,3 +16,29 @@ You can tell this by seeing that most Controller classes in View literally only 
 Aswell as the fact that any majority of code in viewModel such as methods is ONLY from View or Model
 
 
+
+
+TO-DO LIST:
+
+Database folder probably with connection class and files to access user and books
+Book and user viewmodel
+States for books
+Book View list to perform button/loan actions
+Concurrency to keep proper book state management
+RMI calls for books and user  AND  Server implementation
+Book View list for admins mainly to add, remove or update books
+
+
+Perhaps in this order.
+
+First we focus single client and just on the essential functionality
+1. Database setup
+2. Classes such as book/user/etc and state management of books
+3. Viewmodels for books and  user (In this version the IDE user has to perform actions on buttons)
+4 and 5. Concurrency / Locks / RMI and server implementations
+This is where multiple clients can use the application aswell as makeing sure its thread safe
+6. Polish User interface and add Search functionality and Quality of life from requirements.
+7. Testing and Finishing documentation
+8. Maybe create a JAR so the program is openable through a an actual desktop shortcut instead of inside the code.
+
+
