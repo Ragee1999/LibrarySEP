@@ -6,6 +6,7 @@ public class Book {
     private String title;
     private String author;
     private Integer releaseYear;
+    private BookStates state;
 
 
     public Book(Integer bookId, String title, String author, Integer releaseYear) {
@@ -13,8 +14,22 @@ public class Book {
         this.title = title;
         this.author = author;
         this.releaseYear = releaseYear;
+        this.state = new AvailableState();
     }
 
+    // State to string for use in UI display
+    public static BookStates getStateFromString(String stateString) {
+        switch (stateString) {
+            case "Available":
+                return new AvailableState();
+            case "Borrowed":
+                return new BorrowedState();
+            case "Reserved":
+                return new ReservedState();
+            default:
+                throw new IllegalArgumentException("Unknown state: " + stateString);
+        }
+    }
 
     public Integer getBookId() {
         return bookId;
@@ -46,5 +61,29 @@ public class Book {
 
     public void setReleaseYear(Integer releaseYear) {
         this.releaseYear = releaseYear;
+    }
+
+    public void setState(BookStates state) {
+        this.state = state;
+    }
+
+    public void borrow() {
+        state.borrow(this);
+    }
+
+    public void returnBook() {
+        state.returnBook(this);
+    }
+
+    public void reserve() {
+        state.reserve(this);
+    }
+
+    public void cancelReservation() {
+        state.cancelReservation(this);
+    }
+
+    public String getStateName() {
+        return state.toString();
     }
 }
