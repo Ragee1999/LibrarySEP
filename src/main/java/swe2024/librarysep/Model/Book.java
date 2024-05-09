@@ -1,6 +1,9 @@
 package swe2024.librarysep.Model;
 
-public class Book {
+import java.io.Serializable;
+
+public class Book implements Serializable { // We need to seralize book because of RMI
+    private static final long serialVersionUID = 1L;
 
     private Integer bookId;
     private String title;

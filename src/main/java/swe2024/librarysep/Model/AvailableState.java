@@ -1,6 +1,8 @@
 package swe2024.librarysep.Model;
 
 public class AvailableState implements BookStates {
+    private static final long serialVersionUID = 1L;
+
     @Override
     public void borrow(Book book) {
         book.setState(new BorrowedState());

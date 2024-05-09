@@ -9,10 +9,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 // It goes against MVVM principles but for now this is a quick solution for time saving
 // We decided to make this exception in this case to import from Model (Mainly to update the GUI with data)
 // If we have time over we will put time into fixing this, as few attempts has been waste of time
-import swe2024.librarysep.Database.DatabaseService; // Technical debt
-import swe2024.librarysep.Model.Book; // Technical debt
-
-
+// We go into Technical debt because we at some point want to fix it to follow MVVM.
+import swe2024.librarysep.Database.DatabaseService;
+import swe2024.librarysep.Model.Book;
+import swe2024.librarysep.Server.RMIBookService;
+import swe2024.librarysep.Server.RMIClient;
 import swe2024.librarysep.ViewModel.DashboardViewModel;
 
 public class DashboardController {
@@ -32,12 +33,18 @@ public class DashboardController {
     private TableColumn<Book, String> stateColumn;
 
     // Declaration of DashboardViewModel Instance
-    private final DashboardViewModel viewModel;
+    private DashboardViewModel viewModel;
 
     // Constructor for DashboardController initializing the DashboardViewModel with a DatabaseService instance
     //  enabling the ViewModel to interact with data from the database.
     public DashboardController() {
         this.viewModel = new DashboardViewModel(new DatabaseService());
+    }
+
+    public void initClient(RMIClient client) {
+        RMIBookService bookService = new RMIBookService(client);
+        this.viewModel = new DashboardViewModel(bookService);
+        bookTableView.setItems(viewModel.getBooks());
     }
 
     @FXML

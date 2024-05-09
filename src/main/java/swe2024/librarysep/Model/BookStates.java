@@ -1,6 +1,9 @@
 package swe2024.librarysep.Model;
 
-public interface BookStates {
+import java.io.Serializable;
+
+public interface BookStates extends Serializable {
+
     void borrow(Book book);
     void returnBook(Book book);
     void reserve(Book book);

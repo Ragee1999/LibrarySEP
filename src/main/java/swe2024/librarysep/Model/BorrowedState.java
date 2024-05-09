@@ -1,6 +1,7 @@
 package swe2024.librarysep.Model;
 
 public class BorrowedState implements BookStates {
+    private static final long serialVersionUID = 1L;
     @Override
     public void borrow(Book book) {
         throw new IllegalStateException("Book already borrowed!");
