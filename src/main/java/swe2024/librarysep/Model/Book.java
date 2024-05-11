@@ -7,6 +7,7 @@ public class Book {
     private String author;
     private Integer releaseYear;
     private BookStates state;
+    //private Integer isbn; we need this for unique numbers for books
 
 
     public Book(Integer bookId, String title, String author, Integer releaseYear) {
