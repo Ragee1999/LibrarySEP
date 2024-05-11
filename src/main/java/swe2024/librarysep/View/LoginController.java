@@ -5,6 +5,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import swe2024.librarysep.Main;
+import swe2024.librarysep.Model.SessionManager;
+import swe2024.librarysep.Model.User;
 import swe2024.librarysep.ViewModel.LoginViewModel;
 
 public class LoginController {
@@ -26,17 +28,18 @@ public class LoginController {
         usernameField.textProperty().bindBidirectional(loginViewModel.usernameProperty());
         passwordField.textProperty().bindBidirectional(loginViewModel.passwordProperty());
 
-        registerButton.setOnAction(event -> handleRegister());
+        registerButton.setOnAction(event -> Main.showRegistration());
         loginButton.setOnAction(event -> handleLogin());
     }
 
-    private void handleRegister() {
-        Main.showRegistration();
-    }
 
     private void handleLogin() {
-        if (loginViewModel.authenticateUser()) {
-            Main.showDashboard();
+        User user = loginViewModel.authenticateUser();
+        if (user != null) {
+            SessionManager.loginUser(user); // Log the user into the session
+            System.out.println("User Successfully logged in");
+            Main.showDashboard(); // Navigate to the dashboard
+            System.out.println("User authenticated with Database");
         } else {
             showLoginAlert("Login Failed", "Invalid username or password");
         }

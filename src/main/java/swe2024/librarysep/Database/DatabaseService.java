@@ -30,44 +30,61 @@ public class DatabaseService implements BookService {
     }
 
 
-// Retrieves a list of all books from the database making it into java objects in this case Books.
-
+    // Retrieves a list of all books from the database making it into java objects in this case Books.
     @Override
     public List<Book> getAllBooks() {
         List<Book> books = new ArrayList<>();
         try {
-            PreparedStatement statement = connection.prepareStatement("SELECT bookId, title, author, releaseYear, state FROM books");
+            // Updated SQL to include a join with the users table
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT b.bookId, b.title, b.author, b.releaseYear, b.state, u.username AS userName " +
+                            "FROM books b " +
+                            "LEFT JOIN users u ON b.user_id = u.id"
+            );
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                Book book = new Book(resultSet.getInt("bookId"), resultSet.getString("title"),
-                        resultSet.getString("author"), resultSet.getInt("releaseYear"));
+                Book book = new Book(
+                        resultSet.getInt("bookId"),
+                        resultSet.getString("title"),
+                        resultSet.getString("author"),
+                        resultSet.getInt("releaseYear")
+                );
                 book.setState(Book.getStateFromString(resultSet.getString("state")));
+                // Set the userName retrieved from the JOIN
+                book.setUserName(resultSet.getString("userName"));
                 books.add(book);
             }
         } catch (SQLException e) {
             System.out.println("Error fetching books from database: " + e.getMessage());
         }
+
+
         return books;
+
     }
 
-
-// Updates the state of a book in the database.
-
-    @Override
     public void updateBookState(Book book) {
         try {
-            PreparedStatement statement = connection.prepareStatement("UPDATE books SET state = ? WHERE bookId = ?");
-            statement.setString(1, book.getStateName());
-            statement.setInt(2, book.getBookId());
-            int affectedRows = statement.executeUpdate();
+            PreparedStatement ps;
+            if (book.getUserName() != null) {
+                ps = connection.prepareStatement("UPDATE books SET state = ?, user_id = (SELECT id FROM users WHERE username = ?) WHERE bookId = ?");
+                ps.setString(2, book.getUserName());
+            } else {
+                ps = connection.prepareStatement("UPDATE books SET state = ?, user_id = NULL WHERE bookId = ?");
+            }
+            ps.setString(1, book.getStateName());
+            ps.setInt(3, book.getBookId());
+            int affectedRows = ps.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Updating the book failed, no rows affected.");
             }
         } catch (SQLException e) {
-            System.out.println("Error updating book state in database: " + e.getMessage());
+            System.out.println("Error updating book in the database: " + e.getMessage());
+            throw new RuntimeException("Failed to update the book state in the database.", e);
         }
     }
 }
+
 
 

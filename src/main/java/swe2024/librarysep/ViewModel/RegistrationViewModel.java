@@ -37,7 +37,7 @@ public class RegistrationViewModel {
             userService.registerUser(newUser);
             registrationStatus.set("Success: User registered successfully!");
         } catch (SQLException e) {
-            registrationStatus.set("Error: An error occurred while registering the user: " + e.getMessage());
+            registrationStatus.set("Error: An error occurred while registering: " + e.getMessage());
         }
     }
 }

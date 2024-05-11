@@ -6,7 +6,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="281.0" prefWidth="220.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="swe2024.librarysep.View.RegistrationController">
+<AnchorPane prefHeight="281.0" prefWidth="220.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="swe2024.librarysep.View.RegistrationController">
    <children>
       <TextField fx:id="usernameRegister" layoutX="36.0" layoutY="71.0" promptText="Username" />
       <TextField fx:id="passwordRegister" layoutX="36.0" layoutY="119.0" promptText="Password" />

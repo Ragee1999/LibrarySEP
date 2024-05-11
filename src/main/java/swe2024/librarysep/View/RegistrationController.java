@@ -22,17 +22,20 @@ public class RegistrationController {
 
     @FXML
     private void initialize() {
+        // Property-binding with the RegistrationViewModel
         usernameRegister.textProperty().bindBidirectional(viewModel.usernameProperty());
         passwordRegister.textProperty().bindBidirectional(viewModel.passwordProperty());
 
+        // Initializing clickable buttons
         createAccountButton.setOnAction(event -> handleCreateAccount());
         goBackToLoginButton.setOnAction(event -> goBackToLogin());
 
-        viewModel.registrationStatusProperty().addListener((obs, oldStatus, newStatus) -> {
+        // Listener that checks for either Success or Error and sends messages accordingly
+        viewModel.registrationStatusProperty().addListener((observableValue, oldStatus, newStatus) -> {
             if (newStatus != null && !newStatus.isEmpty()) {
                 showRegistrationAlert(newStatus.startsWith("Success") ? "Success" : "Error", newStatus);
                 if (newStatus.startsWith("Success")) {
-                    goBackToLogin(); // Goes back to the login screen for user friendly-ness
+                    goBackToLogin(); // Goes back to the login screen after account creation for user friendly-ness
                 }
                 viewModel.registrationStatusProperty().set(""); // Resets UI status message to prevent repeated messages
             }

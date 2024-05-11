@@ -5,11 +5,31 @@ import java.io.Serializable;
 public class Book implements Serializable { // We need to seralize book because of RMI
     private static final long serialVersionUID = 1L;
 
+    private Integer userId;
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        // Check if userName is null, and if so, set it to an empty string instead
+        this.userName = (userName != null) ? userName : "";
+    }
+
     private Integer bookId;
     private String title;
     private String author;
     private Integer releaseYear;
     private BookStates state;
+    private String userName;
 
 
     public Book(Integer bookId, String title, String author, Integer releaseYear) {
@@ -34,59 +54,64 @@ public class Book implements Serializable { // We need to seralize book because 
         }
     }
 
+
     public Integer getBookId() {
         return bookId;
     }
 
-    public void setBookId(Integer bookId) {
-        this.bookId = bookId;
-    }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
     public String getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
 
     public Integer getReleaseYear() {
         return releaseYear;
     }
 
-    public void setReleaseYear(Integer releaseYear) {
-        this.releaseYear = releaseYear;
+    public String getStateName() {
+        return state.toString();
+    } // for state string names
+
+    public BookStates getState() {
+        return this.state;
     }
 
     public void setState(BookStates state) {
         this.state = state;
     }
 
+
     public void borrow() {
+        if (!(state instanceof AvailableState) && !(state instanceof ReservedState)) {
+            throw new IllegalStateException("Cannot borrow a book that is not available or reserved.");
+        }
         state.borrow(this);
     }
 
     public void returnBook() {
+        if (!(state instanceof BorrowedState)) {
+            throw new IllegalStateException("Cannot return a book that is not borrowed.");
+        }
         state.returnBook(this);
     }
 
     public void reserve() {
+        if (!(state instanceof AvailableState)) {
+            throw new IllegalStateException("Cannot reserve a book that is not available.");
+        }
         state.reserve(this);
     }
 
     public void cancelReservation() {
+        if (!(state instanceof ReservedState)) {
+            throw new IllegalStateException("Cannot cancel reservation for a book that is not reserved.");
+        }
         state.cancelReservation(this);
-    }
-
-    public String getStateName() {
-        return state.toString();
     }
 }

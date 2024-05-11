@@ -2,9 +2,10 @@ package swe2024.librarysep.Model;
 
 public class ReservedState implements BookStates {
     private static final long serialVersionUID = 1L;
-   @Override
+
     public void borrow(Book book) {
-        throw new IllegalStateException("Book is already reserved");
+        book.setState(new BorrowedState());
+        System.out.println("Book borrowed successfully!");
     }
 
     @Override
