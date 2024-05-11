@@ -1,6 +1,7 @@
 package swe2024.librarysep.View;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import swe2024.librarysep.Model.Book;
@@ -30,6 +31,14 @@ public class DashboardController {
         this.viewModel = viewModel;
         bookTableView.setItems(viewModel.getBooks());
         viewModel.bindTableColumns(titleColumn, authorColumn, releaseYearColumn, idColumn, stateColumn);
+
+        // Binds the error message property to show alerts on changes
+        this.viewModel.errorMessageProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && !newValue.isEmpty()) {
+                showStateAlert(newValue);
+                this.viewModel.errorMessageProperty().set(""); // Also resets the message to prevent repeated alerts
+            }
+        });
     }
 
 
@@ -78,5 +87,13 @@ public class DashboardController {
         } else {
             System.out.println("No book selected");
         }
+    }
+
+    private void showStateAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

@@ -1,13 +1,13 @@
 package swe2024.librarysep.ViewModel;
 
-
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import swe2024.librarysep.Model.Book;
 import swe2024.librarysep.Model.BookService;
-
 import java.util.List;
 
 public class DashboardViewModel {
@@ -62,30 +62,47 @@ public class DashboardViewModel {
     }
 
 
-    //-----------------------------------------------------------------------
-    // NEED TO ADD PRINT LOGIC TO THESE BUTTON ACTIONS ONCE WE ADD USER SETUP
-    //-----------------------------------------------------------------------
 
+    // Bind errorMessage for UI alerts
+    private StringProperty errorMessage = new SimpleStringProperty();
 
-    public void borrowBook(Book book) {
-        book.borrow();
-        updateBookState(book);
+    public StringProperty errorMessageProperty() {
+        return errorMessage;
     }
 
+    public void borrowBook(Book book) {
+        try {
+            book.borrow();
+            updateBookState(book);
+        } catch (IllegalStateException e) {
+            errorMessage.set("Error borrowing book: " + e.getMessage());
+        }
+    }
 
     public void reserveBook(Book book) {
-        book.reserve();
-        updateBookState(book);
+        try {
+            book.reserve();
+            updateBookState(book);
+        } catch (IllegalStateException e) {
+            errorMessage.set("Error reserving book: " + e.getMessage());
+        }
     }
 
     public void returnBook(Book book) {
-
-        book.returnBook();
-        updateBookState(book);
+        try {
+            book.returnBook();
+            updateBookState(book);
+        } catch (IllegalStateException e) {
+            errorMessage.set("Error returning book: " + e.getMessage());
+        }
     }
 
     public void cancelReservation(Book book) {
-        book.cancelReservation();
-        updateBookState(book);
+        try {
+            book.cancelReservation();
+            updateBookState(book);
+        } catch (IllegalStateException e) {
+            errorMessage.set("Error canceling reservation: " + e.getMessage());
+        }
     }
 }

@@ -49,6 +49,7 @@ public class DatabaseConnection {
     public static Connection connect() throws SQLException {
         synchronized (lock) {
             if (pool.isEmpty()) {
+                // incase all pools are unavailable we throw and exception
                 throw new SQLException("All connections are in use.");
             }
             Connection connection = pool.poll();
