@@ -19,7 +19,7 @@ public class DatabaseService implements BookService {
 
 
 // Constructor for DatabaseService.
-//Initializes the connection to the database.
+// Initializes the connection to the database.
 
     public DatabaseService() {
         try {
@@ -31,6 +31,7 @@ public class DatabaseService implements BookService {
 
 
 // Retrieves a list of all books from the database making it into java objects in this case Books.
+
     @Override
     public List<Book> getAllBooks() {
         List<Book> books = new ArrayList<>();

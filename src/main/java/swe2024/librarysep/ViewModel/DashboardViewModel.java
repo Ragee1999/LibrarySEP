@@ -3,6 +3,8 @@ package swe2024.librarysep.ViewModel;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.cell.PropertyValueFactory;
 import swe2024.librarysep.Model.Book;
 import swe2024.librarysep.Model.BookService;
 
@@ -21,7 +23,22 @@ public class DashboardViewModel {
         return books;
     }
 
-     private void loadBooks() { // Checks for accidentally duplicated books and updates after state change, so we don't ruin the database
+    // Bind properties
+    public void bindTableColumns(
+            TableColumn<Book, String> titleColumn,
+            TableColumn<Book, String> authorColumn,
+            TableColumn<Book, Integer> releaseYearColumn,
+            TableColumn<Book, Integer> idColumn,
+            TableColumn<Book, String> stateColumn)
+    {
+        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
+        releaseYearColumn.setCellValueFactory(new PropertyValueFactory<>("releaseYear"));
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("bookId"));
+        stateColumn.setCellValueFactory(new PropertyValueFactory<>("stateName"));
+    }
+
+    private void loadBooks() { // Checks for accidentally duplicated books and updates after state change, so we don't ruin the database
         List<Book> updatedBooks = bookService.getAllBooks();
         for (Book updatedBook : updatedBooks) {
             // Check if the book already exists in the list
@@ -51,24 +68,24 @@ public class DashboardViewModel {
 
 
     public void borrowBook(Book book) {
-            book.borrow();
-            updateBookState(book);
-        }
+        book.borrow();
+        updateBookState(book);
+    }
 
 
     public void reserveBook(Book book) {
-            book.reserve();
-            updateBookState(book);
+        book.reserve();
+        updateBookState(book);
     }
 
     public void returnBook(Book book) {
 
-            book.returnBook();
-            updateBookState(book);
+        book.returnBook();
+        updateBookState(book);
     }
 
     public void cancelReservation(Book book) {
-            book.cancelReservation();
-            updateBookState(book);
+        book.cancelReservation();
+        updateBookState(book);
     }
 }

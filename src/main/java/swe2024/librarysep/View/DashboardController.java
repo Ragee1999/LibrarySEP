@@ -3,7 +3,6 @@ package swe2024.librarysep.View;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import swe2024.librarysep.Model.Book;
 import swe2024.librarysep.ViewModel.DashboardViewModel;
 
@@ -30,20 +29,7 @@ public class DashboardController {
     public void setViewModel(DashboardViewModel viewModel) {
         this.viewModel = viewModel;
         bookTableView.setItems(viewModel.getBooks());
-        initializeTable();
-    }
-
-    @FXML
-    public void initializeTable() {
-        // Initialize TableView and propertybind
-        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-        authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
-        releaseYearColumn.setCellValueFactory(new PropertyValueFactory<>("releaseYear"));
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("bookId"));
-        stateColumn.setCellValueFactory(new PropertyValueFactory<>("stateName"));
-
-        // Fills TableView with data from Dashboard ViewModel
-        bookTableView.setItems(viewModel.getBooks());
+        viewModel.bindTableColumns(titleColumn, authorColumn, releaseYearColumn, idColumn, stateColumn);
     }
 
 

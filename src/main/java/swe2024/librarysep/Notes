@@ -23,10 +23,11 @@ First we focus single client and just on the essential functionality
 1. Database setup  ::(Finished 09-05-2024)
 1.1 Database CRUD
 2. Classes such as book and state management of books ::(Finished 09-05-2024)
-3. Viewmodels for books and  user (In this version the IDE user has to perform actions on buttons)
+3. Viewmodels for books and user (In this version the IDE user has to perform actions on buttons)
 3.1 For now just have a dashboard ViewModel and dashboard Controller ::(Finished 09-05-2024)
-4 and 5. Concurrency / Locks / RMI and server implementations
-This is where multiple clients can use the application aswell as makeing sure its thread safe
+4.  Concurrency / Locks  (Will implmenet with user setup)
+5. RMI and server implementations (Finished 11-05-2024)
+5.1 Need to add pooling so client actions are updated regularly
 6. Polish User interface and add Search functionality and Quality of life from requirements.
 7. Testing and Finishing documentation
 8. Maybe create a JAR so the program is openable through a an actual desktop shortcut instead of inside the code.

@@ -14,4 +14,5 @@ module swe2024.librarysep {
 
 
     exports swe2024.librarysep.Server to java.rmi;
+    opens swe2024.librarysep.Server to javafx.base, javafx.fxml;
 }
