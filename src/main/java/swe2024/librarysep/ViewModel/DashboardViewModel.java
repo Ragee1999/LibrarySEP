@@ -21,8 +21,7 @@ public class DashboardViewModel {
         return books;
     }
 
-
-    private void loadBooks() { // Checks for accidentally duplicated books and updates after state change, so we don't ruin the database
+     private void loadBooks() { // Checks for accidentally duplicated books and updates after state change, so we don't ruin the database
         List<Book> updatedBooks = bookService.getAllBooks();
         for (Book updatedBook : updatedBooks) {
             // Check if the book already exists in the list
@@ -43,5 +42,33 @@ public class DashboardViewModel {
     public void updateBookState(Book book) {
         bookService.updateBookState(book);
         loadBooks();
+    }
+
+
+    //-----------------------------------------------------------------------
+    // NEED TO ADD PRINT LOGIC TO THESE BUTTON ACTIONS ONCE WE ADD USER SETUP
+    //-----------------------------------------------------------------------
+
+
+    public void borrowBook(Book book) {
+            book.borrow();
+            updateBookState(book);
+        }
+
+
+    public void reserveBook(Book book) {
+            book.reserve();
+            updateBookState(book);
+    }
+
+    public void returnBook(Book book) {
+
+            book.returnBook();
+            updateBookState(book);
+    }
+
+    public void cancelReservation(Book book) {
+            book.cancelReservation();
+            updateBookState(book);
     }
 }

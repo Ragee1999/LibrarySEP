@@ -30,7 +30,7 @@ public class DatabaseService implements BookService {
     }
 
 
-    // Retrieves a list of all books from the database making it into java objects in this case Books.
+// Retrieves a list of all books from the database making it into java objects in this case Books.
     @Override
     public List<Book> getAllBooks() {
         List<Book> books = new ArrayList<>();
@@ -51,7 +51,7 @@ public class DatabaseService implements BookService {
     }
 
 
-    // Updates the state of a book in the database.
+// Updates the state of a book in the database.
 
     @Override
     public void updateBookState(Book book) {
