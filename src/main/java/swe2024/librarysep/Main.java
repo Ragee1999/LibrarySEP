@@ -26,7 +26,7 @@ public class Main extends Application {
 
         public static void showLogin() {
                 try {
-                        Parent root = FXMLLoader.load(Main.class.getResource("/swe2024/librarysep/View/Login.fxml"));
+                        Parent root = FXMLLoader.load(Main.class.getResource("/swe2024/librarysep/View/userLogin.fxml"));
                         primaryStage.setScene(new Scene(root));
                         primaryStage.setTitle("Login");
                         primaryStage.show();
@@ -37,7 +37,7 @@ public class Main extends Application {
 
         public static void showDashboard() {
                 try {
-                        FXMLLoader loader = new FXMLLoader(Main.class.getResource("/swe2024/librarysep/View/Dashboard.fxml"));
+                        FXMLLoader loader = new FXMLLoader(Main.class.getResource("/swe2024/librarysep/View/AdminDashboard.fxml"));
                         Parent root = loader.load();
                         DashboardController controller = loader.getController();
 
@@ -55,7 +55,7 @@ public class Main extends Application {
 
         public static void showRegistration() {
                 try {
-                        Parent root = FXMLLoader.load(Main.class.getResource("/swe2024/librarysep/View/Registration.fxml"));
+                        Parent root = FXMLLoader.load(Main.class.getResource("/swe2024/librarysep/View/userRegistration.fxml"));
                         primaryStage.setScene(new Scene(root));
                         primaryStage.setTitle("Registration");
                         primaryStage.show();

@@ -37,7 +37,7 @@ public class DatabaseService implements BookService {
         try {
             // Updated SQL to include a join with the users table
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT b.bookId, b.title, b.author, b.releaseYear, b.state, u.username AS userName " +
+                    "SELECT b.bookId, b.title, b.author, b.releaseYear, b.state, b.genre, u.username AS userName " +
                             "FROM books b " +
                             "LEFT JOIN users u ON b.user_id = u.id"
             );
@@ -48,7 +48,8 @@ public class DatabaseService implements BookService {
                         resultSet.getInt("bookId"),
                         resultSet.getString("title"),
                         resultSet.getString("author"),
-                        resultSet.getInt("releaseYear")
+                        resultSet.getInt("releaseYear"),
+                        resultSet.getString("genre")
                 );
                 book.setState(Book.getStateFromString(resultSet.getString("state")));
                 // Set the userName retrieved from the JOIN

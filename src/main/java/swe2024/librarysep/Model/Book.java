@@ -28,16 +28,18 @@ public class Book implements Serializable { // We need to seralize book because 
     private String title;
     private String author;
     private Integer releaseYear;
+    private String genre;
     private BookStates state;
     private String userName;
 
 
-    public Book(Integer bookId, String title, String author, Integer releaseYear) {
+    public Book(Integer bookId, String title, String author, Integer releaseYear, String genre) {
         this.bookId = bookId;
         this.title = title;
         this.author = author;
         this.releaseYear = releaseYear;
         this.state = new AvailableState();
+        this.genre = genre;
     }
 
     // State to string for use in UI display
@@ -73,6 +75,11 @@ public class Book implements Serializable { // We need to seralize book because 
     public Integer getReleaseYear() {
         return releaseYear;
     }
+
+    public String getGenre() {
+        return genre;
+    }
+
 
     public String getStateName() {
         return state.toString();

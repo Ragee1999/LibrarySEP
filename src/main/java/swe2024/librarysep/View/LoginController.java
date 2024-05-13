@@ -39,7 +39,6 @@ public class LoginController {
             SessionManager.loginUser(user); // Log the user into the session
             System.out.println("User Successfully logged in");
             Main.showDashboard(); // Navigate to the dashboard
-            System.out.println("User authenticated with Database");
         } else {
             showLoginAlert("Login Failed", "Invalid username or password");
         }

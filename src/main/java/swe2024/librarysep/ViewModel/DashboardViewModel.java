@@ -42,7 +42,8 @@ public class DashboardViewModel {
             TableColumn<Book, Integer> releaseYearColumn,
             TableColumn<Book, Integer> idColumn,
             TableColumn<Book, String> stateColumn,
-            TableColumn<Book, String> clientColumn
+            TableColumn<Book, String> clientColumn,
+            TableColumn<Book, String> genreColumn
     ) {
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
@@ -50,6 +51,7 @@ public class DashboardViewModel {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("bookId"));
         stateColumn.setCellValueFactory(new PropertyValueFactory<>("stateName"));
         clientColumn.setCellValueFactory(new PropertyValueFactory<>("userName"));
+        genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
     }
 
     private void loadBooks() { // Checks for accidentally duplicated books and updates after state change, so we don't ruin the database

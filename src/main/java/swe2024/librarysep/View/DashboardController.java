@@ -26,6 +26,8 @@ public class DashboardController {
     private TableColumn<Book, String> stateColumn;
     @FXML
     private TableColumn<Book, String> clientColumn;
+    @FXML
+    private TableColumn<Book, String> genreColumn;
 
     // Declaration of DashboardViewModel Instance
     private DashboardViewModel viewModel;
@@ -34,7 +36,7 @@ public class DashboardController {
     public void setViewModel(DashboardViewModel viewModel) {
         this.viewModel = viewModel;
         bookTableView.setItems(viewModel.getBooks());
-        viewModel.bindTableColumns(titleColumn, authorColumn, releaseYearColumn, idColumn, stateColumn, clientColumn);
+        viewModel.bindTableColumns(titleColumn, authorColumn, releaseYearColumn, idColumn, stateColumn, clientColumn, genreColumn);
 
         // Binds the error message property to show alerts on changes
         this.viewModel.errorMessageProperty().addListener((observable, oldValue, newValue) -> {
