@@ -36,9 +36,15 @@ public class LoginController {
     private void handleLogin() {
         User user = loginViewModel.authenticateUser();
         if (user != null) {
-            SessionManager.loginUser(user); // Log the user into the session
-            System.out.println("User Successfully logged in");
-            Main.showDashboard(); // Navigate to the dashboard
+            if (user.getUsername().equals("Admin")) { // Check if the username is 'Admin'
+                SessionManager.loginUser(user);
+                System.out.println("Admin Successfully logged in");
+                Main.showAdminDashboard(); // Navigate to the admin dashboard
+            } else {
+                SessionManager.loginUser(user);
+                System.out.println("User Successfully logged in");
+                Main.showDashboard(); // Navigate to the user dashboard
+            }
         } else {
             showLoginAlert("Login Failed", "Invalid username or password");
         }

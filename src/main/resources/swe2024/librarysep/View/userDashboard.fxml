@@ -1,26 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="swe2024.librarysep.View.DashboardController">
+<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="swe2024.librarysep.View.userDashboardController">
     <children>
-        <Label layoutX="39.0" layoutY="33.0" prefHeight="38.0" prefWidth="481.0" text="Library Management System - Admin panel">
+        <Label layoutX="44.0" layoutY="38.0" prefHeight="38.0" prefWidth="378.0" text="Library Management System">
             <font>
                 <Font name="Arial Nova Cond Light" size="24.0" />
             </font>
         </Label>
-        <TableView fx:id="bookTableView" layoutX="184.0" layoutY="120.0" prefHeight="368.0" prefWidth="534.0">
+        <TableView fx:id="bookTableViewUser" layoutX="184.0" layoutY="120.0" prefHeight="368.0" prefWidth="479.0">
             <columns>
-                <TableColumn fx:id="idColumn" prefWidth="75.0" text="BookID" />
                 <TableColumn fx:id="genreColumn" prefWidth="75.0" text="Genre" />
-                <TableColumn fx:id="titleColumn" prefWidth="75.0" text="Title" />
-                <TableColumn fx:id="authorColumn" prefWidth="75.0" text="Author" />
-                <TableColumn fx:id="releaseYearColumn" prefWidth="84.7999267578125" text="Release Year" />
-                <TableColumn fx:id="stateColumn" prefWidth="65.60003662109375" text="State" />
-                <TableColumn fx:id="clientColumn" prefWidth="75.0" text="Username" />
+                <TableColumn fx:id="titleColumn" prefWidth="116.0" text="Title" />
+                <TableColumn fx:id="authorColumn" prefWidth="107.0" text="Author" />
+                <TableColumn fx:id="releaseYearColumn" prefWidth="81.0" text="Release Year" />
+                <TableColumn fx:id="stateColumn" prefWidth="99.0" text="State" />
             </columns>
         </TableView>
         <Button layoutX="48.0" layoutY="136.0" mnemonicParsing="false" onAction="#handleBorrowBook" prefHeight="38.0" prefWidth="98.0" text="Borrow">
@@ -39,21 +42,6 @@
             </effect>
         </Button>
         <Button layoutX="48.0" layoutY="331.0" mnemonicParsing="false" onAction="#handleCancelBook" prefHeight="38.0" prefWidth="120.0" text="Cancel Reservation ">
-            <effect>
-                <DropShadow />
-            </effect>
-        </Button>
-        <Button fx:id="createBook" layoutX="588.0" layoutY="83.0" mnemonicParsing="false" text="Create">
-            <effect>
-                <DropShadow />
-            </effect>
-        </Button>
-        <Button fx:id="editBook" layoutX="520.0" layoutY="83.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="50.0" text="Edit">
-            <effect>
-                <DropShadow />
-            </effect>
-        </Button>
-        <Button fx:id="deleteBook" layoutX="653.0" layoutY="83.0" mnemonicParsing="false" text="Delete">
             <effect>
                 <DropShadow />
             </effect>
