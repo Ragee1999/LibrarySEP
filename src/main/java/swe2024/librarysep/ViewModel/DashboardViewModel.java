@@ -12,6 +12,8 @@ import javafx.util.Duration;
 import swe2024.librarysep.Model.*;
 
 
+import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.List;
 
 public class DashboardViewModel {
@@ -154,6 +156,21 @@ public class DashboardViewModel {
             }
         } catch (IllegalStateException e) {
             errorMessage.set("Error cancelling reservation: " + e.getMessage());
+        }
+    }
+
+    public void deleteBook(Book book) {
+        if (book != null) {
+            try {
+                bookService.deleteBook(book.getBookId());
+                books.remove(book);  // Remove the book from the observable list to update UI
+            } catch (SQLException e) {
+                errorMessage.set("Failed to delete book: " + e.getMessage());
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            errorMessage.set("No book selected to delete.");
         }
     }
 }

@@ -1,12 +1,12 @@
 package swe2024.librarysep.View;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import swe2024.librarysep.Main;
 import swe2024.librarysep.Model.Book;
 import swe2024.librarysep.Model.User;
 import swe2024.librarysep.ViewModel.DashboardViewModel;
+
 import static swe2024.librarysep.Model.SessionManager.getCurrentUser;
 
 public class DashboardController {
@@ -29,6 +29,7 @@ public class DashboardController {
     @FXML
     private TableColumn<Book, String> genreColumn;
 
+
     // Declaration of DashboardViewModel Instance
     private DashboardViewModel viewModel;
 
@@ -41,10 +42,15 @@ public class DashboardController {
         // Binds the error message property to show alerts on changes
         this.viewModel.errorMessageProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && !newValue.isEmpty()) {
-              showStateAlert(newValue);
+                showStateAlert(newValue);
                 this.viewModel.errorMessageProperty().set(""); // Also resets the message to prevent repeated alerts
             }
         });
+    }
+
+    @FXML
+    private void handleOnClickAddBook() {
+        Main.ShowAddBook();
     }
 
     @FXML
@@ -58,7 +64,7 @@ public class DashboardController {
         }
     }
 
-  @FXML
+    @FXML
     private void handleReturnBook() {
         Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
         User currentUser = getCurrentUser();
@@ -92,12 +98,31 @@ public class DashboardController {
     }
 
 
-
     private void showStateAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    @FXML
+    private void handleDeleteBook() {
+        Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
+        if (selectedBook != null) {
+            Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this book?", ButtonType.YES, ButtonType.NO);
+            confirmAlert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.YES) {
+                    try {
+                        viewModel.deleteBook(selectedBook);
+                        System.out.println("Successfully deleted book");
+                    } catch (RuntimeException e) {
+                        showStateAlert("Failed to delete book: " + e.getCause().getMessage());
+                    }
+                }
+            });
+        } else {
+            showStateAlert("No book selected.");
+        }
     }
 }

@@ -3,6 +3,8 @@ package swe2024.librarysep.Server;
 import java.rmi.server.UnicastRemoteObject;
 import java.rmi.RemoteException;
 import swe2024.librarysep.Database.DatabaseService;
+
+import java.sql.SQLException;
 import java.util.List;
 import swe2024.librarysep.Model.Book;
 
@@ -22,5 +24,24 @@ public class LibraryManagerImpl extends UnicastRemoteObject implements ILibraryM
     @Override
     public void updateBookState(Book book) throws RemoteException {
         databaseService.updateBookState(book);
+    }
+
+    @Override
+    public void deleteBook(int bookId) throws RemoteException {
+        try {
+            databaseService.deleteBook(bookId);
+        } catch (SQLException e) {
+            System.err.println("SQL error during deletion: " + e.getMessage());
+            throw new RemoteException("Deletion failed", e);
+        }
+    }
+
+    @Override
+    public void addBook(Book book) throws RemoteException {
+        try {
+            databaseService.addBook(book);
+        } catch (SQLException e) {
+            throw new RemoteException("Database error adding book", e);
+        }
     }
 }

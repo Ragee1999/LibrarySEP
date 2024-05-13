@@ -5,8 +5,30 @@ import java.io.Serializable;
 public class Book implements Serializable { // We need to seralize book because of RMI
     private static final long serialVersionUID = 1L;
 
-    private Integer userId;
 
+    private Integer bookId;
+    private String title;
+    private String author;
+    private Integer releaseYear;
+    private String genre;
+    private BookStates state;
+    private String userName;
+
+    public Book(Integer bookId, String title, String author, Integer releaseYear, String genre) {
+        this.bookId = bookId;
+        this.title = title;
+        this.author = author;
+        this.releaseYear = releaseYear;
+        this.state = new AvailableState();
+        this.genre = genre;
+    }
+
+    // Constructor without bookId for adding new books
+    public Book(String title, String author, Integer releaseYear, String genre) {
+        this(null, title, author, releaseYear, genre);
+    }
+
+    private Integer userId;
     public Integer getUserId() {
         return userId;
     }
@@ -23,39 +45,6 @@ public class Book implements Serializable { // We need to seralize book because 
         // Check if userName is null, and if so, set it to an empty string instead
         this.userName = (userName != null) ? userName : "";
     }
-
-    private Integer bookId;
-    private String title;
-    private String author;
-    private Integer releaseYear;
-    private String genre;
-    private BookStates state;
-    private String userName;
-
-
-    public Book(Integer bookId, String title, String author, Integer releaseYear, String genre) {
-        this.bookId = bookId;
-        this.title = title;
-        this.author = author;
-        this.releaseYear = releaseYear;
-        this.state = new AvailableState();
-        this.genre = genre;
-    }
-
-    // State to string for use in UI display
-    public static BookStates getStateFromString(String stateString) {
-        switch (stateString) {
-            case "Available":
-                return new AvailableState();
-            case "Borrowed":
-                return new BorrowedState();
-            case "Reserved":
-                return new ReservedState();
-            default:
-                throw new IllegalArgumentException("Unknown state: " + stateString);
-        }
-    }
-
 
     public Integer getBookId() {
         return bookId;
@@ -81,9 +70,10 @@ public class Book implements Serializable { // We need to seralize book because 
     }
 
 
+    // for state string names
     public String getStateName() {
         return state.toString();
-    } // for state string names
+    }
 
     public BookStates getState() {
         return this.state;
@@ -93,6 +83,25 @@ public class Book implements Serializable { // We need to seralize book because 
         this.state = state;
     }
 
+
+
+
+    // LOAN ACTIONS
+
+
+    // State to string for use in UI display
+    public static BookStates getStateFromString(String stateString) {
+        switch (stateString) {
+            case "Available":
+                return new AvailableState();
+            case "Borrowed":
+                return new BorrowedState();
+            case "Reserved":
+                return new ReservedState();
+            default:
+                throw new IllegalArgumentException("Unknown state: " + stateString);
+        }
+    }
 
     public void borrow() {
         if (!(state instanceof AvailableState) && !(state instanceof ReservedState)) {

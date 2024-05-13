@@ -43,17 +43,17 @@
                 <DropShadow />
             </effect>
         </Button>
-        <Button fx:id="createBook" layoutX="588.0" layoutY="83.0" mnemonicParsing="false" text="Create">
+        <Button layoutX="588.0" layoutY="83.0" mnemonicParsing="false" onAction="#handleOnClickAddBook" text="Create">
             <effect>
                 <DropShadow />
             </effect>
         </Button>
-        <Button fx:id="editBook" layoutX="520.0" layoutY="83.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="50.0" text="Edit">
+        <Button layoutX="520.0" layoutY="83.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="50.0" text="Edit">
             <effect>
                 <DropShadow />
             </effect>
         </Button>
-        <Button fx:id="deleteBook" layoutX="653.0" layoutY="83.0" mnemonicParsing="false" text="Delete">
+        <Button layoutX="653.0" layoutY="83.0" mnemonicParsing="false" onAction="#handleDeleteBook" text="Delete">
             <effect>
                 <DropShadow />
             </effect>

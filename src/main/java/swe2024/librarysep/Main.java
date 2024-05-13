@@ -80,4 +80,14 @@ public class Main extends Application {
                         e.printStackTrace();
                 }
         }
+
+        public static void ShowAddBook() {
+                try {
+                        Parent root = FXMLLoader.load(Main.class.getResource("/swe2024/librarysep/View/addBook.fxml"));
+                        primaryStage.setScene(new Scene(root));
+                        primaryStage.show();
+                } catch (Exception e) {
+                        e.printStackTrace();
+                }
+        }
 }
