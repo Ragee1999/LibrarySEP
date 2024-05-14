@@ -13,16 +13,32 @@ import swe2024.librarysep.Model.*;
 
 
 import java.util.List;
+import javafx.collections.transformation.FilteredList;
 
 public class DashboardViewModel {
     private ObservableList<Book> books = FXCollections.observableArrayList();
     private BookService bookService;
     private Timeline refresh;
+    private FilteredList<Book> filteredBooks;
+    private StringProperty searchQuery = new SimpleStringProperty(""); // Testing
 
     public DashboardViewModel(BookService bookService) {
         this.bookService = bookService;
         loadBooks();
         setupRefresh();
+        filteredBooks = new FilteredList<>(books, book -> true); // Testing
+
+        // Update the filtered list whenever the search query changes
+        searchQuery.addListener((observable, oldValue, newValue) -> {
+            filteredBooks.setPredicate(book -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                String lowerCaseQuery = newValue.toLowerCase();
+                return book.getTitle().toLowerCase().contains(lowerCaseQuery)
+                        || book.getAuthor().toLowerCase().contains(lowerCaseQuery);
+            });
+        });
     }
 
     private void setupRefresh() {
@@ -77,6 +93,17 @@ public class DashboardViewModel {
         loadBooks();
     }
 
+    public ObservableList<Book> getFilteredBooks() {
+        return filteredBooks;
+    }
+
+    public StringProperty searchQueryProperty() {
+        return searchQuery;
+    }
+
+    public void setSearchQuery(String searchQuery) {
+        this.searchQuery.set(searchQuery);
+    }
 
     // Bind errorMessage for UI alerts
     private StringProperty errorMessage = new SimpleStringProperty();

@@ -4,14 +4,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import swe2024.librarysep.Model.Book;
 import swe2024.librarysep.Model.User;
 import swe2024.librarysep.ViewModel.DashboardViewModel;
 import static swe2024.librarysep.Model.SessionManager.getCurrentUser;
 
 public class DashboardController {
-
-
     @FXML
     private TableView<Book> bookTableView;
     @FXML
@@ -28,21 +27,27 @@ public class DashboardController {
     private TableColumn<Book, String> clientColumn;
     @FXML
     private TableColumn<Book, String> genreColumn;
+    @FXML
+    private TextField searchTextField;
 
     // Declaration of DashboardViewModel Instance
     private DashboardViewModel viewModel;
 
-
     public void setViewModel(DashboardViewModel viewModel) {
         this.viewModel = viewModel;
-        bookTableView.setItems(viewModel.getBooks());
+        bookTableView.setItems(viewModel.getFilteredBooks());
         viewModel.bindTableColumns(titleColumn, authorColumn, releaseYearColumn, idColumn, stateColumn, clientColumn, genreColumn);
+
+        // Bind search text field to update the filter predicate
+        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            viewModel.setSearchQuery(newValue);
+        });
 
         // Binds the error message property to show alerts on changes
         this.viewModel.errorMessageProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && !newValue.isEmpty()) {
               showStateAlert(newValue);
-                this.viewModel.errorMessageProperty().set(""); // Also resets the message to prevent repeated alerts
+                this.viewModel.errorMessageProperty().set("");
             }
         });
     }
