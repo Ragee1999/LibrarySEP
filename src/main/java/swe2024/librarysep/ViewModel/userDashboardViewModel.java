@@ -23,7 +23,8 @@ public class userDashboardViewModel {
     private BookService bookService;
     private Timeline refresh;
     private FilteredList<Book> filteredBooks;
-    private StringProperty setUserSearchQuery = new SimpleStringProperty("");
+    private StringProperty userSearchQuery = new SimpleStringProperty("");
+    private StringProperty userGenreFilter = new SimpleStringProperty(null);
 
     public userDashboardViewModel(BookService bookService) {
         this.bookService = bookService;
@@ -31,16 +32,35 @@ public class userDashboardViewModel {
         setupRefresh();
         filteredBooks = new FilteredList<>(books, book -> true);
 
+        userSearchQuery.addListener((observable, oldValue, newValue) -> {
+            updateFilter();
+        });
+
+        userGenreFilter.addListener((observable, oldValue, newValue) -> {
+            updateFilter();
+        });
+
         // Update the filtered list whenever the search query changes
-        setUserSearchQuery.addListener((observable, oldValue, newValue) -> {
-            filteredBooks.setPredicate(book -> {
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-                String lowerCaseQuery = newValue.toLowerCase();
-                return book.getTitle().toLowerCase().contains(lowerCaseQuery)
-                        || book.getAuthor().toLowerCase().contains(lowerCaseQuery);
-            });
+//        userSearchQuery.addListener((observable, oldValue, newValue) -> {
+//            filteredBooks.setPredicate(book -> {
+//                if (newValue == null || newValue.isEmpty()) {
+//                    return true;
+//                }
+//                String lowerCaseQuery = newValue.toLowerCase();
+//                return book.getTitle().toLowerCase().contains(lowerCaseQuery)
+//                        || book.getAuthor().toLowerCase().contains(lowerCaseQuery);
+//            });
+//        });
+    }
+
+    private void updateFilter() {
+        filteredBooks.setPredicate(book -> {
+            boolean matchesSearchQuery = userSearchQuery.get() == null || userSearchQuery.get().isEmpty() ||
+                    book.getTitle().toLowerCase().contains(userSearchQuery.get().toLowerCase()) ||
+                    book.getAuthor().toLowerCase().contains(userSearchQuery.get().toLowerCase());
+            boolean matchesGenreFilter = userGenreFilter.get() == null || userGenreFilter.get().isEmpty() ||
+                    book.getGenre().equalsIgnoreCase(userGenreFilter.get());
+            return matchesSearchQuery && matchesGenreFilter;
         });
     }
 
@@ -98,11 +118,23 @@ public class userDashboardViewModel {
     }
 
     public StringProperty searchQueryProperty() {
-        return setUserSearchQuery;
+        return userSearchQuery;
     }
 
     public void setUserSearchQuery(String searchQuery) {
-        this.setUserSearchQuery.set(searchQuery);
+        this.userSearchQuery.set(searchQuery);
+    }
+
+    public StringProperty genreFilterProperty() {
+        return userGenreFilter;
+    }
+
+    public void setGenreFilter(String genre) {
+        this.userGenreFilter.set(genre);
+    }
+
+    public List<String> getGenres() {
+        return List.of("Fiction", "Science Fiction", "Romance", "Political Satire", "Fantasy", "Modernist", "Gothic", "Adventure", "Satire");
     }
 
     // Bind errorMessage for UI alerts

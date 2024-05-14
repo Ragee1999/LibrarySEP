@@ -28,11 +28,11 @@ public class DashboardController {
     private TableColumn<Book, String> genreColumn;
     @FXML
     private TextField searchTextField;
-
+    @FXML
+    private MenuButton filterDropdownMenu;
 
     // Declaration of DashboardViewModel Instance
     private DashboardViewModel viewModel;
-
 
     public void setViewModel(DashboardViewModel viewModel) {
         this.viewModel = viewModel;
@@ -52,6 +52,18 @@ public class DashboardController {
                 this.viewModel.errorMessageProperty().set(""); // Also resets the message to prevent repeated alerts
             }
         });
+
+        // Add genre filter items to the dropdown menu
+        for (String genre : viewModel.getGenres()) {
+            MenuItem item = new MenuItem(genre);
+            item.setOnAction(event -> viewModel.setGenreFilter(genre));
+            filterDropdownMenu.getItems().add(item);
+        }
+
+        // Add a "Clear Filter" item
+        MenuItem clearFilter = new MenuItem("Clear Filter");
+        clearFilter.setOnAction(event -> viewModel.setGenreFilter(null));
+        filterDropdownMenu.getItems().add(clearFilter);
     }
 
     @FXML

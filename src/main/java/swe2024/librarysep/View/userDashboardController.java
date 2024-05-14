@@ -1,10 +1,7 @@
 package swe2024.librarysep.View;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import swe2024.librarysep.Model.Book;
 import swe2024.librarysep.Model.User;
 import swe2024.librarysep.ViewModel.userDashboardViewModel;
@@ -29,10 +26,11 @@ public class userDashboardController {
     private TableColumn<Book, String> genreColumn;
     @FXML
     private TextField userSearchTextField;
+    @FXML
+    private MenuButton userFilterDropdownMenu;
 
     // Declaration of DashboardViewModel Instance
     private userDashboardViewModel viewModelUser;
-
 
     public void setViewModel(userDashboardViewModel viewModelUser) {
         this.viewModelUser = viewModelUser;
@@ -52,6 +50,18 @@ public class userDashboardController {
                 this.viewModelUser.errorMessageProperty().set(""); // Also resets the message to prevent repeated alerts
             }
         });
+
+        // Add genre filter items to the dropdown menu
+        for (String genre : viewModelUser.getGenres()) {
+            MenuItem item = new MenuItem(genre);
+            item.setOnAction(event -> viewModelUser.setGenreFilter(genre));
+            userFilterDropdownMenu.getItems().add(item);
+        }
+
+        // Add a "Clear Filter" item
+        MenuItem clearFilter = new MenuItem("Clear Filter");
+        clearFilter.setOnAction(event -> viewModelUser.setGenreFilter(null));
+        userFilterDropdownMenu.getItems().add(clearFilter);
     }
 
     @FXML
