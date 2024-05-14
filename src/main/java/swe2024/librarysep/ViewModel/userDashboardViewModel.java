@@ -11,27 +11,28 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Duration;
 import swe2024.librarysep.Model.*;
-
-
-import java.rmi.RemoteException;
-import java.sql.SQLException;
 import java.util.List;
 
-public class DashboardViewModel {
+//
+// This class is almost similar to DashboardViewModel, the only difference being constructor having 2 fewer columns and property-bindings
+//
+
+
+public class userDashboardViewModel {
     private ObservableList<Book> books = FXCollections.observableArrayList();
     private BookService bookService;
     private Timeline refresh;
     private FilteredList<Book> filteredBooks;
-    private StringProperty searchQuery = new SimpleStringProperty("");
+    private StringProperty setUserSearchQuery = new SimpleStringProperty("");
 
-    public DashboardViewModel(BookService bookService) {
+    public userDashboardViewModel(BookService bookService) {
         this.bookService = bookService;
         loadBooks();
         setupRefresh();
         filteredBooks = new FilteredList<>(books, book -> true);
 
         // Update the filtered list whenever the search query changes
-        searchQuery.addListener((observable, oldValue, newValue) -> {
+        setUserSearchQuery.addListener((observable, oldValue, newValue) -> {
             filteredBooks.setPredicate(book -> {
                 if (newValue == null || newValue.isEmpty()) {
                     return true;
@@ -58,17 +59,14 @@ public class DashboardViewModel {
             TableColumn<Book, String> titleColumn,
             TableColumn<Book, String> authorColumn,
             TableColumn<Book, Integer> releaseYearColumn,
-            TableColumn<Book, Integer> idColumn,
             TableColumn<Book, String> stateColumn,
-            TableColumn<Book, String> clientColumn,
             TableColumn<Book, String> genreColumn
+
     ) {
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
         releaseYearColumn.setCellValueFactory(new PropertyValueFactory<>("releaseYear"));
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("bookId"));
         stateColumn.setCellValueFactory(new PropertyValueFactory<>("stateName"));
-        clientColumn.setCellValueFactory(new PropertyValueFactory<>("userName"));
         genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
     }
 
@@ -100,11 +98,11 @@ public class DashboardViewModel {
     }
 
     public StringProperty searchQueryProperty() {
-        return searchQuery;
+        return setUserSearchQuery;
     }
 
-    public void setSearchQuery(String searchQuery) {
-        this.searchQuery.set(searchQuery);
+    public void setUserSearchQuery(String searchQuery) {
+        this.setUserSearchQuery.set(searchQuery);
     }
 
     // Bind errorMessage for UI alerts
@@ -183,21 +181,6 @@ public class DashboardViewModel {
             }
         } catch (IllegalStateException e) {
             errorMessage.set("Error cancelling reservation: " + e.getMessage());
-        }
-    }
-
-    public void deleteBook(Book book) {
-        if (book != null) {
-            try {
-                bookService.deleteBook(book.getBookId());
-                books.remove(book);  // Remove the book from the observable list to update UI
-            } catch (SQLException e) {
-                errorMessage.set("Failed to delete book: " + e.getMessage());
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            errorMessage.set("No book selected to delete.");
         }
     }
 }

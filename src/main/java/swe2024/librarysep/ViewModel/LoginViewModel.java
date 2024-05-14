@@ -24,13 +24,12 @@ public class LoginViewModel {
 
     public User authenticateUser() {
         try (Connection connection = DatabaseConnection.connect()) {
-            String sql = "SELECT id, username, password FROM users WHERE username = ? AND password = ?"; // Consider hashing passwords
+            String sql = "SELECT id, username, password FROM users WHERE username = ? AND password = ?";
             try (PreparedStatement ps = connection.prepareStatement(sql)) {
                 ps.setString(1, username.get());
                 ps.setString(2, password.get());
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
-                        // Assuming the first column in your user table is the user id
                         int userId = rs.getInt("id");
                         String userUsername = rs.getString("username");
                         String userPassword = rs.getString("password");

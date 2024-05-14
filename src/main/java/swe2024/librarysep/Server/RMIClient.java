@@ -35,4 +35,12 @@ public class RMIClient {
             System.err.println("Error updating book state: " + e.getMessage());
         }
     }
+
+    public void deleteBook(int bookId) throws RemoteException {
+        libraryManager.deleteBook(bookId);
+    }
+
+    public void addBook(Book book) throws RemoteException {
+        libraryManager.addBook(book);
+    }
 }
