@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 // This class provides database services for interacting with book data.
 // It implements the BookService interface.
 

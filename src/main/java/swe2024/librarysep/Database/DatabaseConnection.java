@@ -7,18 +7,24 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 
-// Manages a connection pool for database access.
+ // Manages a connection pool for database access.
 
 public class DatabaseConnection {
 
-
     private static final Queue<Connection> pool = new LinkedList<>();  // Queue to hold database connections
-    private static final int MAX_POOL_SIZE = 15;
-    private static final Object lock = new Object();                   // Object for synchronization
+    private static final int MAX_POOL_SIZE = 10;
+    private static final Object lock = new Object();  // Object for synchronization
 
-    private static final String url = "jdbc:postgresql://localhost:5432/postgres";
-    private static final String user = "postgres";
-    private static final String password = "1234";
+  // For the local host
+  /*
+  private static final String url = "jdbc:postgresql://localhost:5432/postgres";
+  private static final String user = "postgres";
+  private static final String password = "1234";
+  */
+
+    private static final String url = "jdbc:postgresql://database2024sep.postgres.database.azure.com:5432/postgres";
+    private static final String user = "via";
+    private static final String password = "group6!%";
 
     static {
         initializeConnectionPool();
@@ -27,7 +33,6 @@ public class DatabaseConnection {
     // Private constructor to prevent instantiation
     private DatabaseConnection() {
     }
-
 
     // Initialize the connection pool with the maximum number of connections
     private static void initializeConnectionPool() {
