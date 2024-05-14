@@ -10,8 +10,6 @@ import swe2024.librarysep.ViewModel.DashboardViewModel;
 import static swe2024.librarysep.Model.SessionManager.getCurrentUser;
 
 public class DashboardController {
-
-
     @FXML
     private TableView<Book> bookTableView;
     @FXML
@@ -28,6 +26,8 @@ public class DashboardController {
     private TableColumn<Book, String> clientColumn;
     @FXML
     private TableColumn<Book, String> genreColumn;
+    @FXML
+    private TextField searchTextField;
 
 
     // Declaration of DashboardViewModel Instance
@@ -36,8 +36,14 @@ public class DashboardController {
 
     public void setViewModel(DashboardViewModel viewModel) {
         this.viewModel = viewModel;
-        bookTableView.setItems(viewModel.getBooks());
+        // bookTableView.setItems(viewModel.getBooks());
+        bookTableView.setItems(viewModel.getFilteredBooks());
         viewModel.bindTableColumns(titleColumn, authorColumn, releaseYearColumn, idColumn, stateColumn, clientColumn, genreColumn);
+
+        // Bind search text field to update the filter predicate
+        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            viewModel.setSearchQuery(newValue);
+        });
 
         // Binds the error message property to show alerts on changes
         this.viewModel.errorMessageProperty().addListener((observable, oldValue, newValue) -> {

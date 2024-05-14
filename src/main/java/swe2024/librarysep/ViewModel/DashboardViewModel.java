@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Duration;
@@ -20,11 +21,26 @@ public class DashboardViewModel {
     private ObservableList<Book> books = FXCollections.observableArrayList();
     private BookService bookService;
     private Timeline refresh;
+    private FilteredList<Book> filteredBooks;
+    private StringProperty searchQuery = new SimpleStringProperty("");
 
     public DashboardViewModel(BookService bookService) {
         this.bookService = bookService;
         loadBooks();
         setupRefresh();
+        filteredBooks = new FilteredList<>(books, book -> true);
+
+        // Update the filtered list whenever the search query changes
+        searchQuery.addListener((observable, oldValue, newValue) -> {
+            filteredBooks.setPredicate(book -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                String lowerCaseQuery = newValue.toLowerCase();
+                return book.getTitle().toLowerCase().contains(lowerCaseQuery)
+                        || book.getAuthor().toLowerCase().contains(lowerCaseQuery);
+            });
+        });
     }
 
     private void setupRefresh() {
@@ -79,6 +95,17 @@ public class DashboardViewModel {
         loadBooks();
     }
 
+    public ObservableList<Book> getFilteredBooks() {
+        return filteredBooks;
+    }
+
+    public StringProperty searchQueryProperty() {
+        return searchQuery;
+    }
+
+    public void setSearchQuery(String searchQuery) {
+        this.searchQuery.set(searchQuery);
+    }
 
     // Bind errorMessage for UI alerts
     private StringProperty errorMessage = new SimpleStringProperty();
@@ -174,5 +201,3 @@ public class DashboardViewModel {
         }
     }
 }
-
-
