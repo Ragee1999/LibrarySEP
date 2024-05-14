@@ -112,7 +112,6 @@ public class DashboardViewModel {
         return errorMessage;
     }
 
-
     public void borrowBook(Book book, User user) {
         try {
             // Check if the book is available (userName is null or empty)
@@ -184,5 +183,3 @@ public class DashboardViewModel {
         }
     }
 }
-
-

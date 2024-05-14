@@ -96,8 +96,6 @@ public class DashboardController {
         }
     }
 
-
-
     private void showStateAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
