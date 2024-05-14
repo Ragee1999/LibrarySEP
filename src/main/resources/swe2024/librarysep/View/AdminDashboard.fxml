@@ -63,9 +63,9 @@
                 <DropShadow />
             </effect>
             <items>
-                <MenuItem mnemonicParsing="false" text="Action 1" />
-                <MenuItem mnemonicParsing="false" text="Action 2" />
+                <!-- MenuItems will be added in DashboardViewModel -->
             </items>
         </MenuButton>
+        <TextField fx:id="searchTextField" layoutX="210.0" layoutY="85.0" prefHeight="26.0" prefWidth="184.0" promptText="Search by title or author..." />
     </children>
 </AnchorPane>

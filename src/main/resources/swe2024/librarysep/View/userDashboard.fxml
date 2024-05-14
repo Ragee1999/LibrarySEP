@@ -9,6 +9,7 @@
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.control.TextField?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="swe2024.librarysep.View.userDashboardController">
     <children>
@@ -46,14 +47,14 @@
                 <DropShadow />
             </effect>
         </Button>
-        <MenuButton fx:id="filterDropdownMenu" layoutX="422.0" layoutY="83.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="78.0" text="Filter">
+        <MenuButton fx:id="userFilterDropdownMenu" layoutX="422.0" layoutY="83.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="78.0" text="Filter">
             <effect>
                 <DropShadow />
             </effect>
             <items>
-                <MenuItem mnemonicParsing="false" text="Action 1" />
-                <MenuItem mnemonicParsing="false" text="Action 2" />
+                <!-- MenuItems will be added in UserDashboardViewModel -->
             </items>
         </MenuButton>
+        <TextField fx:id="userSearchTextField" layoutX="210.0" layoutY="85.0" prefHeight="26.0" prefWidth="184.0" promptText="Search by title or author..." />
     </children>
 </AnchorPane>

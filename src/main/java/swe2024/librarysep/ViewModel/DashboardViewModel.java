@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Duration;
@@ -20,11 +21,46 @@ public class DashboardViewModel {
     private ObservableList<Book> books = FXCollections.observableArrayList();
     private BookService bookService;
     private Timeline refresh;
+    private FilteredList<Book> filteredBooks;
+    private StringProperty searchQuery = new SimpleStringProperty("");
+    private StringProperty genreFilter = new SimpleStringProperty(null);
 
     public DashboardViewModel(BookService bookService) {
         this.bookService = bookService;
         loadBooks();
         setupRefresh();
+        filteredBooks = new FilteredList<>(books, book -> true);
+
+        searchQuery.addListener((observable, oldValue, newValue) -> {
+            updateFilter();
+        });
+
+        genreFilter.addListener((observable, oldValue, newValue) -> {
+            updateFilter();
+        });
+
+        // Update the filtered list whenever the search query changes
+//        searchQuery.addListener((observable, oldValue, newValue) -> {
+//            filteredBooks.setPredicate(book -> {
+//                if (newValue == null || newValue.isEmpty()) {
+//                    return true;
+//                }
+//                String lowerCaseQuery = newValue.toLowerCase();
+//                return book.getTitle().toLowerCase().contains(lowerCaseQuery)
+//                        || book.getAuthor().toLowerCase().contains(lowerCaseQuery);
+//            });
+//        });
+    }
+
+    private void updateFilter() {
+        filteredBooks.setPredicate(book -> {
+            boolean matchesSearchQuery = searchQuery.get() == null || searchQuery.get().isEmpty() ||
+                    book.getTitle().toLowerCase().contains(searchQuery.get().toLowerCase()) ||
+                    book.getAuthor().toLowerCase().contains(searchQuery.get().toLowerCase());
+            boolean matchesGenreFilter = genreFilter.get() == null || genreFilter.get().isEmpty() ||
+                    book.getGenre().equalsIgnoreCase(genreFilter.get());
+            return matchesSearchQuery && matchesGenreFilter;
+        });
     }
 
     private void setupRefresh() {
@@ -79,6 +115,29 @@ public class DashboardViewModel {
         loadBooks();
     }
 
+    public ObservableList<Book> getFilteredBooks() {
+        return filteredBooks;
+    }
+
+    public StringProperty searchQueryProperty() {
+        return searchQuery;
+    }
+
+    public void setSearchQuery(String searchQuery) {
+        this.searchQuery.set(searchQuery);
+    }
+
+    public StringProperty genreFilterProperty() {
+        return genreFilter;
+    }
+
+    public void setGenreFilter(String genre) {
+        this.genreFilter.set(genre);
+    }
+
+    public List<String> getGenres() {
+        return List.of("Fiction", "Science Fiction", "Romance", "Political Satire", "Fantasy", "Modernist", "Gothic", "Adventure", "Satire");
+    }
 
     // Bind errorMessage for UI alerts
     private StringProperty errorMessage = new SimpleStringProperty();
@@ -174,5 +233,3 @@ public class DashboardViewModel {
         }
     }
 }
-
-

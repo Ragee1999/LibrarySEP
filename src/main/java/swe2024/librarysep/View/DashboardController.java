@@ -10,8 +10,6 @@ import swe2024.librarysep.ViewModel.DashboardViewModel;
 import static swe2024.librarysep.Model.SessionManager.getCurrentUser;
 
 public class DashboardController {
-
-
     @FXML
     private TableView<Book> bookTableView;
     @FXML
@@ -28,16 +26,24 @@ public class DashboardController {
     private TableColumn<Book, String> clientColumn;
     @FXML
     private TableColumn<Book, String> genreColumn;
-
+    @FXML
+    private TextField searchTextField;
+    @FXML
+    private MenuButton filterDropdownMenu;
 
     // Declaration of DashboardViewModel Instance
     private DashboardViewModel viewModel;
 
-
     public void setViewModel(DashboardViewModel viewModel) {
         this.viewModel = viewModel;
-        bookTableView.setItems(viewModel.getBooks());
+        // bookTableView.setItems(viewModel.getBooks());
+        bookTableView.setItems(viewModel.getFilteredBooks());
         viewModel.bindTableColumns(titleColumn, authorColumn, releaseYearColumn, idColumn, stateColumn, clientColumn, genreColumn);
+
+        // Bind search text field to update the filter predicate
+        searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            viewModel.setSearchQuery(newValue);
+        });
 
         // Binds the error message property to show alerts on changes
         this.viewModel.errorMessageProperty().addListener((observable, oldValue, newValue) -> {
@@ -46,6 +52,18 @@ public class DashboardController {
                 this.viewModel.errorMessageProperty().set(""); // Also resets the message to prevent repeated alerts
             }
         });
+
+        // Add genre filter items to the dropdown menu
+        for (String genre : viewModel.getGenres()) {
+            MenuItem item = new MenuItem(genre);
+            item.setOnAction(event -> viewModel.setGenreFilter(genre));
+            filterDropdownMenu.getItems().add(item);
+        }
+
+        // Add a "Clear Filter" item
+        MenuItem clearFilter = new MenuItem("Clear Filter");
+        clearFilter.setOnAction(event -> viewModel.setGenreFilter(null));
+        filterDropdownMenu.getItems().add(clearFilter);
     }
 
     @FXML
