@@ -10,4 +10,5 @@ public interface ILibraryManager extends Remote {
     void updateBookState(Book book) throws RemoteException;
     void deleteBook(int bookId) throws RemoteException;
     void addBook(Book book) throws RemoteException;
+    void updateBook(Book book) throws RemoteException;
 }

@@ -32,7 +32,7 @@ public class DatabaseService implements BookService {
 // CRUD RELATED METHODS BELOW
 
 
-// Retrieves a list of all books from the database making it into java objects in this case Books.
+    // Retrieves a list of all books from the database making it into java objects in this case Books.
     @Override
     public List<Book> getAllBooks() {
         List<Book> books = new ArrayList<>();
@@ -61,8 +61,6 @@ public class DatabaseService implements BookService {
         } catch (SQLException e) {
             System.out.println("Error fetching books from database: " + e.getMessage());
         }
-
-
         return books;
 
     }
@@ -108,6 +106,21 @@ public class DatabaseService implements BookService {
             statement.setInt(3, book.getReleaseYear());
             statement.setString(4, book.getGenre());
             statement.executeUpdate();
+        }
+    }
+
+    public void updateBook(Book book) throws SQLException {
+        String sql = "UPDATE books SET title = ?, author = ?, releaseYear = ?, genre = ? WHERE bookId = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, book.getTitle());
+            statement.setString(2, book.getAuthor());
+            statement.setInt(3, book.getReleaseYear());
+            statement.setString(4, book.getGenre());
+            statement.setInt(5, book.getBookId());
+            int affectedRows = statement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Updating the book failed, no rows affected.");
+            }
         }
     }
 }

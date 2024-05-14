@@ -42,4 +42,14 @@ public class RMIBookService implements BookService {
             throw new RuntimeException("Failed to add book due to remote exception", e);
         }
     }
+
+    @Override
+    public void updateBook(Book book) {
+        try {
+            client.updateBook(book);
+        } catch (RemoteException e) {
+            System.err.println("Remote exception occurred while updating book: " + e.getMessage());
+            throw new RuntimeException("Failed to update book due to remote exception", e);
+        }
+    }
 }

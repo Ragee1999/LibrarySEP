@@ -44,4 +44,14 @@ public class LibraryManagerImpl extends UnicastRemoteObject implements ILibraryM
             throw new RemoteException("Database error adding book", e);
         }
     }
+
+    @Override
+    public void updateBook(Book book) throws RemoteException {
+        try {
+            databaseService.updateBook(book);
+        } catch (SQLException e) {
+            System.err.println("SQL error while updating book: " + e.getMessage());
+            throw new RemoteException("Update failed", e);
+        }
+    }
 }

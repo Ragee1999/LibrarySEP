@@ -7,7 +7,7 @@ import java.rmi.RemoteException;
 import java.sql.SQLException;
 
 public class AddBookViewModel {
-    private BookService bookService; // This should be initialized somewhere, perhaps in the constructor
+    private BookService bookService;
 
     public AddBookViewModel(BookService service) {
         this.bookService = service;

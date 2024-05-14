@@ -28,7 +28,10 @@ public class Book implements Serializable { // We need to seralize book because 
         this(null, title, author, releaseYear, genre);
     }
 
+
+
     private Integer userId;
+
     public Integer getUserId() {
         return userId;
     }
@@ -55,11 +58,9 @@ public class Book implements Serializable { // We need to seralize book because 
         return title;
     }
 
-
     public String getAuthor() {
         return author;
     }
-
 
     public Integer getReleaseYear() {
         return releaseYear;
@@ -69,6 +70,22 @@ public class Book implements Serializable { // We need to seralize book because 
         return genre;
     }
 
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public void setReleaseYear(Integer releaseYear) {
+        this.releaseYear = releaseYear;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
 
     // for state string names
     public String getStateName() {
@@ -82,8 +99,6 @@ public class Book implements Serializable { // We need to seralize book because 
     public void setState(BookStates state) {
         this.state = state;
     }
-
-
 
 
     // LOAN ACTIONS

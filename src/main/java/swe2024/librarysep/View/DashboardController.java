@@ -54,6 +54,21 @@ public class DashboardController {
     }
 
     @FXML
+    private void handleOnClickEditBook() {
+        Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
+        if (selectedBook != null) {
+            EditBookController editBookController = Main.ShowEditBook();
+            if (editBookController != null) {
+                editBookController.setBook(selectedBook);
+            } else {
+                System.out.println("Failed to load the Edit Book view.");
+            }
+        } else {
+            System.out.println("No book selected");
+        }
+    }
+
+    @FXML
     private void handleBorrowBook() {
         Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
         User currentUser = getCurrentUser();

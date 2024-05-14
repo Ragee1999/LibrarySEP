@@ -48,7 +48,7 @@
                 <DropShadow />
             </effect>
         </Button>
-        <Button layoutX="520.0" layoutY="83.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="50.0" text="Edit">
+        <Button layoutX="520.0" layoutY="83.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="50.0" onAction="#handleOnClickEditBook" text="Edit">
             <effect>
                 <DropShadow />
             </effect>

@@ -39,7 +39,7 @@ public class AddBookController {
     private void handleAddBook() throws SQLException, RemoteException {
         String title = titleField.getText();
         String author = authorField.getText();
-        int releaseYear = Integer.parseInt(releaseYearField.getText()); // Consider try-catch for NumberFormatException
+        int releaseYear = Integer.parseInt(releaseYearField.getText());
         String genre = genreField.getText();
         showConfirmationDialog();
         viewModel.addBook(title, author, releaseYear, genre);

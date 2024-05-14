@@ -12,6 +12,7 @@ public interface BookService {
     void updateBookState(Book book); // Updates a state in the database
     void deleteBook(int bookId) throws SQLException, RemoteException;
     void addBook(Book book) throws SQLException, RemoteException;
-    }
+    void updateBook(Book book) throws SQLException, RemoteException;
+}
 
 

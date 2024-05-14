@@ -14,7 +14,7 @@ public class RMIClient {
             Registry registry = LocateRegistry.getRegistry("localhost", 1099);
             libraryManager = (ILibraryManager) registry.lookup("LibraryManager");
         } catch (Exception e) {
-            System.err.println("Client exception: " + e.toString());
+            System.err.println("Client exception: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -42,5 +42,9 @@ public class RMIClient {
 
     public void addBook(Book book) throws RemoteException {
         libraryManager.addBook(book);
+    }
+
+    public void updateBook(Book book) throws RemoteException {
+        libraryManager.updateBook(book);
     }
 }
