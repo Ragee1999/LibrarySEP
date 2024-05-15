@@ -35,6 +35,8 @@ public class DashboardController {
     // Declaration of DashboardViewModel Instance
     private DashboardViewModel viewModel;
 
+    private MenuItem currentSelectedItem;
+
     public void setViewModel(DashboardViewModel viewModel) {
         this.viewModel = viewModel;
         bookTableView.setItems(viewModel.getBooks());
@@ -59,6 +61,7 @@ public class DashboardController {
             MenuItem item = new MenuItem(genre);
             item.setOnAction(event -> {
                 viewModel.setGenreFilter(genre);
+                highlightSelectedItem(item);
                 updateTableViewItems();
             });
             filterDropdownMenu.getItems().add(item);
@@ -68,13 +71,27 @@ public class DashboardController {
         MenuItem clearFilter = new MenuItem("Clear Filter");
         clearFilter.setOnAction(event -> {
                 viewModel.setGenreFilter(null);
+                highlightSelectedItem(clearFilter);
                 updateTableViewItems();
             }
         );
         filterDropdownMenu.getItems().add(clearFilter);
     }
 
+    private void highlightSelectedItem(MenuItem selectedItem) {
+        if (currentSelectedItem != null) {
+            currentSelectedItem.setStyle(""); // Remove previous style
+        }
+        selectedItem.setStyle("-fx-background-color: #d3d3d3; -fx-text-fill: black; -fx-percent-width: 100%; -fx-percent-height: 100%;");
+        currentSelectedItem = selectedItem;
 
+        // Update MenuButton text
+        if ("Clear Filter".equals(selectedItem.getText())) {
+            filterDropdownMenu.setText("Filter Books");
+        } else {
+            filterDropdownMenu.setText("Filter Books: " + selectedItem.getText());
+        }
+    }
 
     private void updateTableViewItems() {
         if (searchTextField.getText().isEmpty() && viewModel.getGenreFilter().isEmpty()) {
