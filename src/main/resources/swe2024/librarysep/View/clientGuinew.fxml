@@ -27,29 +27,11 @@
                </ImageView>
             </graphic>
          </Button>
-         <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="222.0" style="-fx-background-color: #4ab4e1;" text="Borrow " textFill="#eae4e4">
-            <graphic>
-               <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
-                  <image>
-                     <Image url="@../../../../../../img/7444566.png" />
-                  </image>
-               </ImageView>
-            </graphic>
-         </Button>
          <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="222.0" style="-fx-background-color: #4ab4e1;" text="Return" textFill="#eae4e4">
             <graphic>
                <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                   <image>
                      <Image url="@../../../../../../img/4544831_business_comerce_delivery_return_shop_icon.png" />
-                  </image>
-               </ImageView>
-            </graphic>
-         </Button>
-         <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="222.0" style="-fx-background-color: #4ab4e1;" text="Reserve" textFill="#eae4e4">
-            <graphic>
-               <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
-                  <image>
-                     <Image url="@../../../../../../img/9698510_reserve_icon.png" />
                   </image>
                </ImageView>
             </graphic>
@@ -81,22 +63,14 @@
    <top>
       <HBox prefHeight="62.0" prefWidth="848.0" style="-fx-background-color: #00008B;" BorderPane.alignment="CENTER">
          <children>
-            <Label prefHeight="42.0" prefWidth="357.0" text="Library management System" textFill="#eadcdc">
+            <Label prefHeight="54.0" prefWidth="190.0" text="Client Profile  " textFill="#eadcdc">
                <font>
-                  <Font name="Arial Nova Light Italic" size="24.0" />
+                  <Font name="Bodoni MT Condensed" size="36.0" />
                </font>
                <padding>
                   <Insets left="40.0" top="10.0" />
                </padding>
             </Label>
-            <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
-               <HBox.margin>
-                  <Insets top="15.0" />
-               </HBox.margin>
-               <image>
-                  <Image url="@../../../../../../img/9044399_gui_management_icon.png" />
-               </image>
-            </ImageView>
          </children>
       </HBox>
    </top>
@@ -112,11 +86,10 @@
          <center>
             <TableView prefHeight="493.0" prefWidth="631.0" BorderPane.alignment="CENTER">
                <columns>
-                  <TableColumn prefWidth="103.20001065731049" text="Genre" />
-                  <TableColumn prefWidth="135.20008087158203" text="Title" />
-                  <TableColumn prefWidth="110.39999389648438" text="Author" />
-                  <TableColumn minWidth="0.79998779296875" prefWidth="137.60003662109375" text="Release Year" />
-                  <TableColumn minWidth="0.0" prefWidth="143.20004272460938" text="State" />
+                  <TableColumn prefWidth="155.20001828670502" text="Book " />
+                  <TableColumn prefWidth="160.0" text="Date Borrowed " />
+                  <TableColumn minWidth="0.79998779296875" prefWidth="176.79998779296875" text="Return Due Date " />
+                  <TableColumn minWidth="0.0" prefWidth="135.20004272460938" text="State" />
                </columns>
             </TableView>
          </center>
