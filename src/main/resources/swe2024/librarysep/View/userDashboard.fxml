@@ -28,10 +28,6 @@
                 </graphic>
             </Button>
             <MenuButton fx:id="userFilterDropdownMenu" alignment="CENTER" mnemonicParsing="false" prefHeight="43.0" prefWidth="222.0" style="-fx-background-color: #4ab4e1;" text="Filter Books " textFill="#e4dbdb">
-                <items>
-                    <MenuItem mnemonicParsing="false" text="Action 1" />
-                    <MenuItem mnemonicParsing="false" text="Action 2" />
-                </items>
                 <graphic>
                     <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                         <image>
