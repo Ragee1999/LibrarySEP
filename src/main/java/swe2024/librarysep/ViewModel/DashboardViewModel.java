@@ -20,7 +20,6 @@ import java.util.List;
 public class DashboardViewModel {
     private ObservableList<Book> books = FXCollections.observableArrayList();
     private BookService bookService;
-    private Timeline refresh;
     private FilteredList<Book> filteredBooks;
     private StringProperty searchQuery = new SimpleStringProperty("");
     private StringProperty genreFilter = new SimpleStringProperty(null);
@@ -39,17 +38,6 @@ public class DashboardViewModel {
             updateFilter();
         });
 
-        // Update the filtered list whenever the search query changes
-//        searchQuery.addListener((observable, oldValue, newValue) -> {
-//            filteredBooks.setPredicate(book -> {
-//                if (newValue == null || newValue.isEmpty()) {
-//                    return true;
-//                }
-//                String lowerCaseQuery = newValue.toLowerCase();
-//                return book.getTitle().toLowerCase().contains(lowerCaseQuery)
-//                        || book.getAuthor().toLowerCase().contains(lowerCaseQuery);
-//            });
-//        });
     }
 
     private void updateFilter() {
@@ -64,13 +52,9 @@ public class DashboardViewModel {
     }
 
     private void setupRefresh() {
-        refresh = new Timeline(new KeyFrame(Duration.seconds(5), event -> loadBooks()));
+        Timeline refresh = new Timeline(new KeyFrame(Duration.seconds(5), event -> loadBooks()));
         refresh.setCycleCount(Timeline.INDEFINITE);
         refresh.play();
-    }
-
-    public ObservableList<Book> getBooks() {
-        return books;
     }
 
     // Bind properties
@@ -119,17 +103,11 @@ public class DashboardViewModel {
         return filteredBooks;
     }
 
-    public StringProperty searchQueryProperty() {
-        return searchQuery;
-    }
 
     public void setSearchQuery(String searchQuery) {
         this.searchQuery.set(searchQuery);
     }
 
-    public StringProperty genreFilterProperty() {
-        return genreFilter;
-    }
 
     public void setGenreFilter(String genre) {
         this.genreFilter.set(genre);

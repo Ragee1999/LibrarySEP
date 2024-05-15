@@ -34,7 +34,6 @@ public class userDashboardController {
 
     public void setViewModel(userDashboardViewModel viewModelUser) {
         this.viewModelUser = viewModelUser;
-        // bookTableViewUser.setItems(viewModelUser.getBooks());
         bookTableViewUser.setItems(viewModelUser.getFilteredBooks());
         viewModelUser.bindTableColumns(titleColumn, authorColumn, releaseYearColumn, stateColumn, genreColumn);
 

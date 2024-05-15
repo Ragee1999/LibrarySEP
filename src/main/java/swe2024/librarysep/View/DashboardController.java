@@ -36,7 +36,6 @@ public class DashboardController {
 
     public void setViewModel(DashboardViewModel viewModel) {
         this.viewModel = viewModel;
-        // bookTableView.setItems(viewModel.getBooks());
         bookTableView.setItems(viewModel.getFilteredBooks());
         viewModel.bindTableColumns(titleColumn, authorColumn, releaseYearColumn, idColumn, stateColumn, clientColumn, genreColumn);
 
