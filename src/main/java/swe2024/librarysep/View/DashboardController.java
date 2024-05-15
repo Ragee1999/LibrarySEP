@@ -74,6 +74,8 @@ public class DashboardController {
         filterDropdownMenu.getItems().add(clearFilter);
     }
 
+
+
     private void updateTableViewItems() {
         if (searchTextField.getText().isEmpty() && viewModel.getGenreFilter().isEmpty()) {
             bookTableView.setItems(viewModel.getBooks());

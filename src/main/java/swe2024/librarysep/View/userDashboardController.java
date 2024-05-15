@@ -60,14 +60,15 @@ public class userDashboardController {
                 updateTableViewItems();
             });
             userFilterDropdownMenu.getItems().add(item);
+
         }
 
         // Add a "Clear Filter" item
         MenuItem clearFilter = new MenuItem("Clear Filter");
         clearFilter.setOnAction(event -> {
-                viewModelUser.setGenreFilter(null);
-                updateTableViewItems();
-            }
+                    viewModelUser.setGenreFilter(null);
+                    updateTableViewItems();
+                }
         );
         userFilterDropdownMenu.getItems().add(clearFilter);
     }

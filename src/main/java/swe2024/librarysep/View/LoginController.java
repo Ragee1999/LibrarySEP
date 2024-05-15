@@ -43,7 +43,7 @@ public class LoginController {
             } else {
                 SessionManager.loginUser(user);
                 System.out.println("User Successfully logged in");
-                Main.showDashboard(); // Navigate to the user dashboard
+                Main.showUserDashboard(); // Navigate to the user dashboard
             }
         } else {
             showLoginAlert("Login Failed", "Invalid username or password");

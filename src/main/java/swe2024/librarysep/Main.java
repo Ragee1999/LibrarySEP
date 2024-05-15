@@ -53,7 +53,7 @@ public class Main extends Application {
                 }
         }
 
-        public static void showDashboard() {
+        public static void showUserDashboard() {
                 try {
                         FXMLLoader loader = new FXMLLoader(Main.class.getResource("/swe2024/librarysep/View/userDashboard.fxml"));
                         Parent root = loader.load();
