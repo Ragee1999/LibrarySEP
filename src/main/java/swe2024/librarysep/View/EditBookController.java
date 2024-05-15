@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 import swe2024.librarysep.Main;
 import swe2024.librarysep.Model.Book;
 import swe2024.librarysep.Server.RMIBookServiceFactory;
+import swe2024.librarysep.Utility.SceneManager;
 import swe2024.librarysep.ViewModel.EditBookViewModel;
 
 import java.rmi.RemoteException;
@@ -41,7 +42,7 @@ public class EditBookController {
             viewModel.updateBook(); // ViewModel handles updating the book
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Book updated successfully!");
             alert.showAndWait();
-            Main.showAdminDashboard();
+            SceneManager.showAdminDashboard();
         } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid input for Release Year!");
             alert.showAndWait();

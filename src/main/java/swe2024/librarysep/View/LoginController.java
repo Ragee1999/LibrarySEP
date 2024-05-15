@@ -4,9 +4,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import swe2024.librarysep.Main;
-import swe2024.librarysep.Model.SessionManager;
+import swe2024.librarysep.Utility.SessionManager;
 import swe2024.librarysep.Model.User;
+import swe2024.librarysep.Utility.SceneManager;
 import swe2024.librarysep.ViewModel.LoginViewModel;
 
 public class LoginController {
@@ -20,7 +20,12 @@ public class LoginController {
     @FXML
     private Button registerButton;
 
-    private LoginViewModel loginViewModel = new LoginViewModel();
+
+    private LoginViewModel loginViewModel;
+
+    public LoginController(LoginViewModel loginViewModel) {
+        this.loginViewModel = loginViewModel;
+    }
 
     @FXML
     private void initialize() {
@@ -28,22 +33,22 @@ public class LoginController {
         usernameField.textProperty().bindBidirectional(loginViewModel.usernameProperty());
         passwordField.textProperty().bindBidirectional(loginViewModel.passwordProperty());
 
-        registerButton.setOnAction(event -> Main.showRegistration());
+        registerButton.setOnAction(event -> SceneManager.showRegistration());
         loginButton.setOnAction(event -> handleLogin());
     }
 
 
     private void handleLogin() {
-        User user = loginViewModel.authenticateUser();
+        User user = loginViewModel.authenticate();
         if (user != null) {
             if (user.getUsername().equals("Admin")) { // Check if the username is 'Admin'
                 SessionManager.loginUser(user);
                 System.out.println("Admin Successfully logged in");
-                Main.showAdminDashboard(); // Navigate to the admin dashboard
+                SceneManager.showAdminDashboard(); // Navigate to the admin dashboard
             } else {
                 SessionManager.loginUser(user);
                 System.out.println("User Successfully logged in");
-                Main.showUserDashboard(); // Navigate to the user dashboard
+                SceneManager.showUserDashboard(); // Navigate to the user dashboard
             }
         } else {
             showLoginAlert("Login Failed", "Invalid username or password");

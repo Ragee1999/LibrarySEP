@@ -6,6 +6,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import swe2024.librarysep.Main;
 import swe2024.librarysep.Server.RMIBookServiceFactory;
+import swe2024.librarysep.Utility.SceneManager;
 import swe2024.librarysep.ViewModel.AddBookViewModel;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
@@ -30,7 +31,7 @@ public class AddBookController {
 
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
-                Main.showAdminDashboard();
+                SceneManager.showAdminDashboard();
             }
         });
     }

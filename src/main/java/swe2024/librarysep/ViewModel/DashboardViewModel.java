@@ -11,8 +11,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Duration;
 import swe2024.librarysep.Model.*;
-
-
 import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.List;
@@ -122,7 +120,8 @@ public class DashboardViewModel {
     }
 
     public List<String> getGenres() {
-        return List.of("Fiction", "Science Fiction", "Romance", "Political Satire", "Fantasy", "Modernist", "Gothic", "Adventure", "Satire");
+        return List.of("Fiction", "Science Fiction", "Romance", "Political Satire",
+                "Fantasy", "Modernist", "Gothic", "Adventure", "Satire");
     }
 
     // Bind errorMessage for UI alerts

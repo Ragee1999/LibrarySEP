@@ -5,6 +5,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import swe2024.librarysep.Main;
+import swe2024.librarysep.Utility.SceneManager;
 import swe2024.librarysep.ViewModel.RegistrationViewModel;
 
 public class RegistrationController {
@@ -43,7 +44,7 @@ public class RegistrationController {
     }
 
     private void goBackToLogin() {
-        Main.showLogin();
+        SceneManager.showLogin();
     }
 
     private void handleCreateAccount() {

@@ -6,7 +6,7 @@ import javafx.scene.control.*;
 import swe2024.librarysep.Model.Book;
 import swe2024.librarysep.Model.User;
 import swe2024.librarysep.ViewModel.userDashboardViewModel;
-import static swe2024.librarysep.Model.SessionManager.getCurrentUser;
+import static swe2024.librarysep.Utility.SessionManager.getCurrentUser;
 
 //
 // This class is almost similar to DashboardController, the only difference being constructor having 2 fewer columns
