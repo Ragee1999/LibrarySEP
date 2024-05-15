@@ -40,17 +40,7 @@ public class userDashboardViewModel {
             updateFilter();
         });
 
-        // Update the filtered list whenever the search query changes
-//        userSearchQuery.addListener((observable, oldValue, newValue) -> {
-//            filteredBooks.setPredicate(book -> {
-//                if (newValue == null || newValue.isEmpty()) {
-//                    return true;
-//                }
-//                String lowerCaseQuery = newValue.toLowerCase();
-//                return book.getTitle().toLowerCase().contains(lowerCaseQuery)
-//                        || book.getAuthor().toLowerCase().contains(lowerCaseQuery);
-//            });
-//        });
+
     }
 
     private void updateFilter() {
