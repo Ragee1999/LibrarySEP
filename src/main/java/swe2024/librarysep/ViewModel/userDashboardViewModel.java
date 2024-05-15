@@ -122,7 +122,7 @@ public class userDashboardViewModel {
     }
 
     public void setUserSearchQuery(String searchQuery) {
-        this.userSearchQuery.set(searchQuery);
+        this.userSearchQuery.set(searchQuery == null ? "" : searchQuery);
     }
 
     public StringProperty genreFilterProperty() {
@@ -130,7 +130,11 @@ public class userDashboardViewModel {
     }
 
     public void setGenreFilter(String genre) {
-        this.userGenreFilter.set(genre);
+        this.userGenreFilter.set(genre == null ? "" : genre);
+    }
+
+    public String getGenreFilter() {
+        return userGenreFilter.get() == null ? "" : userGenreFilter.get();
     }
 
     public List<String> getGenres() {

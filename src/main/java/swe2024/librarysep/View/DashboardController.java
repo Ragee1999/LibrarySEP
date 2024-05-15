@@ -1,5 +1,6 @@
 package swe2024.librarysep.View;
 
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import swe2024.librarysep.Main;
@@ -36,12 +37,13 @@ public class DashboardController {
 
     public void setViewModel(DashboardViewModel viewModel) {
         this.viewModel = viewModel;
-        bookTableView.setItems(viewModel.getFilteredBooks());
+        bookTableView.setItems(viewModel.getBooks());
         viewModel.bindTableColumns(titleColumn, authorColumn, releaseYearColumn, idColumn, stateColumn, clientColumn, genreColumn);
 
         // Bind search text field to update the filter predicate
         searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             viewModel.setSearchQuery(newValue);
+            updateTableViewItems();
         });
 
         // Binds the error message property to show alerts on changes
@@ -55,14 +57,32 @@ public class DashboardController {
         // Add genre filter items to the dropdown menu
         for (String genre : viewModel.getGenres()) {
             MenuItem item = new MenuItem(genre);
-            item.setOnAction(event -> viewModel.setGenreFilter(genre));
+            item.setOnAction(event -> {
+                viewModel.setGenreFilter(genre);
+                updateTableViewItems();
+            });
             filterDropdownMenu.getItems().add(item);
         }
 
+
         // Add a "Clear Filter" item
         MenuItem clearFilter = new MenuItem("Clear Filter");
-        clearFilter.setOnAction(event -> viewModel.setGenreFilter(null));
+        clearFilter.setOnAction(event -> {
+                    viewModel.setGenreFilter(null);
+                    updateTableViewItems();
+                }
+        );
         filterDropdownMenu.getItems().add(clearFilter);
+    }
+
+    private void updateTableViewItems() {
+        if (searchTextField.getText().isEmpty() && viewModel.getGenreFilter().isEmpty()) {
+            bookTableView.setItems(viewModel.getBooks());
+        } else {
+            SortedList<Book> sortedBooks = new SortedList<>(viewModel.getFilteredBooks());
+            sortedBooks.comparatorProperty().bind(bookTableView.comparatorProperty());
+            bookTableView.setItems(sortedBooks);
+        }
     }
 
     @FXML

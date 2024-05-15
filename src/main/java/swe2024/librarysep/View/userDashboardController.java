@@ -1,5 +1,6 @@
 package swe2024.librarysep.View;
 
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import swe2024.librarysep.Model.Book;
@@ -34,12 +35,13 @@ public class userDashboardController {
 
     public void setViewModel(userDashboardViewModel viewModelUser) {
         this.viewModelUser = viewModelUser;
-        bookTableViewUser.setItems(viewModelUser.getFilteredBooks());
+        bookTableViewUser.setItems(viewModelUser.getBooks());
         viewModelUser.bindTableColumns(titleColumn, authorColumn, releaseYearColumn, stateColumn, genreColumn);
 
         // Bind search text field to update the filter predicate
         userSearchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             viewModelUser.setUserSearchQuery(newValue);
+            updateTableViewItems();
         });
 
         // Binds the error message property to show alerts on changes
@@ -53,14 +55,30 @@ public class userDashboardController {
         // Add genre filter items to the dropdown menu
         for (String genre : viewModelUser.getGenres()) {
             MenuItem item = new MenuItem(genre);
-            item.setOnAction(event -> viewModelUser.setGenreFilter(genre));
-            userFilterDropdownMenu.getItems().add(item);
+            item.setOnAction(event -> {
+                viewModelUser.setGenreFilter(genre);
+                updateTableViewItems();
+            });
         }
 
         // Add a "Clear Filter" item
         MenuItem clearFilter = new MenuItem("Clear Filter");
-        clearFilter.setOnAction(event -> viewModelUser.setGenreFilter(null));
+        clearFilter.setOnAction(event -> {
+                    viewModelUser.setGenreFilter(null);
+                    updateTableViewItems();
+                }
+        );
         userFilterDropdownMenu.getItems().add(clearFilter);
+    }
+
+    private void updateTableViewItems() {
+        if (userSearchTextField.getText().isEmpty() && viewModelUser.getGenreFilter().isEmpty()) {
+            bookTableViewUser.setItems(viewModelUser.getBooks());
+        } else {
+            SortedList<Book> sortedBooks = new SortedList<>(viewModelUser.getFilteredBooks());
+            sortedBooks.comparatorProperty().bind(bookTableViewUser.comparatorProperty());
+            bookTableViewUser.setItems(sortedBooks);
+        }
     }
 
     @FXML

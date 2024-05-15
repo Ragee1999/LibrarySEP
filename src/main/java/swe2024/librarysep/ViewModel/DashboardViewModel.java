@@ -37,8 +37,12 @@ public class DashboardViewModel {
         genreFilter.addListener((observable, oldValue, newValue) -> {
             updateFilter();
         });
-
     }
+
+    public ObservableList<Book> getBooks() {
+        return books;
+    }
+
 
     private void updateFilter() {
         filteredBooks.setPredicate(book -> {
@@ -105,12 +109,16 @@ public class DashboardViewModel {
 
 
     public void setSearchQuery(String searchQuery) {
-        this.searchQuery.set(searchQuery);
+        this.searchQuery.set(searchQuery == null ? "" : searchQuery);
     }
 
 
     public void setGenreFilter(String genre) {
-        this.genreFilter.set(genre);
+        this.genreFilter.set(genre == null ? "" : genre);
+    }
+
+    public String getGenreFilter() {
+        return genreFilter.get() == null ? "" : genreFilter.get();
     }
 
     public List<String> getGenres() {
