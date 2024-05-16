@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import swe2024.librarysep.Model.Book;
 import swe2024.librarysep.Model.User;
+import swe2024.librarysep.Utility.SceneManager;
 import swe2024.librarysep.ViewModel.userDashboardViewModel;
 import static swe2024.librarysep.Utility.SessionManager.getCurrentUser;
 
@@ -71,6 +72,12 @@ public class userDashboardController {
                 }
         );
         userFilterDropdownMenu.getItems().add(clearFilter);
+    }
+
+
+    @FXML
+    private void handleOnClickOpenMyProfile() {
+        SceneManager.showMyProfile(getCurrentUser());
     }
 
     private void updateTableViewItems() {

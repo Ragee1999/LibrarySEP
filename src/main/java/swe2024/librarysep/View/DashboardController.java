@@ -90,6 +90,11 @@ public class DashboardController {
     }
 
     @FXML
+    private void handleOnClickOpenMyProfile() {
+        SceneManager.showMyProfile(getCurrentUser());
+    }
+
+    @FXML
     private void handleOnClickEditBook() {
         Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
         if (selectedBook != null) {

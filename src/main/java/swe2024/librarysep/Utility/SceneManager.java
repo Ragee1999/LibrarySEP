@@ -126,7 +126,7 @@ public class SceneManager {
             FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource("/swe2024/librarysep/View/myProfile.fxml"));
             Parent root = loader.load();
             MyProfileController controller = loader.getController();
-            MyProfileViewModel viewModel = new MyProfileViewModel(currentUser);
+            MyProfileViewModel viewModel = new MyProfileViewModel(currentUser, RMIBookServiceFactory.getBookService());
             controller.setViewModel(viewModel);
 
             primaryStage.setScene(new Scene(root));

@@ -4,7 +4,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
-import swe2024.librarysep.Main;
 import swe2024.librarysep.Server.RMIBookServiceFactory;
 import swe2024.librarysep.Utility.SceneManager;
 import swe2024.librarysep.ViewModel.AddBookViewModel;
