@@ -36,6 +36,7 @@ public class EditBookController {
     public void setBook(Book book) {
         viewModel.setBook(book);
     }
+
     @FXML
     private void handleBookSave() {
         try {
@@ -50,5 +51,10 @@ public class EditBookController {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to update the book: " + e.getMessage());
             alert.showAndWait();
         }
+    }
+
+    @FXML
+    private void handleCancel() {
+        SceneManager.showAdminDashboard();
     }
 }

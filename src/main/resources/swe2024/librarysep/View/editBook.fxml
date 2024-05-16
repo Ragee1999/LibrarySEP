@@ -5,12 +5,12 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="424.0" prefWidth="250.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="swe2024.librarysep.View.EditBookController">
+<AnchorPane prefHeight="458.0" prefWidth="250.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="swe2024.librarysep.View.EditBookController">
     <TextField fx:id="titleField" layoutX="52.0" layoutY="88.0" />
     <TextField fx:id="authorField" layoutX="52.0" layoutY="152.0" />
     <TextField fx:id="releaseYearField" layoutX="52.0" layoutY="214.0" />
     <TextField fx:id="genreField" layoutX="52.0" layoutY="280.0" />
-    <Button fx:id="editBookButton" layoutX="76.0" layoutY="343.0" mnemonicParsing="false" onAction="#handleBookSave" prefHeight="38.0" prefWidth="98.0" text="Edit Book">
+    <Button fx:id="editBookButton" layoutX="76.0" layoutY="330.0" mnemonicParsing="false" onAction="#handleBookSave" prefHeight="38.0" prefWidth="98.0" text="Save Book">
         <effect>
             <DropShadow />
         </effect>
@@ -20,4 +20,9 @@
             <Font name="Arial Nova Cond Light" size="24.0" />
         </font>
     </Label>
+   <Button layoutX="78.0" layoutY="394.0" mnemonicParsing="false" onAction="#handleCancel" prefHeight="38.0" prefWidth="98.0" text="Cancel">
+      <effect>
+         <DropShadow />
+      </effect>
+   </Button>
 </AnchorPane>

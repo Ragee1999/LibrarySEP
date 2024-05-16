@@ -48,11 +48,11 @@
             <top>
                 <HBox prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #eaeaea;" BorderPane.alignment="CENTER">
                     <children>
-                        <TextField prefHeight="40.0" prefWidth="625.0" text="                  Your current books and reservations">
+                        <Label prefHeight="40.0" prefWidth="625.0" text="                  Your current books and reservations">
                             <font>
                                 <Font name="System Bold" size="14.0" />
                             </font>
-                        </TextField>
+                        </Label>
                   <Label prefHeight="40.0" prefWidth="278.0" text="  Username:">
                      <HBox.margin>
                         <Insets />

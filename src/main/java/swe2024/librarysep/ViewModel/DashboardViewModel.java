@@ -41,12 +41,16 @@ public class DashboardViewModel {
         return books;
     }
 
-
+// Admin can additionally search by book id and state names, which they can't in the user dashboard
     private void updateFilter() {
         filteredBooks.setPredicate(book -> {
             boolean matchesSearchQuery = searchQuery.get() == null || searchQuery.get().isEmpty() ||
                     book.getTitle().toLowerCase().contains(searchQuery.get().toLowerCase()) ||
-                    book.getAuthor().toLowerCase().contains(searchQuery.get().toLowerCase());
+                    book.getAuthor().toLowerCase().contains(searchQuery.get().toLowerCase()) ||
+                    book.getReleaseYear().toString().contains(searchQuery.get().toLowerCase()) ||
+                    book.getGenre().toLowerCase().contains(searchQuery.get().toLowerCase()) ||
+                    book.getStateName().toLowerCase().contains(searchQuery.get().toLowerCase()) ||
+                    book.getBookId().toString().contains(searchQuery.get().toLowerCase());
             boolean matchesGenreFilter = genreFilter.get() == null || genreFilter.get().isEmpty() ||
                     book.getGenre().equalsIgnoreCase(genreFilter.get());
             return matchesSearchQuery && matchesGenreFilter;

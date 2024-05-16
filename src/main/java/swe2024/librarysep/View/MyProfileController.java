@@ -5,8 +5,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import swe2024.librarysep.Model.Book;
+import swe2024.librarysep.Model.User;
 import swe2024.librarysep.Utility.SceneManager;
 import swe2024.librarysep.ViewModel.MyProfileViewModel;
+
+import static swe2024.librarysep.Utility.SessionManager.getCurrentUser;
 
 public class MyProfileController {
     @FXML
@@ -38,8 +41,14 @@ public class MyProfileController {
         viewModel.bindProfileTableColumns(titleColumn, authorColumn, releaseYearColumn, stateColumn, genreColumn);
     }
 
+    @FXML
     public void handleBackToDashboard() {
-        SceneManager.showAdminDashboard();
+        User currentUser = getCurrentUser();
+        if (currentUser != null && "Admin".equals(currentUser.getUsername())) {
+            SceneManager.showAdminDashboard();
+        } else {
+            SceneManager.showUserDashboard();
+        }
     }
 }
 
