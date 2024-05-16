@@ -75,6 +75,8 @@ public class DashboardController {
             }
         );
         filterDropdownMenu.getItems().add(clearFilter);
+
+        highlightSelectedItem(clearFilter);
     }
 
     private void highlightSelectedItem(MenuItem selectedItem) {

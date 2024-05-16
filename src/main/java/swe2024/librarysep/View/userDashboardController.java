@@ -76,6 +76,8 @@ public class userDashboardController {
                 }
         );
         userFilterDropdownMenu.getItems().add(clearFilter);
+
+        highlightSelectedItem(clearFilter);
     }
 
     private void highlightSelectedItem(MenuItem selectedItem) {
