@@ -3,7 +3,6 @@ package swe2024.librarysep.Server;
 import java.rmi.server.UnicastRemoteObject;
 import java.rmi.RemoteException;
 import swe2024.librarysep.Database.DatabaseService;
-
 import java.sql.SQLException;
 import java.util.List;
 import swe2024.librarysep.Model.Book;

@@ -11,8 +11,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Duration;
 import swe2024.librarysep.Model.*;
-
-
 import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.List;
@@ -43,12 +41,16 @@ public class DashboardViewModel {
         return books;
     }
 
-
+// Admin can additionally search by book id and state names, which they can't in the user dashboard
     private void updateFilter() {
         filteredBooks.setPredicate(book -> {
             boolean matchesSearchQuery = searchQuery.get() == null || searchQuery.get().isEmpty() ||
                     book.getTitle().toLowerCase().contains(searchQuery.get().toLowerCase()) ||
-                    book.getAuthor().toLowerCase().contains(searchQuery.get().toLowerCase());
+                    book.getAuthor().toLowerCase().contains(searchQuery.get().toLowerCase()) ||
+                    book.getReleaseYear().toString().contains(searchQuery.get().toLowerCase()) ||
+                    book.getGenre().toLowerCase().contains(searchQuery.get().toLowerCase()) ||
+                    book.getStateName().toLowerCase().contains(searchQuery.get().toLowerCase()) ||
+                    book.getBookId().toString().contains(searchQuery.get().toLowerCase());
             boolean matchesGenreFilter = genreFilter.get() == null || genreFilter.get().isEmpty() ||
                     book.getGenre().equalsIgnoreCase(genreFilter.get());
             return matchesSearchQuery && matchesGenreFilter;
@@ -122,7 +124,8 @@ public class DashboardViewModel {
     }
 
     public List<String> getGenres() {
-        return List.of("Fiction", "Science Fiction", "Romance", "Political Satire", "Fantasy", "Modernist", "Gothic", "Adventure", "Satire");
+        return List.of("Fiction", "Science Fiction", "Romance", "Political Satire",
+                "Fantasy", "Modernist", "Gothic", "Adventure", "Satire");
     }
 
     // Bind errorMessage for UI alerts

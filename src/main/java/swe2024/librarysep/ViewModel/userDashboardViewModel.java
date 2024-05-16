@@ -47,7 +47,9 @@ public class userDashboardViewModel {
         filteredBooks.setPredicate(book -> {
             boolean matchesSearchQuery = userSearchQuery.get() == null || userSearchQuery.get().isEmpty() ||
                     book.getTitle().toLowerCase().contains(userSearchQuery.get().toLowerCase()) ||
-                    book.getAuthor().toLowerCase().contains(userSearchQuery.get().toLowerCase());
+                    book.getAuthor().toLowerCase().contains(userSearchQuery.get().toLowerCase())||
+            book.getReleaseYear().toString().contains(userSearchQuery.get().toLowerCase()) ||
+                    book.getGenre().toLowerCase().contains(userSearchQuery.get().toLowerCase());
             boolean matchesGenreFilter = userGenreFilter.get() == null || userGenreFilter.get().isEmpty() ||
                     book.getGenre().equalsIgnoreCase(userGenreFilter.get());
             return matchesSearchQuery && matchesGenreFilter;
@@ -107,16 +109,9 @@ public class userDashboardViewModel {
         return filteredBooks;
     }
 
-    public StringProperty searchQueryProperty() {
-        return userSearchQuery;
-    }
 
     public void setUserSearchQuery(String searchQuery) {
         this.userSearchQuery.set(searchQuery == null ? "" : searchQuery);
-    }
-
-    public StringProperty genreFilterProperty() {
-        return userGenreFilter;
     }
 
     public void setGenreFilter(String genre) {

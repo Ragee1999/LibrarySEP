@@ -5,8 +5,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import swe2024.librarysep.Model.Book;
 import swe2024.librarysep.Model.User;
+import swe2024.librarysep.Utility.SceneManager;
 import swe2024.librarysep.ViewModel.userDashboardViewModel;
-import static swe2024.librarysep.Model.SessionManager.getCurrentUser;
+import static swe2024.librarysep.Utility.SessionManager.getCurrentUser;
 
 //
 // This class is almost similar to DashboardController, the only difference being constructor having 2 fewer columns
@@ -69,12 +70,14 @@ public class userDashboardController {
         // Add a "Clear Filter" item
         MenuItem clearFilter = new MenuItem("Clear Filter");
         clearFilter.setOnAction(event -> {
-                viewModelUser.setGenreFilter(null);
-                highlightSelectedItem(clearFilter);
-                updateTableViewItems();
-            }
+                    viewModelUser.setGenreFilter(null);
+                    highlightSelectedItem(clearFilter);
+                    updateTableViewItems();
+                }
         );
         userFilterDropdownMenu.getItems().add(clearFilter);
+
+        highlightSelectedItem(clearFilter);
     }
 
     private void highlightSelectedItem(MenuItem selectedItem) {
@@ -100,6 +103,11 @@ public class userDashboardController {
             sortedBooks.comparatorProperty().bind(bookTableViewUser.comparatorProperty());
             bookTableViewUser.setItems(sortedBooks);
         }
+    }
+
+    @FXML
+    private void handleOnClickOpenMyProfile() {
+        SceneManager.showMyProfile(getCurrentUser());
     }
 
     @FXML

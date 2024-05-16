@@ -23,6 +23,7 @@ public class Book implements Serializable { // We need to seralize book because 
         this.genre = genre;
     }
 
+
     // Constructor without bookId for adding new books
     public Book(String title, String author, Integer releaseYear, String genre) {
         this(null, title, author, releaseYear, genre);

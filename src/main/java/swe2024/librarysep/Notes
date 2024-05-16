@@ -20,8 +20,8 @@ Aswell as the fact that any majority of code in viewModel such as methods is ONL
 Perhaps in this order we can get things done:
 
 First we focus single client and just on the essential functionality
-1. Database setup  ::(Finished 09-05-2024)
-1.1 Database CRUD
+1. Database setup  (Finished 09-05-2024)
+1.1 Database CRUD (Finishjed 12-05-2024)
 2. Classes such as book and state management of books ::(Finished 09-05-2024)
 3. Viewmodels for books and user (In this version the IDE user has to perform actions on buttons)
 3.1 For now just have a dashboard ViewModel and dashboard Controller ::(Finished 09-05-2024)

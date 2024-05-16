@@ -3,12 +3,11 @@ package swe2024.librarysep.View;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import swe2024.librarysep.Main;
 import swe2024.librarysep.Model.Book;
 import swe2024.librarysep.Model.User;
+import swe2024.librarysep.Utility.SceneManager;
 import swe2024.librarysep.ViewModel.DashboardViewModel;
-
-import static swe2024.librarysep.Model.SessionManager.getCurrentUser;
+import static swe2024.librarysep.Utility.SessionManager.getCurrentUser;
 
 public class DashboardController {
     @FXML
@@ -76,6 +75,8 @@ public class DashboardController {
             }
         );
         filterDropdownMenu.getItems().add(clearFilter);
+
+        highlightSelectedItem(clearFilter);
     }
 
     private void highlightSelectedItem(MenuItem selectedItem) {
@@ -105,14 +106,19 @@ public class DashboardController {
 
     @FXML
     private void handleOnClickAddBook() {
-        Main.ShowAddBook();
+        SceneManager.showAddBook();
+    }
+
+    @FXML
+    private void handleOnClickOpenMyProfile() {
+        SceneManager.showMyProfile(getCurrentUser());
     }
 
     @FXML
     private void handleOnClickEditBook() {
         Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
         if (selectedBook != null) {
-            EditBookController editBookController = Main.ShowEditBook();
+            EditBookController editBookController = SceneManager.showEditBook();
             if (editBookController != null) {
                 editBookController.setBook(selectedBook);
             } else {
