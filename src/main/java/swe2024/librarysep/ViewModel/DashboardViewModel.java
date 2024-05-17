@@ -84,6 +84,10 @@ public class DashboardViewModel {
 
     private void loadBooks() { // Checks for accidentally duplicated books and updates after state change, so we don't ruin the database
         List<Book> updatedBooks = bookService.getAllBooks();
+
+        books.removeIf(book -> updatedBooks.stream()
+                .noneMatch(updatedBook -> updatedBook.getBookId().equals(book.getBookId())));
+
         for (Book updatedBook : updatedBooks) {
             // Check if the book already exists in the list
             boolean found = false;
