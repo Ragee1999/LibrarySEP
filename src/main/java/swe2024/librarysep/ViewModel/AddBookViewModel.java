@@ -7,16 +7,14 @@ import java.rmi.RemoteException;
 import java.sql.SQLException;
 
 public class AddBookViewModel {
-    private BookService bookService;
+    private final BookService bookService;
 
     public AddBookViewModel(BookService service) {
         this.bookService = service;
     }
-
 
     public void addBook(String title, String author, int releaseYear, String genre) throws SQLException, RemoteException {
         Book newBook = new Book(title, author, releaseYear, genre);
         bookService.addBook(newBook);
     }
 }
-

@@ -4,7 +4,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import swe2024.librarysep.Main;
 import swe2024.librarysep.Utility.SceneManager;
 import swe2024.librarysep.ViewModel.RegistrationViewModel;
 
@@ -19,7 +18,13 @@ public class RegistrationController {
     @FXML
     private Button goBackToLoginButton;
 
-    private RegistrationViewModel viewModel = new RegistrationViewModel();
+    private RegistrationViewModel viewModel;
+
+    public RegistrationController() {}
+
+    public void setViewModel(RegistrationViewModel viewModel) {
+        this.viewModel = viewModel;
+    }
 
     @FXML
     private void initialize() {
@@ -36,7 +41,7 @@ public class RegistrationController {
             if (newStatus != null && !newStatus.isEmpty()) {
                 showRegistrationAlert(newStatus.startsWith("Success") ? "Success" : "Error", newStatus);
                 if (newStatus.startsWith("Success")) {
-                    goBackToLogin(); // Goes back to the login screen after account creation for user friendly-ness
+                    goBackToLogin(); // Goes back to the login screen after account creation for user-friendliness
                 }
                 viewModel.registrationStatusProperty().set(""); // Resets UI status message to prevent repeated messages
             }

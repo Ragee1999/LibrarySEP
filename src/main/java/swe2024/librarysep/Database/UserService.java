@@ -23,7 +23,9 @@ public class UserService {
     }
 
     public User authenticateUser(String username, String password) {
-        try (Connection connection = DatabaseConnection.connect()) {
+        Connection connection = null;
+        try {
+            connection = DatabaseConnection.connect();
             String sql = "SELECT id, username, password FROM users WHERE username = ? AND password = ?";
             try (PreparedStatement ps = connection.prepareStatement(sql)) {
                 ps.setString(1, username);
@@ -40,6 +42,10 @@ public class UserService {
         } catch (SQLException e) {
             System.err.println("Login error: " + e.getMessage());
             e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                DatabaseConnection.returnConnection(connection);
+            }
         }
         return null; // Return null if authentication fails
     }

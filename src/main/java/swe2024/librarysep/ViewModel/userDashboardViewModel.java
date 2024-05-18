@@ -171,9 +171,7 @@ public class userDashboardViewModel {
             }
         } catch (IllegalStateException e) {
             errorMessage.set("Error borrowing book: " + e.getMessage());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (RemoteException e) {
+        } catch (SQLException | RemoteException e) {
             throw new RuntimeException(e);
         }
     }
@@ -190,9 +188,7 @@ public class userDashboardViewModel {
             }
         } catch (IllegalStateException e) {
             errorMessage.set("Error returning book: " + e.getMessage());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (RemoteException e) {
+        } catch (SQLException | RemoteException e) {
             throw new RuntimeException(e);
         }
     }
@@ -210,9 +206,7 @@ public class userDashboardViewModel {
             }
         } catch (IllegalStateException e) {
             errorMessage.set("Error reserving book: " + e.getMessage());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (RemoteException e) {
+        } catch (SQLException | RemoteException e) {
             throw new RuntimeException(e);
         }
     }
@@ -229,9 +223,7 @@ public class userDashboardViewModel {
             }
         } catch (IllegalStateException e) {
             errorMessage.set("Error cancelling reservation: " + e.getMessage());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (RemoteException e) {
+        } catch (SQLException | RemoteException e) {
             throw new RuntimeException(e);
         }
     }

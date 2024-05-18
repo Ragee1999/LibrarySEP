@@ -1,13 +1,9 @@
 package swe2024.librarysep.View;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
-import swe2024.librarysep.Main;
 import swe2024.librarysep.Model.Book;
-import swe2024.librarysep.Server.RMIBookServiceFactory;
 import swe2024.librarysep.Utility.SceneManager;
 import swe2024.librarysep.ViewModel.EditBookViewModel;
 
@@ -22,39 +18,57 @@ public class EditBookController {
 
     private EditBookViewModel viewModel;
 
-    public EditBookController() {
-        this.viewModel = new EditBookViewModel(RMIBookServiceFactory.getBookService());
+    public EditBookController() {}
+
+    public void setViewModel(EditBookViewModel viewModel) {
+        this.viewModel = viewModel;
     }
 
-    public void initialize() {
+    @FXML
+    private void initialize() {
+        if (viewModel != null) {
+            bindFields();
+        }
+    }
+
+    public void setBook(Book book) {
+        viewModel.setBook(book);
+        bindFields();
+    }
+
+    private void bindFields() {
         titleField.textProperty().bindBidirectional(viewModel.titleProperty());
         authorField.textProperty().bindBidirectional(viewModel.authorProperty());
         releaseYearField.textProperty().bindBidirectional(viewModel.releaseYearProperty());
         genreField.textProperty().bindBidirectional(viewModel.genreProperty());
     }
 
-    public void setBook(Book book) {
-        viewModel.setBook(book);
-    }
 
     @FXML
     private void handleBookSave() {
         try {
-            viewModel.editBook(); // ViewModel handles updating the book
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Book updated successfully!");
-            alert.showAndWait();
+            viewModel.editBook(); // ViewModel handles updating the book and input validation
+            showAlert(Alert.AlertType.INFORMATION, "Success", "Book updated successfully!");
             SceneManager.showAdminDashboard();
         } catch (NumberFormatException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid input for Release Year!");
-            alert.showAndWait();
+            showAlert(Alert.AlertType.ERROR, "Invalid Input", "Invalid input for Release Year: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            showAlert(Alert.AlertType.ERROR, "Invalid Input", e.getMessage());
         } catch (RemoteException | SQLException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to update the book: " + e.getMessage());
-            alert.showAndWait();
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to update the book: " + e.getMessage());
         }
     }
 
     @FXML
     private void handleCancel() {
         SceneManager.showAdminDashboard();
+    }
+
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

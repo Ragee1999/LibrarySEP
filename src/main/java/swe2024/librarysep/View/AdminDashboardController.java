@@ -7,8 +7,8 @@ import swe2024.librarysep.Model.Book;
 import swe2024.librarysep.Model.User;
 import swe2024.librarysep.Utility.SceneManager;
 import swe2024.librarysep.ViewModel.AdminDashboardViewModel;
+import swe2024.librarysep.Utility.SessionManager;
 
-import static swe2024.librarysep.Utility.SessionManager.getCurrentUser;
 
 public class AdminDashboardController {
     @FXML
@@ -146,7 +146,7 @@ public class AdminDashboardController {
     @FXML
     private void handleBorrowBook() {
         Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
-        User currentUser = getCurrentUser();
+        User currentUser = SessionManager.getInstance().getCurrentUser();
         if (selectedBook != null && currentUser != null) {
             viewModel.requestBorrowConfirmation(selectedBook, currentUser);
         } else {
@@ -157,7 +157,7 @@ public class AdminDashboardController {
     @FXML
     private void handleReturnBook() {
         Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
-        User currentUser = getCurrentUser();
+        User currentUser = SessionManager.getInstance().getCurrentUser();
         if (selectedBook != null && currentUser != null) {
             viewModel.requestReturnConfirmation(selectedBook, currentUser);
         } else {
@@ -168,7 +168,7 @@ public class AdminDashboardController {
     @FXML
     private void handleReserveBook() {
         Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
-        User currentUser = getCurrentUser();
+        User currentUser = SessionManager.getInstance().getCurrentUser();
         if (selectedBook != null && currentUser != null) {
             viewModel.requestReserveConfirmation(selectedBook, currentUser);
         } else {
@@ -179,7 +179,7 @@ public class AdminDashboardController {
     @FXML
     private void handleCancelBook() {
         Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
-        User currentUser = getCurrentUser();
+        User currentUser = SessionManager.getInstance().getCurrentUser();
         if (selectedBook != null && currentUser != null) {
             viewModel.requestCancelReservationConfirmation(selectedBook, currentUser);
         } else {
@@ -207,7 +207,7 @@ public class AdminDashboardController {
     // Opens My profile view
     @FXML
     private void handleOnClickOpenMyProfile() {
-        SceneManager.showMyProfile(getCurrentUser());
+        SceneManager.showMyProfile(SessionManager.getInstance().getCurrentUser());
     }
 
     /*----------------------------*/
@@ -241,19 +241,23 @@ public class AdminDashboardController {
         }
     }
 
-
+    // Selects a book to edit and then opens the edit book UI.
     @FXML
     private void handleOnClickEditBook() {
         Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
         if (selectedBook != null) {
-            EditBookController editBookController = SceneManager.showEditBook();
-            if (editBookController != null) {
-                editBookController.setBook(selectedBook);
-            } else {
-                System.out.println("Failed to load the Edit Book view.");
-            }
+            SceneManager.showEditBook(selectedBook);
         } else {
-            System.out.println("No book selected");
+            showEditButtonAlert("No Selection", "No book selected. Please select a book to edit.");
         }
+    }
+
+    // Specific alert for edit book Button
+    private void showEditButtonAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

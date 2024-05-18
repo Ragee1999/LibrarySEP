@@ -54,12 +54,38 @@ public class DatabaseConnection {
     public static Connection connect() throws SQLException {
         synchronized (lock) {
             if (pool.isEmpty()) {
-                // incase all pools are unavailable we throw and exception
+                // in case all pools are unavailable we throw and exception
                 throw new SQLException("All connections are in use.");
             }
             Connection connection = pool.poll();
             System.out.println("Connection retrieved from pool");
             return connection;
+        }
+    }
+
+    // Return a connection to the pool
+    public static void returnConnection(Connection connection) {
+        synchronized (lock) {
+            if (connection != null) {
+                pool.add(connection);
+                System.out.println("Connection returned to pool");
+            }
+        }
+    }
+
+    public static void closeAllConnections() {
+        synchronized (lock) {
+            while (!pool.isEmpty()) {
+                try {
+                    Connection connection = pool.poll();
+                    if (connection != null && !connection.isClosed()) {
+                        connection.close();
+                       // System.out.println("Connection closed");
+                    }
+                } catch (SQLException e) {
+                    System.err.println("Error closing connection: " + e.getMessage());
+                }
+            }
         }
     }
 }

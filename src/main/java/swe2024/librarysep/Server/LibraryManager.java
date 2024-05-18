@@ -58,7 +58,7 @@ public class LibraryManager extends UnicastRemoteObject implements BookService {
     }
 
     @Override
-    public List<Book> loadBooks() throws RemoteException, SQLException {
+    public List<Book> loadBooks() throws RemoteException {
         return getAllBooks();  // Simplified to call getAllBooks()
     }
 

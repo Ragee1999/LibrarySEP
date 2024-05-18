@@ -6,8 +6,8 @@ import javafx.scene.control.*;
 import swe2024.librarysep.Model.Book;
 import swe2024.librarysep.Model.User;
 import swe2024.librarysep.Utility.SceneManager;
+import swe2024.librarysep.Utility.SessionManager;
 import swe2024.librarysep.ViewModel.userDashboardViewModel;
-import static swe2024.librarysep.Utility.SessionManager.getCurrentUser;
 
 //
 // This class is almost similar to AdminDashboardController, the only main difference being constructor,
@@ -118,7 +118,7 @@ public class userDashboardController {
     @FXML
     private void handleBorrowBook() {
         Book selectedBook = bookTableViewUser.getSelectionModel().getSelectedItem();
-        User currentUser = getCurrentUser();
+        User currentUser = SessionManager.getInstance().getCurrentUser();
         if (selectedBook != null && currentUser != null) {
             Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to borrow this book?", ButtonType.YES, ButtonType.NO);
             confirmAlert.showAndWait().ifPresent(response -> {
@@ -134,7 +134,7 @@ public class userDashboardController {
     @FXML
     private void handleReturnBook() {
         Book selectedBook = bookTableViewUser.getSelectionModel().getSelectedItem();
-        User currentUser = getCurrentUser();
+        User currentUser = SessionManager.getInstance().getCurrentUser();
         if (selectedBook != null && currentUser != null) {
             Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to return this book?", ButtonType.YES, ButtonType.NO);
             confirmAlert.showAndWait().ifPresent(response -> {
@@ -150,7 +150,7 @@ public class userDashboardController {
     @FXML
     private void handleReserveBook() {
         Book selectedBook = bookTableViewUser.getSelectionModel().getSelectedItem();
-        User currentUser = getCurrentUser();
+        User currentUser = SessionManager.getInstance().getCurrentUser();
         if (selectedBook != null && currentUser != null) {
             Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to reserve this book?", ButtonType.YES, ButtonType.NO);
             confirmAlert.showAndWait().ifPresent(response -> {
@@ -166,7 +166,7 @@ public class userDashboardController {
     @FXML
     private void handleCancelBook() {
         Book selectedBook = bookTableViewUser.getSelectionModel().getSelectedItem();
-        User currentUser = getCurrentUser();
+        User currentUser = SessionManager.getInstance().getCurrentUser();
         if (selectedBook != null && currentUser != null) {
             Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to cancel the reservation for this book?", ButtonType.YES, ButtonType.NO);
             confirmAlert.showAndWait().ifPresent(response -> {
@@ -190,6 +190,6 @@ public class userDashboardController {
     // Opens My profile view
     @FXML
     private void handleOnClickOpenMyProfile() {
-        SceneManager.showMyProfile(getCurrentUser());
+        SceneManager.showMyProfile(SessionManager.getInstance().getCurrentUser());
     }
 }

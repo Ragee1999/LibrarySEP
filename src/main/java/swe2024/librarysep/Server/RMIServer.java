@@ -19,7 +19,7 @@ public class RMIServer {
             registry.bind("BookService", obj);
             System.out.println("RMI Server is ready.");
         } catch (Exception e) {
-            System.err.println("Server exception: " + e.toString());
+            System.err.println("Server exception: " + e);
             e.printStackTrace();
         }
     }
