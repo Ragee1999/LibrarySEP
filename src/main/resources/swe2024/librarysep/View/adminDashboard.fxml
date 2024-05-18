@@ -6,7 +6,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="555.0" prefWidth="1005.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="swe2024.librarysep.View.DashboardController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="555.0"
+            prefWidth="1005.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="swe2024.librarysep.View.AdminDashboardController">
     <left>
         <VBox prefHeight="555.0" prefWidth="222.0" style="-fx-background-color: #4ab4e1;">
             <MenuButton fx:id="filterDropdownMenu" alignment="CENTER" mnemonicParsing="false" prefHeight="43.0" prefWidth="222.0" styleClass="menu-button-default" text="Filter Books " textFill="#e4dbdb">

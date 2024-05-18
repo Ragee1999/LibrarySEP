@@ -10,7 +10,8 @@ import swe2024.librarysep.ViewModel.userDashboardViewModel;
 import static swe2024.librarysep.Utility.SessionManager.getCurrentUser;
 
 //
-// This class is almost similar to DashboardController, the only difference being constructor having 2 fewer columns
+// This class is almost similar to AdminDashboardController, the only main difference being constructor,
+// having 2 fewer columns, as well as no access to Admin features
 //
 
 public class userDashboardController {
@@ -51,8 +52,16 @@ public class userDashboardController {
         // Binds the error message property to show alerts on changes
         this.viewModelUser.errorMessageProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && !newValue.isEmpty()) {
-                showStateAlert(newValue);
+                showAlert(newValue, Alert.AlertType.ERROR);
                 this.viewModelUser.errorMessageProperty().set(""); // Also resets the message to prevent repeated alerts
+            }
+        });
+
+        // Binds the success message property to show alerts on changes
+        this.viewModelUser.successMessageProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && !newValue.isEmpty()) {
+                showAlert(newValue, Alert.AlertType.INFORMATION);
+                this.viewModelUser.successMessageProperty().set(""); // Also resets the message to prevent repeated alerts
             }
         });
 
@@ -107,18 +116,18 @@ public class userDashboardController {
     }
 
     @FXML
-    private void handleOnClickOpenMyProfile() {
-        SceneManager.showMyProfile(getCurrentUser());
-    }
-
-    @FXML
     private void handleBorrowBook() {
         Book selectedBook = bookTableViewUser.getSelectionModel().getSelectedItem();
         User currentUser = getCurrentUser();
         if (selectedBook != null && currentUser != null) {
-            viewModelUser.borrowBook(selectedBook, currentUser);
+            Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to borrow this book?", ButtonType.YES, ButtonType.NO);
+            confirmAlert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.YES) {
+                    viewModelUser.borrowBook(selectedBook, currentUser);
+                }
+            });
         } else {
-            System.out.println("No book selected");
+            showAlert("No book selected.", Alert.AlertType.ERROR);
         }
     }
 
@@ -127,9 +136,14 @@ public class userDashboardController {
         Book selectedBook = bookTableViewUser.getSelectionModel().getSelectedItem();
         User currentUser = getCurrentUser();
         if (selectedBook != null && currentUser != null) {
-            viewModelUser.returnBook(selectedBook, currentUser);
+            Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to return this book?", ButtonType.YES, ButtonType.NO);
+            confirmAlert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.YES) {
+                    viewModelUser.returnBook(selectedBook, currentUser);
+                }
+            });
         } else {
-            System.out.println("No book selected");
+            showAlert("No book selected.", Alert.AlertType.ERROR);
         }
     }
 
@@ -138,9 +152,14 @@ public class userDashboardController {
         Book selectedBook = bookTableViewUser.getSelectionModel().getSelectedItem();
         User currentUser = getCurrentUser();
         if (selectedBook != null && currentUser != null) {
-            viewModelUser.reserveBook(selectedBook, currentUser);
+            Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to reserve this book?", ButtonType.YES, ButtonType.NO);
+            confirmAlert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.YES) {
+                    viewModelUser.reserveBook(selectedBook, currentUser);
+                }
+            });
         } else {
-            System.out.println("No book selected");
+            showAlert("No book selected.", Alert.AlertType.ERROR);
         }
     }
 
@@ -149,18 +168,28 @@ public class userDashboardController {
         Book selectedBook = bookTableViewUser.getSelectionModel().getSelectedItem();
         User currentUser = getCurrentUser();
         if (selectedBook != null && currentUser != null) {
-            viewModelUser.cancelReservation(selectedBook, currentUser);
+            Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to cancel the reservation for this book?", ButtonType.YES, ButtonType.NO);
+            confirmAlert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.YES) {
+                    viewModelUser.cancelReservation(selectedBook, currentUser);
+                }
+            });
         } else {
-            System.out.println("No book selected");
+            showAlert("No book selected.", Alert.AlertType.ERROR);
         }
     }
 
-
-    private void showStateAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
+    private void showAlert(String message, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(alertType == Alert.AlertType.ERROR ? "Error" : "Information");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    // Opens My profile view
+    @FXML
+    private void handleOnClickOpenMyProfile() {
+        SceneManager.showMyProfile(getCurrentUser());
     }
 }

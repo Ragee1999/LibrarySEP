@@ -6,7 +6,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="555.0" prefWidth="848.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="swe2024.librarysep.View.userDashboardController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="555.0"
+            prefWidth="848.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="swe2024.librarysep.View.userDashboardController">
     <left>
         <VBox prefHeight="555.0" prefWidth="222.0" style="-fx-background-color: #4ab4e1;">
             <Button fx:id="OpenMyProfile" styleClass="button-default" mnemonicParsing="false" onAction="#handleOnClickOpenMyProfile" prefHeight="52.0" prefWidth="222.0" text="Profile " textFill="#eae4e4">

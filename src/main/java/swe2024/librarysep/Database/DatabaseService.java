@@ -2,6 +2,7 @@ package swe2024.librarysep.Database;
 
 import swe2024.librarysep.Model.Book;
 import swe2024.librarysep.Model.BookService;
+import swe2024.librarysep.Model.BookStateFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -53,7 +54,7 @@ public class DatabaseService implements BookService {
                         resultSet.getInt("releaseYear"),
                         resultSet.getString("genre")
                 );
-                book.setState(Book.getStateFromString(resultSet.getString("state")));
+                book.setState(BookStateFactory.getStateFromString(resultSet.getString("state")));
                 // Set the userName retrieved from the JOIN
                 book.setUserName(resultSet.getString("userName"));
                 books.add(book);

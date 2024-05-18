@@ -5,7 +5,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="458.0" prefWidth="250.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="swe2024.librarysep.View.EditBookController">
+<AnchorPane prefHeight="458.0" prefWidth="250.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="swe2024.librarysep.View.EditBookController">
     <TextField fx:id="titleField" layoutX="52.0" layoutY="88.0" />
     <TextField fx:id="authorField" layoutX="52.0" layoutY="152.0" />
     <TextField fx:id="releaseYearField" layoutX="52.0" layoutY="214.0" />

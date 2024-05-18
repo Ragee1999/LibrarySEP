@@ -47,8 +47,8 @@ public class userDashboardViewModel {
         filteredBooks.setPredicate(book -> {
             boolean matchesSearchQuery = userSearchQuery.get() == null || userSearchQuery.get().isEmpty() ||
                     book.getTitle().toLowerCase().contains(userSearchQuery.get().toLowerCase()) ||
-                    book.getAuthor().toLowerCase().contains(userSearchQuery.get().toLowerCase())||
-            book.getReleaseYear().toString().contains(userSearchQuery.get().toLowerCase()) ||
+                    book.getAuthor().toLowerCase().contains(userSearchQuery.get().toLowerCase()) ||
+                    book.getReleaseYear().toString().contains(userSearchQuery.get().toLowerCase()) ||
                     book.getGenre().toLowerCase().contains(userSearchQuery.get().toLowerCase());
             boolean matchesGenreFilter = userGenreFilter.get() == null || userGenreFilter.get().isEmpty() ||
                     book.getGenre().equalsIgnoreCase(userGenreFilter.get());
@@ -130,36 +130,37 @@ public class userDashboardViewModel {
         return List.of("Fiction", "Science Fiction", "Romance", "Political Satire", "Fantasy", "Modernist", "Gothic", "Adventure", "Satire");
     }
 
-    // Bind errorMessage for UI alerts
+    // Bind errorMessage for the UI alerts
+    private StringProperty successMessage = new SimpleStringProperty();
     private StringProperty errorMessage = new SimpleStringProperty();
 
     public StringProperty errorMessageProperty() {
         return errorMessage;
     }
 
+    public StringProperty successMessageProperty() {
+        return successMessage;
+    }
+
 
     public void borrowBook(Book book, User user) {
         try {
-            // Check if the book is available (userName is null or empty)
             if (book.getUserName() == null || book.getUserName().isEmpty()) {
-                // Set the user details and change the book state to borrowed
-                book.setUserId(user.getUserId());
-                book.setUserName(user.getUsername());
-                book.borrow();  // This method changes the state of the book
-                updateBookState(book); // Update book state in the database
-            } else if (book.getState() instanceof ReservedState && book.getUserName().equals(user.getUsername())) {
-                // Book is reserved by the current user, allow borrowing
                 book.setUserId(user.getUserId());
                 book.setUserName(user.getUsername());
                 book.borrow();
                 updateBookState(book);
+                successMessage.set("Book borrowed successfully!");
+            } else if (book.getState() instanceof ReservedState && book.getUserName().equals(user.getUsername())) {
+                book.setUserId(user.getUserId());
+                book.setUserName(user.getUsername());
+                book.borrow();
+                updateBookState(book);
+                successMessage.set("Book borrowed successfully!");
             } else if (book.getUserName().equals(user.getUsername())) {
-                // Book is already borrowed by// This method changes the state of the book the current user
-                errorMessage.set("Error borrowing book: You already borrowed this book.");
-
+                errorMessage.set("You already borrowed this book.");
             } else {
-                // Book is already borrowed by another user
-                errorMessage.set("Error borrowing book: Book is already borrowed by another user.");
+                errorMessage.set("Book is already borrowed by another user.");
             }
         } catch (IllegalStateException e) {
             errorMessage.set("Error borrowing book: " + e.getMessage());
@@ -170,10 +171,11 @@ public class userDashboardViewModel {
         try {
             if (book.getUserName() != null && book.getUserName().equals(user.getUsername()) && book.getState() instanceof BorrowedState) {
                 book.returnBook();
-                book.setUserName(null); // Reset the username to null
-                updateBookState(book); // Update book state in the database
+                book.setUserName(null);
+                updateBookState(book);
+                successMessage.set("Book returned successfully!");
             } else {
-                errorMessage.set("Error returning book: Book is either not borrowed by the current user or is not in a borrowed state.");
+                errorMessage.set("Book is either not borrowed by the current user or is not in a borrowed state.");
             }
         } catch (IllegalStateException e) {
             errorMessage.set("Error returning book: " + e.getMessage());
@@ -185,10 +187,11 @@ public class userDashboardViewModel {
             if (book.getState() instanceof AvailableState) {
                 book.setUserId(user.getUserId());
                 book.setUserName(user.getUsername());
-                book.reserve(); // This method should ideally only change the state of the book
-                updateBookState(book); // Update book state in the database
+                book.reserve();
+                updateBookState(book);
+                successMessage.set("Book reserved successfully!");
             } else {
-                errorMessage.set("Error reserving book: Book is not available for reservation.");
+                errorMessage.set("Book is not available for reservation.");
             }
         } catch (IllegalStateException e) {
             errorMessage.set("Error reserving book: " + e.getMessage());
@@ -198,11 +201,12 @@ public class userDashboardViewModel {
     public void cancelReservation(Book book, User user) {
         try {
             if (book.getUserName() != null && book.getUserName().equals(user.getUsername()) && book.getState() instanceof ReservedState) {
-                book.cancelReservation(); // This method should ideally only change the state of the book
-                book.setUserName(null); // Reset the username to null
-                updateBookState(book); // Update book state in the database
+                book.cancelReservation();
+                book.setUserName(null);
+                updateBookState(book);
+                successMessage.set("Reservation cancelled successfully!");
             } else {
-                errorMessage.set("Error cancelling reservation: You are not the one who reserved this book or it's not reserved.");
+                errorMessage.set("You are not the one who reserved this book or it's not reserved.");
             }
         } catch (IllegalStateException e) {
             errorMessage.set("Error cancelling reservation: " + e.getMessage());

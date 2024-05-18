@@ -8,7 +8,8 @@
 
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="386.0"
-            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="swe2024.librarysep.View.RegistrationController">
+            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="swe2024.librarysep.View.RegistrationController">
 
     <children>
         <TextField fx:id="usernameRegister" layoutX="87.0" layoutY="135.0" prefHeight="26.0" prefWidth="210.0" promptText="User Name" />

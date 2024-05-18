@@ -6,11 +6,11 @@ import javafx.scene.control.*;
 import swe2024.librarysep.Model.Book;
 import swe2024.librarysep.Model.User;
 import swe2024.librarysep.Utility.SceneManager;
-import swe2024.librarysep.ViewModel.DashboardViewModel;
+import swe2024.librarysep.ViewModel.AdminDashboardViewModel;
 
 import static swe2024.librarysep.Utility.SessionManager.getCurrentUser;
 
-public class DashboardController {
+public class AdminDashboardController {
     @FXML
     private TableView<Book> bookTableView;
     @FXML
@@ -33,16 +33,16 @@ public class DashboardController {
     private MenuButton filterDropdownMenu;
 
     // Declaration of DashboardViewModel Instance
-    private DashboardViewModel viewModel;
+    private AdminDashboardViewModel viewModel;
 
     private MenuItem currentSelectedItem;
 
-    public void setViewModel(DashboardViewModel viewModel) {
+    public void setViewModel(AdminDashboardViewModel viewModel) {
         this.viewModel = viewModel;
         bookTableView.setItems(viewModel.getBooks());
         viewModel.bindTableColumns(titleColumn, authorColumn, releaseYearColumn, idColumn, stateColumn, clientColumn, genreColumn);
 
-        // Bind search text field to update the filter predicate
+        // Bind search text field to update the filter
         searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             viewModel.setSearchQuery(newValue);
             updateTableViewItems();
@@ -51,8 +51,45 @@ public class DashboardController {
         // Binds the error message property to show alerts on changes
         this.viewModel.errorMessageProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && !newValue.isEmpty()) {
-                showStateAlert(newValue);
+                showAlert(newValue, Alert.AlertType.ERROR);
                 this.viewModel.errorMessageProperty().set(""); // Also resets the message to prevent repeated alerts
+            }
+        });
+
+        // Binds the success message property to show alerts on changes
+        this.viewModel.successMessageProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && !newValue.isEmpty()) {
+                showAlert(newValue, Alert.AlertType.INFORMATION);
+                this.viewModel.successMessageProperty().set(""); // Also resets the message to prevent repeated alerts
+            }
+        });
+
+        // Bind confirmation properties to show dialogs
+        viewModel.borrowConfirmationRequestedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                showConfirmation("Are you sure you want to borrow this book?", viewModel::borrowBook);
+                viewModel.borrowConfirmationRequestedProperty().set(false);
+            }
+        });
+
+        viewModel.returnConfirmationRequestedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                showConfirmation("Are you sure you want to return this book?", viewModel::returnBook);
+                viewModel.returnConfirmationRequestedProperty().set(false);
+            }
+        });
+
+        viewModel.reserveConfirmationRequestedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                showConfirmation("Are you sure you want to reserve this book?", viewModel::reserveBook);
+                viewModel.reserveConfirmationRequestedProperty().set(false);
+            }
+        });
+
+        viewModel.cancelReservationConfirmationRequestedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                showConfirmation("Are you sure you want to cancel the reservation for this book?", viewModel::cancelReservation);
+                viewModel.cancelReservationConfirmationRequestedProperty().set(false);
             }
         });
 
@@ -77,7 +114,6 @@ public class DashboardController {
         });
         clearFilter.getStyleClass().add("menu-item-default");
         filterDropdownMenu.getItems().add(clearFilter);
-
         highlightSelectedItem(clearFilter);
     }
 
@@ -106,15 +142,105 @@ public class DashboardController {
         }
     }
 
+
+    @FXML
+    private void handleBorrowBook() {
+        Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
+        User currentUser = getCurrentUser();
+        if (selectedBook != null && currentUser != null) {
+            viewModel.requestBorrowConfirmation(selectedBook, currentUser);
+        } else {
+            showAlert("No book selected.", Alert.AlertType.ERROR);
+        }
+    }
+
+    @FXML
+    private void handleReturnBook() {
+        Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
+        User currentUser = getCurrentUser();
+        if (selectedBook != null && currentUser != null) {
+            viewModel.requestReturnConfirmation(selectedBook, currentUser);
+        } else {
+            showAlert("No book selected.", Alert.AlertType.ERROR);
+        }
+    }
+
+    @FXML
+    private void handleReserveBook() {
+        Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
+        User currentUser = getCurrentUser();
+        if (selectedBook != null && currentUser != null) {
+            viewModel.requestReserveConfirmation(selectedBook, currentUser);
+        } else {
+            showAlert("No book selected.", Alert.AlertType.ERROR);
+        }
+    }
+
+    @FXML
+    private void handleCancelBook() {
+        Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
+        User currentUser = getCurrentUser();
+        if (selectedBook != null && currentUser != null) {
+            viewModel.requestCancelReservationConfirmation(selectedBook, currentUser);
+        } else {
+            showAlert("No book selected.", Alert.AlertType.ERROR);
+        }
+    }
+
+    private void showAlert(String message, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(alertType == Alert.AlertType.ERROR ? "Error" : "Information");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private void showConfirmation(String message, Runnable onConfirm) {
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION, message, ButtonType.YES, ButtonType.NO);
+        confirmAlert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.YES) {
+                onConfirm.run();
+            }
+        });
+    }
+
+    // Opens My profile view
+    @FXML
+    private void handleOnClickOpenMyProfile() {
+        SceneManager.showMyProfile(getCurrentUser());
+    }
+
+    /*----------------------------*/
+    //  ADMIN SPECIFIC FEATURES   //
+    /*----------------------------*/
+
+    // Opens Add book view
     @FXML
     private void handleOnClickAddBook() {
         SceneManager.showAddBook();
     }
 
+
     @FXML
-    private void handleOnClickOpenMyProfile() {
-        SceneManager.showMyProfile(getCurrentUser());
+    private void handleDeleteBook() {
+        Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
+        if (selectedBook != null) {
+            Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this book?", ButtonType.YES, ButtonType.NO);
+            confirmAlert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.YES) {
+                    try {
+                        viewModel.deleteBook(selectedBook);
+                        System.out.println("Successfully deleted book");
+                    } catch (RuntimeException e) {
+                        showAlert("Failed to delete book: " + e.getCause().getMessage(), Alert.AlertType.ERROR);
+                    }
+                }
+            });
+        } else {
+            showAlert("No book selected.", Alert.AlertType.ERROR);
+        }
     }
+
 
     @FXML
     private void handleOnClickEditBook() {
@@ -128,78 +254,6 @@ public class DashboardController {
             }
         } else {
             System.out.println("No book selected");
-        }
-    }
-
-    @FXML
-    private void handleBorrowBook() {
-        Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
-        User currentUser = getCurrentUser();
-        if (selectedBook != null && currentUser != null) {
-            viewModel.borrowBook(selectedBook, currentUser);
-        } else {
-            System.out.println("No book selected");
-        }
-    }
-
-    @FXML
-    private void handleReturnBook() {
-        Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
-        User currentUser = getCurrentUser();
-        if (selectedBook != null && currentUser != null) {
-            viewModel.returnBook(selectedBook, currentUser);
-        } else {
-            System.out.println("No book selected");
-        }
-    }
-
-    @FXML
-    private void handleReserveBook() {
-        Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
-        User currentUser = getCurrentUser();
-        if (selectedBook != null && currentUser != null) {
-            viewModel.reserveBook(selectedBook, currentUser);
-        } else {
-            System.out.println("No book selected");
-        }
-    }
-
-    @FXML
-    private void handleCancelBook() {
-        Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
-        User currentUser = getCurrentUser();
-        if (selectedBook != null && currentUser != null) {
-            viewModel.cancelReservation(selectedBook, currentUser);
-        } else {
-            System.out.println("No book selected");
-        }
-    }
-
-    private void showStateAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-    @FXML
-    private void handleDeleteBook() {
-        Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
-        if (selectedBook != null) {
-            Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete this book?", ButtonType.YES, ButtonType.NO);
-            confirmAlert.showAndWait().ifPresent(response -> {
-                if (response == ButtonType.YES) {
-                    try {
-                        viewModel.deleteBook(selectedBook);
-                        System.out.println("Successfully deleted book");
-                    } catch (RuntimeException e) {
-                        showStateAlert("Failed to delete book: " + e.getCause().getMessage());
-                    }
-                }
-            });
-        } else {
-            showStateAlert("No book selected.");
         }
     }
 }

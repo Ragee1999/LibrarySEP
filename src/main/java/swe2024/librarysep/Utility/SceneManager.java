@@ -10,7 +10,7 @@ import swe2024.librarysep.Model.BookService;
 import swe2024.librarysep.Model.User;
 import swe2024.librarysep.Server.RMIBookServiceFactory;
 import swe2024.librarysep.View.*;
-import swe2024.librarysep.ViewModel.DashboardViewModel;
+import swe2024.librarysep.ViewModel.AdminDashboardViewModel;
 import swe2024.librarysep.ViewModel.LoginViewModel;
 import swe2024.librarysep.ViewModel.MyProfileViewModel;
 import swe2024.librarysep.ViewModel.userDashboardViewModel;
@@ -58,9 +58,9 @@ public class SceneManager {
         try {
             FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource("/swe2024/librarysep/View/adminDashboard.fxml"));
             Parent root = loader.load();
-            DashboardController controller = loader.getController();
+            AdminDashboardController controller = loader.getController();
             BookService bookService = RMIBookServiceFactory.getBookService();
-            DashboardViewModel viewModel = new DashboardViewModel(bookService);
+            AdminDashboardViewModel viewModel = new AdminDashboardViewModel(bookService);
             controller.setViewModel(viewModel);
 
             Scene scene = new Scene(root);
