@@ -1,7 +1,5 @@
 package swe2024.librarysep.ViewModel;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -9,8 +7,10 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.Duration;
 import swe2024.librarysep.Model.*;
+import swe2024.librarysep.Utility.ObserverManager;
+import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.List;
 
 //
@@ -19,17 +19,22 @@ import java.util.List;
 
 
 public class userDashboardViewModel {
+
     private ObservableList<Book> books = FXCollections.observableArrayList();
     private BookService bookService;
-    private Timeline refresh;
     private FilteredList<Book> filteredBooks;
     private StringProperty userSearchQuery = new SimpleStringProperty("");
     private StringProperty userGenreFilter = new SimpleStringProperty(null);
 
-    public userDashboardViewModel(BookService bookService) {
+    public userDashboardViewModel(BookService bookService) throws SQLException, RemoteException {
+        super();
         this.bookService = bookService;
+
+        ObserverManager observerManager = new ObserverManager(this);
+        bookService.addObserver(observerManager);
+
+
         loadBooks();
-        setupRefresh();
         filteredBooks = new FilteredList<>(books, book -> true);
 
         userSearchQuery.addListener((observable, oldValue, newValue) -> {
@@ -39,8 +44,14 @@ public class userDashboardViewModel {
         userGenreFilter.addListener((observable, oldValue, newValue) -> {
             updateFilter();
         });
+    }
 
-
+    public void refreshBooks() throws RemoteException {
+        try {
+            loadBooks();
+        } catch (SQLException e) {
+            throw new RemoteException(e.getMessage());
+        }
     }
 
     private void updateFilter() {
@@ -56,11 +67,7 @@ public class userDashboardViewModel {
         });
     }
 
-    private void setupRefresh() {
-        refresh = new Timeline(new KeyFrame(Duration.seconds(5), event -> loadBooks()));
-        refresh.setCycleCount(Timeline.INDEFINITE);
-        refresh.play();
-    }
+
 
     public ObservableList<Book> getBooks() {
         return books;
@@ -82,7 +89,7 @@ public class userDashboardViewModel {
         genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
     }
 
-    private void loadBooks() { // Checks for accidentally duplicated books and updates after state change, so we don't ruin the database
+    private void loadBooks() throws SQLException, RemoteException { // Checks for accidentally duplicated books and updates after state change, so we don't ruin the database
         List<Book> updatedBooks = bookService.getAllBooks();
 
         books.removeIf(book -> updatedBooks.stream()
@@ -104,7 +111,7 @@ public class userDashboardViewModel {
         }
     }
 
-    public void updateBookState(Book book) {
+    public void updateBookState(Book book) throws SQLException, RemoteException {
         bookService.updateBookState(book);
         loadBooks();
     }
@@ -145,33 +152,37 @@ public class userDashboardViewModel {
 
     public void borrowBook(Book book, User user) {
         try {
-            if (book.getUserName() == null || book.getUserName().isEmpty()) {
+            if (book.getUsername() == null || book.getUsername().isEmpty()) {
                 book.setUserId(user.getUserId());
-                book.setUserName(user.getUsername());
+                book.setUsername(user.getUsername());
                 book.borrow();
                 updateBookState(book);
                 successMessage.set("Book borrowed successfully!");
-            } else if (book.getState() instanceof ReservedState && book.getUserName().equals(user.getUsername())) {
+            } else if (book.getState() instanceof ReservedState && book.getUsername().equals(user.getUsername())) {
                 book.setUserId(user.getUserId());
-                book.setUserName(user.getUsername());
+                book.setUsername(user.getUsername());
                 book.borrow();
                 updateBookState(book);
                 successMessage.set("Book borrowed successfully!");
-            } else if (book.getUserName().equals(user.getUsername())) {
+            } else if (book.getUsername().equals(user.getUsername())) {
                 errorMessage.set("You already borrowed this book.");
             } else {
                 errorMessage.set("Book is already borrowed by another user.");
             }
         } catch (IllegalStateException e) {
             errorMessage.set("Error borrowing book: " + e.getMessage());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
         }
     }
 
     public void returnBook(Book book, User user) {
         try {
-            if (book.getUserName() != null && book.getUserName().equals(user.getUsername()) && book.getState() instanceof BorrowedState) {
+            if (book.getUsername() != null && book.getUsername().equals(user.getUsername()) && book.getState() instanceof BorrowedState) {
                 book.returnBook();
-                book.setUserName(null);
+                book.setUsername(null);
                 updateBookState(book);
                 successMessage.set("Book returned successfully!");
             } else {
@@ -179,6 +190,10 @@ public class userDashboardViewModel {
             }
         } catch (IllegalStateException e) {
             errorMessage.set("Error returning book: " + e.getMessage());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -186,7 +201,7 @@ public class userDashboardViewModel {
         try {
             if (book.getState() instanceof AvailableState) {
                 book.setUserId(user.getUserId());
-                book.setUserName(user.getUsername());
+                book.setUsername(user.getUsername());
                 book.reserve();
                 updateBookState(book);
                 successMessage.set("Book reserved successfully!");
@@ -195,14 +210,18 @@ public class userDashboardViewModel {
             }
         } catch (IllegalStateException e) {
             errorMessage.set("Error reserving book: " + e.getMessage());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
         }
     }
 
     public void cancelReservation(Book book, User user) {
         try {
-            if (book.getUserName() != null && book.getUserName().equals(user.getUsername()) && book.getState() instanceof ReservedState) {
+            if (book.getUsername() != null && book.getUsername().equals(user.getUsername()) && book.getState() instanceof ReservedState) {
                 book.cancelReservation();
-                book.setUserName(null);
+                book.setUsername(null);
                 updateBookState(book);
                 successMessage.set("Reservation cancelled successfully!");
             } else {
@@ -210,6 +229,10 @@ public class userDashboardViewModel {
             }
         } catch (IllegalStateException e) {
             errorMessage.set("Error cancelling reservation: " + e.getMessage());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
         }
     }
 }

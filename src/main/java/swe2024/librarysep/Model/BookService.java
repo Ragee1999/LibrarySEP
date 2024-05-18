@@ -6,13 +6,21 @@ import java.sql.SQLException;
 import java.util.List;
 
 
-public interface BookService extends Remote {
+// This interface defines the contract for the methods that can be called remotely.
+// It is implemented by both the server-side LibraryManager and the client-side RMIBookService.
 
-    List<Book> getAllBooks();  // Retrives a list of all books from database and returns it to be useable by the book class
-    void updateBookState(Book book); // Updates a state in the database
-    void deleteBook(int bookId) throws SQLException, RemoteException;
-    void addBook(Book book) throws SQLException, RemoteException;
-    void updateBook(Book book) throws SQLException, RemoteException;
+public interface BookService extends Remote {
+    List<Book> getAllBooks() throws RemoteException, SQLException;
+    void updateBookState(Book book) throws RemoteException, SQLException;
+    void deleteBook(int bookId) throws RemoteException, SQLException;
+    void addBook(Book book) throws RemoteException, SQLException;
+    void editBook(Book book) throws RemoteException, SQLException;
+    List<Book> loadBooks() throws RemoteException, SQLException;
+
+    // Observer methods
+    void addObserver(ClientObserver observer) throws RemoteException;
+    void removeObserver(ClientObserver observer) throws RemoteException;
 }
+
 
 

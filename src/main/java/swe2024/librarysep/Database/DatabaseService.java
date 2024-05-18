@@ -3,7 +3,9 @@ package swe2024.librarysep.Database;
 import swe2024.librarysep.Model.Book;
 import swe2024.librarysep.Model.BookService;
 import swe2024.librarysep.Model.BookStateFactory;
+import swe2024.librarysep.Model.ClientObserver;
 
+import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -56,22 +58,22 @@ public class DatabaseService implements BookService {
                 );
                 book.setState(BookStateFactory.getStateFromString(resultSet.getString("state")));
                 // Set the userName retrieved from the JOIN
-                book.setUserName(resultSet.getString("userName"));
+                book.setUsername(resultSet.getString("username"));
                 books.add(book);
             }
         } catch (SQLException e) {
             System.out.println("Error fetching books from database: " + e.getMessage());
         }
         return books;
-
     }
 
+    // Updates the book state in the database.
     public void updateBookState(Book book) {
         try {
             PreparedStatement ps;
-            if (book.getUserName() != null) {
+            if (book.getUsername() != null) {
                 ps = connection.prepareStatement("UPDATE books SET state = ?, user_id = (SELECT id FROM users WHERE username = ?) WHERE bookId = ?");
-                ps.setString(2, book.getUserName());
+                ps.setString(2, book.getUsername());
             } else {
                 ps = connection.prepareStatement("UPDATE books SET state = ?, user_id = NULL WHERE bookId = ?");
             }
@@ -88,6 +90,7 @@ public class DatabaseService implements BookService {
     }
 
 
+    // Deletes a book in the database
     public void deleteBook(int bookId) throws SQLException {
         String sql = "DELETE FROM books WHERE bookId = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -99,6 +102,7 @@ public class DatabaseService implements BookService {
         }
     }
 
+    // Adds a book into the database
     public void addBook(Book book) throws SQLException {
         String sql = "INSERT INTO books (title, author, releaseYear, genre) VALUES (?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -110,7 +114,8 @@ public class DatabaseService implements BookService {
         }
     }
 
-    public void updateBook(Book book) throws SQLException {
+    // Updates one book in the database
+    public void editBook(Book book) throws SQLException {
         String sql = "UPDATE books SET title = ?, author = ?, releaseYear = ?, genre = ? WHERE bookId = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, book.getTitle());
@@ -123,6 +128,21 @@ public class DatabaseService implements BookService {
                 throw new SQLException("Updating the book failed, no rows affected.");
             }
         }
+    }
+
+    @Override
+    public List<Book> loadBooks() throws RemoteException {
+        return getAllBooks(); // Calls the getAllBooks method to get the list of all books
+    }
+
+    @Override
+    public void addObserver(ClientObserver observer) throws RemoteException {
+        throw new UnsupportedOperationException("Observers are not managed by DatabaseService.");
+    }
+
+    @Override
+    public void removeObserver(ClientObserver observer) throws RemoteException {
+        throw new UnsupportedOperationException("Observers are not managed by DatabaseService.");
     }
 }
 

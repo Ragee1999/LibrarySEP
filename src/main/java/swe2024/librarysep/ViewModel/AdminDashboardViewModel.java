@@ -1,7 +1,5 @@
 package swe2024.librarysep.ViewModel;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -11,13 +9,15 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.Duration;
 import swe2024.librarysep.Model.*;
+import swe2024.librarysep.Utility.ObserverManager;
+
 import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.List;
 
-public class AdminDashboardViewModel {
+public class AdminDashboardViewModel  {
+
     private ObservableList<Book> books = FXCollections.observableArrayList();
     private BookService bookService;
     private FilteredList<Book> filteredBooks;
@@ -31,16 +31,19 @@ public class AdminDashboardViewModel {
     private Book selectedBook;
     private User currentUser;
 
-    public AdminDashboardViewModel(BookService bookService) {
+    public AdminDashboardViewModel(BookService bookService) throws SQLException, RemoteException {
         this.bookService = bookService;
         loadBooks();
-        setupRefresh();
+
+        // Observer setup
+        ObserverManager observerManager = new ObserverManager(this);
+        bookService.addObserver(observerManager);
+
         filteredBooks = new FilteredList<>(books, book -> true);
 
         searchQuery.addListener((observable, oldValue, newValue) -> {
             updateFilter();
         });
-
         genreFilter.addListener((observable, oldValue, newValue) -> {
             updateFilter();
         });
@@ -48,6 +51,14 @@ public class AdminDashboardViewModel {
 
     public ObservableList<Book> getBooks() {
         return books;
+    }
+
+    public void refreshBooks() throws RemoteException {
+        try {
+            loadBooks();
+        } catch (SQLException e) {
+            throw new RemoteException(e.getMessage());
+        }
     }
 
 // Admin can additionally search by book id and state names, which they can't in the user dashboard
@@ -66,12 +77,6 @@ public class AdminDashboardViewModel {
         });
     }
 
-    private void setupRefresh() {
-        Timeline refresh = new Timeline(new KeyFrame(Duration.seconds(15), event -> loadBooks()));
-        refresh.setCycleCount(Timeline.INDEFINITE);
-        refresh.play();
-    }
-
     // Bind properties
     public void bindTableColumns(
             TableColumn<Book, String> titleColumn,
@@ -87,22 +92,21 @@ public class AdminDashboardViewModel {
         releaseYearColumn.setCellValueFactory(new PropertyValueFactory<>("releaseYear"));
         idColumn.setCellValueFactory(new PropertyValueFactory<>("bookId"));
         stateColumn.setCellValueFactory(new PropertyValueFactory<>("stateName"));
-        clientColumn.setCellValueFactory(new PropertyValueFactory<>("userName"));
+        clientColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
         genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
     }
 
-    private void loadBooks() { // Checks for accidentally duplicated books and updates after state change, so we don't ruin the database
+    public void loadBooks() throws SQLException, RemoteException {
         List<Book> updatedBooks = bookService.getAllBooks();
 
         books.removeIf(book -> updatedBooks.stream()
                 .noneMatch(updatedBook -> updatedBook.getBookId().equals(book.getBookId())));
 
         for (Book updatedBook : updatedBooks) {
-            // Check if the book already exists in the list
             boolean found = false;
             for (int i = 0; i < books.size(); i++) {
                 if (books.get(i).getBookId().equals(updatedBook.getBookId())) {
-                    books.set(i, updatedBook); // Update existing book
+                    books.set(i, updatedBook);
                     found = true;
                     break;
                 }
@@ -113,7 +117,7 @@ public class AdminDashboardViewModel {
         }
     }
 
-    public void updateBookState(Book book) {
+    public void updateBookState(Book book) throws SQLException, RemoteException {
         bookService.updateBookState(book);
         loadBooks();
     }
@@ -202,10 +206,10 @@ public class AdminDashboardViewModel {
     }
 
     private boolean canBorrow(Book book, User user) {
-        if (book.getUserName() == null || book.getUserName().isEmpty() ||
-                (book.getState() instanceof ReservedState && book.getUserName().equals(user.getUsername()))) {
+        if (book.getUsername() == null || book.getUsername().isEmpty() ||
+                (book.getState() instanceof ReservedState && book.getUsername().equals(user.getUsername()))) {
             return true;
-        } else if (book.getUserName().equals(user.getUsername())) {
+        } else if (book.getUsername().equals(user.getUsername())) {
             errorMessage.set("You already borrowed this book.");
         } else {
             errorMessage.set("Book is already borrowed by another user.");
@@ -214,7 +218,7 @@ public class AdminDashboardViewModel {
     }
 
     private boolean canReturn(Book book, User user) {
-        if (book.getUserName() != null && book.getUserName().equals(user.getUsername()) && book.getState() instanceof BorrowedState) {
+        if (book.getUsername() != null && book.getUsername().equals(user.getUsername()) && book.getState() instanceof BorrowedState) {
             return true;
         }
         errorMessage.set("Book is either not borrowed by the current user or is not in a borrowed state.");
@@ -230,7 +234,7 @@ public class AdminDashboardViewModel {
     }
 
     private boolean canCancelReservation(Book book, User user) {
-        if (book.getUserName() != null && book.getUserName().equals(user.getUsername()) && book.getState() instanceof ReservedState) {
+        if (book.getUsername() != null && book.getUsername().equals(user.getUsername()) && book.getState() instanceof ReservedState) {
             return true;
         }
         errorMessage.set("You are not the one who reserved this book or it's not reserved.");
@@ -241,10 +245,10 @@ public class AdminDashboardViewModel {
         try {
             selectedBook.borrow();
             selectedBook.setUserId(currentUser.getUserId());
-            selectedBook.setUserName(currentUser.getUsername());
+            selectedBook.setUsername(currentUser.getUsername());
             updateBookState(selectedBook);
             successMessage.set("Book borrowed successfully!");
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException | SQLException | RemoteException e) {
             errorMessage.set("Error borrowing book: " + e.getMessage());
         }
     }
@@ -252,10 +256,10 @@ public class AdminDashboardViewModel {
     public void returnBook() {
         try {
             selectedBook.returnBook();
-            selectedBook.setUserName(null);
+            selectedBook.setUsername(null);
             updateBookState(selectedBook);
             successMessage.set("Book returned successfully!");
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException | SQLException | RemoteException e) {
             errorMessage.set("Error returning book: " + e.getMessage());
         }
     }
@@ -264,10 +268,10 @@ public class AdminDashboardViewModel {
         try {
             selectedBook.reserve();
             selectedBook.setUserId(currentUser.getUserId());
-            selectedBook.setUserName(currentUser.getUsername());
+            selectedBook.setUsername(currentUser.getUsername());
             updateBookState(selectedBook);
             successMessage.set("Book reserved successfully!");
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException | SQLException | RemoteException e) {
             errorMessage.set("Error reserving book: " + e.getMessage());
         }
     }
@@ -275,10 +279,10 @@ public class AdminDashboardViewModel {
     public void cancelReservation() {
         try {
             selectedBook.cancelReservation();
-            selectedBook.setUserName(null);
+            selectedBook.setUsername(null);
             updateBookState(selectedBook);
             successMessage.set("Reservation cancelled successfully!");
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException | SQLException | RemoteException e) {
             errorMessage.set("Error cancelling reservation: " + e.getMessage());
         }
     }

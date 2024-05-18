@@ -10,6 +10,8 @@ import swe2024.librarysep.Model.Book;
 import swe2024.librarysep.Model.BookService;
 import swe2024.librarysep.Model.User;
 
+import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,17 +21,17 @@ public class MyProfileViewModel {
     private ObservableList<Book> userBooks = FXCollections.observableArrayList();
     private BookService bookService;
 
-    public MyProfileViewModel(User currentUser, BookService bookService) {
+    public MyProfileViewModel(User currentUser, BookService bookService) throws SQLException, RemoteException {
         this.currentUser = currentUser;
         this.bookService = bookService;
         this.username.set(currentUser.getUsername());
         fetchUserBooks();
     }
 
-    private void fetchUserBooks() {
+    private void fetchUserBooks() throws SQLException, RemoteException {
         List<Book> allBooks = bookService.getAllBooks();
         List<Book> filteredBooks = allBooks.stream()
-                .filter(book -> currentUser.getUsername().equals(book.getUserName()))
+                .filter(book -> currentUser.getUsername().equals(book.getUsername()))
                 .collect(Collectors.toList());
         userBooks.setAll(filteredBooks);
     }

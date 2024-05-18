@@ -30,6 +30,6 @@ First we focus single client and just on the essential functionality
 5.1 Need to add pooling so client actions are updated regularly
 6. Polish User interface and add Search functionality and Quality of life from requirements.
 7. Testing and Finishing documentation
-8. Maybe create a JAR so the program is openable through a an actual desktop shortcut instead of inside the code.
+8. Maybe create a JAR so the program is openable through an actual desktop shortcut instead of inside the IDE.
 
 

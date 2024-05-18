@@ -36,11 +36,11 @@ public class EditBookViewModel {
     public StringProperty genreProperty() { return genre; }
 
 
-    public void updateBook() throws RemoteException, SQLException {
+    public void editBook() throws RemoteException, SQLException {
         currentBook.setTitle(title.get());
         currentBook.setAuthor(author.get());
         currentBook.setReleaseYear(Integer.parseInt(releaseYear.get()));
         currentBook.setGenre(genre.get());
-        bookService.updateBook(currentBook);
+        bookService.editBook(currentBook);
     }
 }

@@ -40,7 +40,7 @@ public class EditBookController {
     @FXML
     private void handleBookSave() {
         try {
-            viewModel.updateBook(); // ViewModel handles updating the book
+            viewModel.editBook(); // ViewModel handles updating the book
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Book updated successfully!");
             alert.showAndWait();
             SceneManager.showAdminDashboard();

@@ -2,9 +2,17 @@ package swe2024.librarysep.Server;
 
 import swe2024.librarysep.Model.Book;
 import swe2024.librarysep.Model.BookService;
+import swe2024.librarysep.Model.ClientObserver;
 
 import java.rmi.RemoteException;
 import java.util.List;
+
+/**
+ * RMIBookService acts as a client-side proxy for communicating with the remote LibraryManager server.
+ * This class implements the BookService interface, forwarding method calls to the RMIClient,
+ * which handles the actual RMI communication. It allows the client to interact with the server-side
+ * LibraryManager without exposing the client to the complexities of RMI.
+ */
 
 public class RMIBookService implements BookService {
     private RMIClient client;
@@ -25,31 +33,31 @@ public class RMIBookService implements BookService {
 
     @Override
     public void deleteBook(int bookId) {
-        try {
-            client.deleteBook(bookId);
-        } catch (RemoteException e) {
-            System.err.println("Remote exception occurred while deleting book: " + e.getMessage());
-            throw new RuntimeException("Failed to delete book", e);
-        }
+        client.deleteBook(bookId);
     }
 
     @Override
     public void addBook(Book book) {
-        try {
-            client.addBook(book);
-        } catch (RemoteException e) {
-            System.err.println("Remote exception occurred while adding book: " + e.getMessage());
-            throw new RuntimeException("Failed to add book due to remote exception", e);
-        }
+        client.addBook(book);
     }
 
     @Override
-    public void updateBook(Book book) {
-        try {
-            client.updateBook(book);
-        } catch (RemoteException e) {
-            System.err.println("Remote exception occurred while updating book: " + e.getMessage());
-            throw new RuntimeException("Failed to update book due to remote exception", e);
-        }
+    public void editBook(Book book) {
+        client.editBook(book);
+    }
+
+    @Override
+    public List<Book> loadBooks() {
+        return client.loadBooks();
+    }
+
+    @Override
+    public void addObserver(ClientObserver observer) throws RemoteException {
+        client.addObserver(observer);
+    }
+
+    @Override
+    public void removeObserver(ClientObserver observer) throws RemoteException {
+        client.removeObserver(observer);
     }
 }
