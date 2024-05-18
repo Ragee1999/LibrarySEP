@@ -84,6 +84,10 @@ public class userDashboardViewModel {
 
     private void loadBooks() { // Checks for accidentally duplicated books and updates after state change, so we don't ruin the database
         List<Book> updatedBooks = bookService.getAllBooks();
+
+        books.removeIf(book -> updatedBooks.stream()
+                .noneMatch(updatedBook -> updatedBook.getBookId().equals(book.getBookId())));
+
         for (Book updatedBook : updatedBooks) {
             // Check if the book already exists in the list
             boolean found = false;
@@ -141,16 +145,16 @@ public class userDashboardViewModel {
                 // Set the user details and change the book state to borrowed
                 book.setUserId(user.getUserId());
                 book.setUserName(user.getUsername());
-                book.borrow(); // This method should ideally only change the state of the book
+                book.borrow();  // This method changes the state of the book
                 updateBookState(book); // Update book state in the database
             } else if (book.getState() instanceof ReservedState && book.getUserName().equals(user.getUsername())) {
                 // Book is reserved by the current user, allow borrowing
                 book.setUserId(user.getUserId());
                 book.setUserName(user.getUsername());
-                book.borrow(); // This method should ideally only change the state of the book
-                updateBookState(book); // Update book state in the database
+                book.borrow();
+                updateBookState(book);
             } else if (book.getUserName().equals(user.getUsername())) {
-                // Book is already borrowed by the current user
+                // Book is already borrowed by// This method changes the state of the book the current user
                 errorMessage.set("Error borrowing book: You already borrowed this book.");
 
             } else {
