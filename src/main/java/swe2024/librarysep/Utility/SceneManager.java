@@ -63,7 +63,9 @@ public class SceneManager {
             DashboardViewModel viewModel = new DashboardViewModel(bookService);
             controller.setViewModel(viewModel);
 
-            primaryStage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(SceneManager.class.getResource("/swe2024/librarysep/Css/styles.css").toExternalForm());
+            primaryStage.setScene(scene);
             primaryStage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -79,7 +81,9 @@ public class SceneManager {
             userDashboardViewModel viewModelUser = new userDashboardViewModel(bookService);
             controller.setViewModel(viewModelUser);
 
-            primaryStage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(SceneManager.class.getResource("/swe2024/librarysep/Css/styles.css").toExternalForm());
+            primaryStage.setScene(scene);
             primaryStage.show();
         } catch (Exception e) {
             e.printStackTrace();

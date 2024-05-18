@@ -31,6 +31,7 @@ public class userDashboardController {
     @FXML
     private MenuButton userFilterDropdownMenu;
 
+
     // Declaration of DashboardViewModel Instance
     private userDashboardViewModel viewModelUser;
 

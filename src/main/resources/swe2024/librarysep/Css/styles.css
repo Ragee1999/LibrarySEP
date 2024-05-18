@@ -1,10 +1,22 @@
-
-.button {
-    -fx-background-color: #1E90FF;
-    -fx-text-fill: white;
-    -fx-font-size: 12px;
-    -fx-font-family: "Segoe UI";
-    -fx-effect: dropshadow(three-pass-box, #000000, 10, 0.5, 0, 0);
+.button-default {
+    -fx-background-color: #4ab4e1; /* Default background color */
+    -fx-text-fill: #eae4e4; /* Default text color */
+    -fx-border-radius: 5;
+    -fx-border-color: transparent; /* No border color initially */
 }
 
-/* currently not being used, was just for testing css on buttons and it worked */
+.button-default:hover {
+    -fx-text-fill: black; /* Highlight text color */
+    -fx-border-color: black; /* Border color on hover */
+}
+
+.menu-button-default {
+    -fx-background-color: #4ab4e1; /* Default background color */
+    -fx-text-fill: #e4dbdb; /* Default text color */
+    -fx-border-color: transparent; /* No border color initially */
+}
+
+.menu-button-default:hover {
+    -fx-text-fill: black; /* Highlight text color */
+    -fx-border-color: black; /* Border color on hover */
+}

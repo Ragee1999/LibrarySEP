@@ -64,17 +64,18 @@ public class DashboardController {
                 highlightSelectedItem(item);
                 updateTableViewItems();
             });
+            item.getStyleClass().add("menu-item-default");
             filterDropdownMenu.getItems().add(item);
         }
 
         // Clear Filter button item in dropdown menu
         MenuItem clearFilter = new MenuItem("Clear Filter");
         clearFilter.setOnAction(event -> {
-                    viewModel.setGenreFilter(null);
-                    highlightSelectedItem(clearFilter);
-                    updateTableViewItems();
-                }
-        );
+            viewModel.setGenreFilter(null);
+            highlightSelectedItem(clearFilter);
+            updateTableViewItems();
+        });
+        clearFilter.getStyleClass().add("menu-item-default");
         filterDropdownMenu.getItems().add(clearFilter);
 
         highlightSelectedItem(clearFilter);
@@ -173,7 +174,6 @@ public class DashboardController {
             System.out.println("No book selected");
         }
     }
-
 
     private void showStateAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
