@@ -7,6 +7,7 @@ import swe2024.librarysep.Model.Book;
 import swe2024.librarysep.Model.User;
 import swe2024.librarysep.Utility.SceneManager;
 import swe2024.librarysep.ViewModel.DashboardViewModel;
+
 import static swe2024.librarysep.Utility.SessionManager.getCurrentUser;
 
 public class DashboardController {
@@ -69,10 +70,10 @@ public class DashboardController {
         // Clear Filter button item in dropdown menu
         MenuItem clearFilter = new MenuItem("Clear Filter");
         clearFilter.setOnAction(event -> {
-                viewModel.setGenreFilter(null);
-                highlightSelectedItem(clearFilter);
-                updateTableViewItems();
-            }
+                    viewModel.setGenreFilter(null);
+                    highlightSelectedItem(clearFilter);
+                    updateTableViewItems();
+                }
         );
         filterDropdownMenu.getItems().add(clearFilter);
 
