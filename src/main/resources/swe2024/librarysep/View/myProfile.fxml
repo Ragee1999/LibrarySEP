@@ -6,12 +6,10 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="428.0" prefWidth="848.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="swe2024.librarysep.View.MyProfileController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="428.0" prefWidth="848.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="swe2024.librarysep.View.MyProfileController">
     <left>
-        <VBox prefHeight="555.0" prefWidth="222.0" style="-fx-background-color: #4ab4e1;">
-            <Button mnemonicParsing="false" prefHeight="52.0" prefWidth="222.0" style="-fx-background-color: #4ab4e1;" text="My Profile " textFill="#eae4e4">
+        <VBox prefHeight="555.0" prefWidth="222.0" style="-fx-background-color: #5D76A9;">
+            <Button mnemonicParsing="false" prefHeight="52.0" prefWidth="222.0" style="-fx-background-color: #5D76A9;" text="My Profile " textFill="WHITE">
                 <graphic>
                     <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                         <image>
@@ -20,7 +18,7 @@
                     </ImageView>
                 </graphic>
             </Button>
-         <Button fx:id="backToDashboard" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleBackToDashboard" prefHeight="52.0" prefWidth="222.0" style="-fx-background-color: #4ab4e1;" text="Back to dashboard" textFill="#eae4e4">
+         <Button fx:id="backToDashboard" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleBackToDashboard" prefHeight="52.0" prefWidth="222.0" style="-fx-background-color: #5D76A9;" text="Back to dashboard" textFill="WHITE">
             <graphic>
                <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                   <image>
@@ -32,9 +30,9 @@
         </VBox>
     </left>
     <top>
-        <HBox prefHeight="62.0" prefWidth="848.0" style="-fx-background-color: #00008B;" BorderPane.alignment="CENTER">
+        <HBox prefHeight="62.0" prefWidth="848.0" style="-fx-background-color: #002244;" BorderPane.alignment="CENTER">
             <children>
-                <Label prefHeight="42.0" prefWidth="357.0" text="Library management System" textFill="#eadcdc">
+                <Label prefHeight="42.0" prefWidth="357.0" text="Library management System" textFill="WHITE">
                     <font>
                         <Font name="Arial Nova Light Italic" size="24.0" />
                     </font>

@@ -65,7 +65,7 @@ public class userDashboardController {
             }
         });
 
-        // Add genre filter items to the dropdown menu
+        // Inserts genres into the filter dropdown menu
         for (String genre : viewModelUser.getGenres()) {
             MenuItem item = new MenuItem(genre);
             item.setOnAction(event -> {
@@ -73,36 +73,24 @@ public class userDashboardController {
                 highlightSelectedItem(item);
                 updateTableViewItems();
             });
+            item.getStyleClass().add("menu-item-default"); // adds the color to all the dropdown menus
             userFilterDropdownMenu.getItems().add(item);
-
         }
 
-        // Add a "Clear Filter" item
+        // Adds a Clear Filter button item in dropdown menu and applies the css to it
         MenuItem clearFilter = new MenuItem("Clear Filter");
         clearFilter.setOnAction(event -> {
-                    viewModelUser.setGenreFilter(null);
-                    highlightSelectedItem(clearFilter);
-                    updateTableViewItems();
-                }
-        );
+            viewModelUser.setGenreFilter(null);
+            highlightSelectedItem(clearFilter);
+            updateTableViewItems();
+        });
+        clearFilter.getStyleClass().add("menu-item-default");
         userFilterDropdownMenu.getItems().add(clearFilter);
-
         highlightSelectedItem(clearFilter);
     }
 
     private void highlightSelectedItem(MenuItem selectedItem) {
-        if (currentSelectedItem != null) {
-            currentSelectedItem.setStyle(""); // Remove previous style
-        }
-        selectedItem.setStyle("-fx-background-color: #d3d3d3; -fx-text-fill: black; -fx-percent-width: 100%; -fx-percent-height: 100%;");
         currentSelectedItem = selectedItem;
-
-        // Update MenuButton text
-        if ("Clear Filter".equals(selectedItem.getText())) {
-            userFilterDropdownMenu.setText("Filter Books");
-        } else {
-            userFilterDropdownMenu.setText("Filter Books: " + selectedItem.getText());
-        }
     }
 
     private void updateTableViewItems() {

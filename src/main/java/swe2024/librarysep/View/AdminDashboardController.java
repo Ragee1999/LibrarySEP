@@ -101,11 +101,11 @@ public class AdminDashboardController {
                 highlightSelectedItem(item);
                 updateTableViewItems();
             });
-            item.getStyleClass().add("menu-item-default");
+            item.getStyleClass().add("menu-item-default"); // adds the color to all the dropdown menus
             filterDropdownMenu.getItems().add(item);
         }
 
-        // Clear Filter button item in dropdown menu
+        // Adds a Clear Filter button item in dropdown menu and applies the css to it
         MenuItem clearFilter = new MenuItem("Clear Filter");
         clearFilter.setOnAction(event -> {
             viewModel.setGenreFilter(null);
@@ -118,18 +118,7 @@ public class AdminDashboardController {
     }
 
     private void highlightSelectedItem(MenuItem selectedItem) {
-        if (currentSelectedItem != null) {
-            currentSelectedItem.setStyle(""); // Remove previous style
-        }
-        selectedItem.setStyle("-fx-background-color: #d3d3d3; -fx-text-fill: black; -fx-percent-width: 100%; -fx-percent-height: 100%;");
         currentSelectedItem = selectedItem;
-
-        // Update MenuButton text
-        if ("Clear Filter".equals(selectedItem.getText())) {
-            filterDropdownMenu.setText("Filter Books");
-        } else {
-            filterDropdownMenu.setText("Filter Books: " + selectedItem.getText());
-        }
     }
 
     private void updateTableViewItems() {
