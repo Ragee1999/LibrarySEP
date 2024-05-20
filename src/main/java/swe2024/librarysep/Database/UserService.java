@@ -1,9 +1,7 @@
 package swe2024.librarysep.Database;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+
 import swe2024.librarysep.Model.User;
 
 public class UserService {
@@ -19,6 +17,8 @@ public class UserService {
             statement.setString(1, user.getUsername());
             statement.setString(2, user.getPassword());
             statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException("An error occurred while registering: " + e.getMessage());
         }
     }
 
