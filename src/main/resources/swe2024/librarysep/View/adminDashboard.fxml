@@ -6,106 +6,86 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="555.0"
-            prefWidth="1005.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="swe2024.librarysep.View.AdminDashboardController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="555.0" prefWidth="1005.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="swe2024.librarysep.View.AdminDashboardController">
     <left>
         <VBox prefHeight="555.0" prefWidth="222.0" style="-fx-background-color: #5D76A9;">
-            <MenuButton fx:id="filterDropdownMenu" alignment="CENTER" mnemonicParsing="false" prefHeight="50.0"
-                        prefWidth="222.0" style="-fx-background-color: #5D76A9;" styleClass="menu-button-default"
-                        text="Filter Books" textFill="WHITE">
+            <MenuButton fx:id="filterDropdownMenu" alignment="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="222.0" style="-fx-background-color: #5D76A9;" styleClass="menu-button-default" text="Filter Books" textFill="WHITE">
                 <graphic>
                     <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                         <image>
-                            <Image url="@../images/9040443_filter_icon.png"/>
+                            <Image url="@../images/filter_list_24dp_FILL0_wght400_GRAD0_opsz24.png" />
                         </image>
                     </ImageView>
                 </graphic>
             </MenuButton>
-            <Button fx:id="profileButton" mnemonicParsing="false" onAction="#handleOnClickOpenMyProfile"
-                    prefHeight="50.0" prefWidth="222.0" style="-fx-background-color: #5D76A9;"
-                    styleClass="button-default" text="Profile" textFill="WHITE">
+            <Button fx:id="profileButton" mnemonicParsing="false" onAction="#handleOnClickOpenMyProfile" prefHeight="50.0" prefWidth="222.0" style="-fx-background-color: #5D76A9;" styleClass="button-default" text="Profile" textFill="WHITE">
                 <graphic>
                     <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                         <image>
-                            <Image url="@../images/7853767_kashifarif_user_profile_person_account_icon.png"/>
+                            <Image url="@../images/person_24dp_FILL0_wght400_GRAD0_opsz24.png" />
                         </image>
                     </ImageView>
                 </graphic>
             </Button>
-            <Button fx:id="borrowButton" mnemonicParsing="false" onAction="#handleBorrowBook" prefHeight="50.0"
-                    prefWidth="222.0" style="-fx-background-color: #5D76A9;" styleClass="button-default" text="Borrow"
-                    textFill="WHITE">
+            <Button fx:id="borrowButton" mnemonicParsing="false" onAction="#handleBorrowBook" prefHeight="50.0" prefWidth="222.0" style="-fx-background-color: #5D76A9;" styleClass="button-default" text="Borrow" textFill="WHITE">
+                <graphic>
+                    <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@../images/menu_book_24dp_FILL0_wght400_GRAD0_opsz24.png" />
+                  </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button fx:id="returnButton" mnemonicParsing="false" onAction="#handleReturnBook" prefHeight="50.0" prefWidth="222.0" style="-fx-background-color: #5D76A9;" styleClass="button-default" text="Return" textFill="WHITE">
                 <graphic>
                     <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                         <image>
-                            <Image url="@../images/7444566.png"/>
+                            <Image url="@../images/assignment_return_24dp_FILL0_wght400_GRAD0_opsz24.png" />
                         </image>
                     </ImageView>
                 </graphic>
             </Button>
-            <Button fx:id="returnButton" mnemonicParsing="false" onAction="#handleReturnBook" prefHeight="50.0"
-                    prefWidth="222.0" style="-fx-background-color: #5D76A9;" styleClass="button-default" text="Return"
-                    textFill="WHITE">
+            <Button fx:id="reserveButton" mnemonicParsing="false" onAction="#handleReserveBook" prefHeight="50.0" prefWidth="222.0" style="-fx-background-color: #5D76A9;" styleClass="button-default" text="Reserve" textFill="WHITE">
                 <graphic>
                     <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                         <image>
-                            <Image url="@../images/4544831_business_comerce_delivery_return_shop_icon.png"/>
+                            <Image url="@../images/book_4_24dp_FILL0_wght400_GRAD0_opsz24.png" />
                         </image>
                     </ImageView>
                 </graphic>
             </Button>
-            <Button fx:id="reserveButton" mnemonicParsing="false" onAction="#handleReserveBook" prefHeight="50.0"
-                    prefWidth="222.0" style="-fx-background-color: #5D76A9;" styleClass="button-default" text="Reserve"
-                    textFill="WHITE">
+            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancelBook" prefHeight="50.0" prefWidth="222.0" style="-fx-background-color: #5D76A9;" styleClass="button-default" text="Cancel Reservation" textFill="WHITE">
                 <graphic>
                     <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                         <image>
-                            <Image url="@../images/9698510_reserve_icon.png"/>
+                            <Image url="@../images/cancel_24dp_FILL0_wght400_GRAD0_opsz24.png" />
                         </image>
                     </ImageView>
                 </graphic>
             </Button>
-            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancelBook" prefHeight="50.0"
-                    prefWidth="222.0" style="-fx-background-color: #5D76A9;" styleClass="button-default"
-                    text="Cancel Reservation" textFill="WHITE">
+            <Button fx:id="addButton" mnemonicParsing="false" onAction="#handleOnClickAddBook" prefHeight="50.0" prefWidth="222.0" style="-fx-background-color: #5D76A9;" styleClass="button-default" text="Add Book" textFill="WHITE">
                 <graphic>
                     <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                         <image>
-                            <Image url="@../images/326554_cancel_icon.png"/>
+                            <Image url="@../images/add_circle_24dp_FILL0_wght400_GRAD0_opsz24.png" />
                         </image>
                     </ImageView>
                 </graphic>
             </Button>
-            <Button fx:id="addButton" mnemonicParsing="false" onAction="#handleOnClickAddBook" prefHeight="50.0"
-                    prefWidth="222.0" style="-fx-background-color: #5D76A9;" styleClass="button-default" text="Create"
-                    textFill="WHITE">
+            <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#handleDeleteBook" prefHeight="50.0" prefWidth="222.0" style="-fx-background-color: #5D76A9;" styleClass="button-default" text="Delete" textFill="WHITE">
                 <graphic>
                     <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                         <image>
-                            <Image url="@../images/1564491_add_create_new_plus_icon.png"/>
+                            <Image url="@../images/delete_24dp_FILL0_wght400_GRAD0_opsz24.png" />
                         </image>
                     </ImageView>
                 </graphic>
             </Button>
-            <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#handleDeleteBook" prefHeight="50.0"
-                    prefWidth="222.0" style="-fx-background-color: #5D76A9;" styleClass="button-default" text="Delete"
-                    textFill="WHITE">
+            <Button fx:id="editButton" mnemonicParsing="false" onAction="#handleOnClickEditBook" prefHeight="50.0" prefWidth="222.0" style="-fx-background-color: #5D76A9;" styleClass="button-default" text="Edit" textFill="WHITE">
                 <graphic>
                     <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                         <image>
-                            <Image url="@../images/8664938_trash_can_delete_remove_icon.png"/>
-                        </image>
-                    </ImageView>
-                </graphic>
-            </Button>
-            <Button fx:id="editButton" mnemonicParsing="false" onAction="#handleOnClickEditBook" prefHeight="50.0"
-                    prefWidth="222.0" style="-fx-background-color: #5D76A9;" styleClass="button-default" text="Edit"
-                    textFill="WHITE">
-                <graphic>
-                    <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
-                        <image>
-                            <Image url="@../images/8666681_edit_icon.png"/>
+                            <Image url="@../images/edit_square_24dp_FILL0_wght400_GRAD0_opsz24.png" />
                         </image>
                     </ImageView>
                 </graphic>
@@ -117,10 +97,10 @@
             <children>
                 <Label prefHeight="45.0" prefWidth="412.0" text="Library management System" textFill="#FFFFFF">
                     <font>
-                        <Font name="System Bold" size="24.0"/>
+                        <Font name="System Bold" size="24.0" />
                     </font>
                     <padding>
-                        <Insets left="40.0" top="10.0"/>
+                        <Insets left="40.0" top="10.0" />
                     </padding>
                 </Label>
             </children>
@@ -129,12 +109,11 @@
     <center>
         <BorderPane>
             <top>
-                <HBox prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #eaeaea;"
-                      BorderPane.alignment="CENTER">
+                <HBox prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #eaeaea;" BorderPane.alignment="CENTER">
                     <children>
                         <TextField fx:id="searchTextField" prefHeight="40.0" prefWidth="790.0" promptText="Search...">
                             <font>
-                                <Font name="System Bold" size="12.0"/>
+                                <Font name="System Bold" size="12.0" />
                             </font>
                         </TextField>
                     </children>
@@ -143,14 +122,13 @@
             <center>
                 <TableView fx:id="bookTableView" prefHeight="453.0" prefWidth="647.0" BorderPane.alignment="CENTER">
                     <columns>
-                        <TableColumn fx:id="idColumn" minWidth="0.0" prefWidth="68.0" text="BookID"/>
-                        <TableColumn fx:id="genreColumn" prefWidth="103.20001065731049" text="Genre"/>
-                        <TableColumn fx:id="titleColumn" prefWidth="152.0" text="Title"/>
-                        <TableColumn fx:id="authorColumn" prefWidth="142.0" text="Author"/>
-                        <TableColumn fx:id="releaseYearColumn" minWidth="0.79998779296875" prefWidth="99.0"
-                                     text="Release Year"/>
-                        <TableColumn fx:id="stateColumn" minWidth="0.0" prefWidth="104.0" text="State"/>
-                        <TableColumn fx:id="clientColumn" minWidth="0.0" prefWidth="113.0" text="Username"/>
+                        <TableColumn fx:id="idColumn" minWidth="0.0" prefWidth="68.0" text="BookID" />
+                        <TableColumn fx:id="genreColumn" prefWidth="103.20001065731049" text="Genre" />
+                        <TableColumn fx:id="titleColumn" prefWidth="152.0" text="Title" />
+                        <TableColumn fx:id="authorColumn" prefWidth="142.0" text="Author" />
+                        <TableColumn fx:id="releaseYearColumn" minWidth="0.79998779296875" prefWidth="99.0" text="Release Year" />
+                        <TableColumn fx:id="stateColumn" minWidth="0.0" prefWidth="104.0" text="State" />
+                        <TableColumn fx:id="clientColumn" minWidth="0.0" prefWidth="113.0" text="Username" />
                     </columns>
                 </TableView>
             </center>

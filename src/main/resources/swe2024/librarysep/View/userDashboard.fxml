@@ -13,7 +13,7 @@
                 <graphic>
                     <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                         <image>
-                            <Image url="@../images/9040443_filter_icon.png" />
+                            <Image url="@../images/filter_list_24dp_FILL0_wght400_GRAD0_opsz24.png" />
                         </image>
                     </ImageView>
                 </graphic>
@@ -22,7 +22,7 @@
                 <graphic>
                     <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                         <image>
-                            <Image url="@../images/7853767_kashifarif_user_profile_person_account_icon.png" />
+                            <Image url="@../images/person_24dp_FILL0_wght400_GRAD0_opsz24.png" />
                         </image>
                     </ImageView>
                 </graphic>
@@ -31,34 +31,34 @@
                 <graphic>
                     <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                         <image>
-                            <Image url="@../images/7444566.png" />
+                            <Image url="@../images/menu_book_24dp_FILL0_wght400_GRAD0_opsz24.png" />
                         </image>
                     </ImageView>
                 </graphic>
             </Button>
-            <Button fx:id="returnButton" mnemonicParsing="false" onAction="#handleReturnBook" prefHeight="50.0" prefWidth="222.0" style="-fx-background-color: #5D76A9;;" styleClass="button-default" text="Return" textFill="#eae4e4">
+            <Button fx:id="returnButton" mnemonicParsing="false" onAction="#handleReturnBook" prefHeight="50.0" prefWidth="222.0" style="-fx-background-color: #5D76A9;;" styleClass="button-default" text="Return" textFill="WHITE">
                 <graphic>
                     <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                         <image>
-                            <Image url="@../images/4544831_business_comerce_delivery_return_shop_icon.png" />
+                            <Image url="@../images/assignment_return_24dp_FILL0_wght400_GRAD0_opsz24.png" />
                         </image>
                     </ImageView>
                 </graphic>
             </Button>
-            <Button fx:id="reserveButton" mnemonicParsing="false" onAction="#handleReserveBook" prefHeight="50.0" prefWidth="222.0" style="-fx-background-color: #5D76A9;;" styleClass="button-default" text="Reserve" textFill="#eae4e4">
+            <Button fx:id="reserveButton" mnemonicParsing="false" onAction="#handleReserveBook" prefHeight="50.0" prefWidth="222.0" style="-fx-background-color: #5D76A9;;" styleClass="button-default" text="Reserve" textFill="WHITE">
                 <graphic>
                     <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                         <image>
-                            <Image url="@../images/9698510_reserve_icon.png" />
+                            <Image url="@../images/book_4_24dp_FILL0_wght400_GRAD0_opsz24.png" />
                         </image>
                     </ImageView>
                 </graphic>
             </Button>
-            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancelBook" prefHeight="50.0" prefWidth="222.0" style="-fx-background-color: #5D76A9;;" styleClass="button-default" text="Cancel Reservation " textFill="#eae4e4">
+            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancelBook" prefHeight="50.0" prefWidth="222.0" style="-fx-background-color: #5D76A9;;" styleClass="button-default" text="Cancel Reservation " textFill="WHITE">
                 <graphic>
                     <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                         <image>
-                            <Image url="@../images/326554_cancel_icon.png" />
+                            <Image url="@../images/cancel_24dp_FILL0_wght400_GRAD0_opsz24.png" />
                         </image>
                     </ImageView>
                 </graphic>
