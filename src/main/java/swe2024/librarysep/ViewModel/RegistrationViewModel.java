@@ -4,9 +4,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import swe2024.librarysep.Database.UserService;
 import swe2024.librarysep.Model.User;
-
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 
 public class RegistrationViewModel {
     private final StringProperty username = new SimpleStringProperty();
