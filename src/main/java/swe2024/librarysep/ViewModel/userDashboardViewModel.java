@@ -1,5 +1,7 @@
 package swe2024.librarysep.ViewModel;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -25,6 +27,13 @@ public class userDashboardViewModel {
     private FilteredList<Book> filteredBooks;
     private StringProperty userSearchQuery = new SimpleStringProperty("");
     private StringProperty userGenreFilter = new SimpleStringProperty(null);
+
+    private BooleanProperty borrowConfirmationRequested = new SimpleBooleanProperty(false);
+    private BooleanProperty returnConfirmationRequested = new SimpleBooleanProperty(false);
+    private BooleanProperty reserveConfirmationRequested = new SimpleBooleanProperty(false);
+    private BooleanProperty cancelReservationConfirmationRequested = new SimpleBooleanProperty(false);
+    private Book selectedBook;
+    private User currentUser;
 
     public userDashboardViewModel(BookService bookService) throws SQLException, RemoteException {
         super();
@@ -66,7 +75,6 @@ public class userDashboardViewModel {
             return matchesSearchQuery && matchesGenreFilter;
         });
     }
-
 
 
     public ObservableList<Book> getBooks() {
@@ -149,82 +157,133 @@ public class userDashboardViewModel {
         return successMessage;
     }
 
+    public BooleanProperty borrowConfirmationRequestedProperty() {
+        return borrowConfirmationRequested;
+    }
 
-    public void borrowBook(Book book, User user) {
+    public BooleanProperty returnConfirmationRequestedProperty() {
+        return returnConfirmationRequested;
+    }
+
+    public BooleanProperty reserveConfirmationRequestedProperty() {
+        return reserveConfirmationRequested;
+    }
+
+    public BooleanProperty cancelReservationConfirmationRequestedProperty() {
+        return cancelReservationConfirmationRequested;
+    }
+
+    public void requestBorrowConfirmation(Book book, User user) {
+        if (canBorrow(book, user)) {
+            selectedBook = book;
+            currentUser = user;
+            borrowConfirmationRequested.set(true);
+        }
+    }
+
+    public void requestReturnConfirmation(Book book, User user) {
+        if (canReturn(book, user)) {
+            selectedBook = book;
+            currentUser = user;
+            returnConfirmationRequested.set(true);
+        }
+    }
+
+    public void requestReserveConfirmation(Book book, User user) {
+        if (canReserve(book, user)) {
+            selectedBook = book;
+            currentUser = user;
+            reserveConfirmationRequested.set(true);
+        }
+    }
+
+    public void requestCancelReservationConfirmation(Book book, User user) {
+        if (canCancelReservation(book, user)) {
+            selectedBook = book;
+            currentUser = user;
+            cancelReservationConfirmationRequested.set(true);
+        }
+    }
+
+    private boolean canBorrow(Book book, User user) {
+        if (book.getUsername() == null || book.getUsername().isEmpty() ||
+                (book.getState() instanceof ReservedState && book.getUsername().equals(user.getUsername()))) {
+            return true;
+        } else if (book.getUsername().equals(user.getUsername())) {
+            errorMessage.set("You already borrowed this book.");
+        } else {
+            errorMessage.set("Book is already borrowed by another user.");
+        }
+        return false;
+    }
+
+    private boolean canReturn(Book book, User user) {
+        if (book.getUsername() != null && book.getUsername().equals(user.getUsername()) && book.getState() instanceof BorrowedState) {
+            return true;
+        }
+        errorMessage.set("Book is either not borrowed by the current user or is not in a borrowed state.");
+        return false;
+    }
+
+    private boolean canReserve(Book book, User user) {
+        if (book.getState() instanceof AvailableState) {
+            return true;
+        }
+        errorMessage.set("Book is not available for reservation.");
+        return false;
+    }
+
+    private boolean canCancelReservation(Book book, User user) {
+        if (book.getUsername() != null && book.getUsername().equals(user.getUsername()) && book.getState() instanceof ReservedState) {
+            return true;
+        }
+        errorMessage.set("You are not the one who reserved this book or it's not reserved.");
+        return false;
+    }
+
+    public void borrowBook() {
         try {
-            if (book.getUsername() == null || book.getUsername().isEmpty()) {
-                book.setUserId(user.getUserId());
-                book.setUsername(user.getUsername());
-                book.borrow();
-                updateBookState(book);
-                successMessage.set("Book borrowed successfully!");
-            } else if (book.getState() instanceof ReservedState && book.getUsername().equals(user.getUsername())) {
-                book.setUserId(user.getUserId());
-                book.setUsername(user.getUsername());
-                book.borrow();
-                updateBookState(book);
-                successMessage.set("Book borrowed successfully!");
-            } else if (book.getUsername().equals(user.getUsername())) {
-                errorMessage.set("You already borrowed this book.");
-            } else {
-                errorMessage.set("Book is already borrowed by another user.");
-            }
-        } catch (IllegalStateException e) {
+            selectedBook.borrow();
+            selectedBook.setUserId(currentUser.getUserId());
+            selectedBook.setUsername(currentUser.getUsername());
+            updateBookState(selectedBook);
+            successMessage.set("Book borrowed successfully!");
+        } catch (IllegalStateException | SQLException | RemoteException e) {
             errorMessage.set("Error borrowing book: " + e.getMessage());
-        } catch (SQLException | RemoteException e) {
-            throw new RuntimeException(e);
         }
     }
 
-    public void returnBook(Book book, User user) {
+    public void returnBook() {
         try {
-            if (book.getUsername() != null && book.getUsername().equals(user.getUsername()) && book.getState() instanceof BorrowedState) {
-                book.returnBook();
-                book.setUsername(null);
-                updateBookState(book);
-                successMessage.set("Book returned successfully!");
-            } else {
-                errorMessage.set("Book is either not borrowed by the current user or is not in a borrowed state.");
-            }
-        } catch (IllegalStateException e) {
+            selectedBook.returnBook();
+            selectedBook.setUsername(null);
+            updateBookState(selectedBook);
+            successMessage.set("Book returned successfully!");
+        } catch (IllegalStateException | SQLException | RemoteException e) {
             errorMessage.set("Error returning book: " + e.getMessage());
-        } catch (SQLException | RemoteException e) {
-            throw new RuntimeException(e);
         }
     }
 
-    public void reserveBook(Book book, User user) {
+    public void reserveBook() {
         try {
-            if (book.getState() instanceof AvailableState) {
-                book.setUserId(user.getUserId());
-                book.setUsername(user.getUsername());
-                book.reserve();
-                updateBookState(book);
-                successMessage.set("Book reserved successfully!");
-            } else {
-                errorMessage.set("Book is not available for reservation.");
-            }
-        } catch (IllegalStateException e) {
+            selectedBook.reserve();
+            selectedBook.setUserId(currentUser.getUserId());
+            selectedBook.setUsername(currentUser.getUsername());
+            updateBookState(selectedBook);
+            successMessage.set("Book reserved successfully!");
+        } catch (IllegalStateException | SQLException | RemoteException e) {
             errorMessage.set("Error reserving book: " + e.getMessage());
-        } catch (SQLException | RemoteException e) {
-            throw new RuntimeException(e);
         }
     }
 
-    public void cancelReservation(Book book, User user) {
+    public void cancelReservation() {
         try {
-            if (book.getUsername() != null && book.getUsername().equals(user.getUsername()) && book.getState() instanceof ReservedState) {
-                book.cancelReservation();
-                book.setUsername(null);
-                updateBookState(book);
-                successMessage.set("Reservation cancelled successfully!");
-            } else {
-                errorMessage.set("You are not the one who reserved this book or it's not reserved.");
-            }
-        } catch (IllegalStateException e) {
+            selectedBook.cancelReservation();
+            selectedBook.setUsername(null);
+            updateBookState(selectedBook);
+            successMessage.set("Reservation cancelled successfully!");
+        } catch (IllegalStateException | SQLException | RemoteException e) {
             errorMessage.set("Error cancelling reservation: " + e.getMessage());
-        } catch (SQLException | RemoteException e) {
-            throw new RuntimeException(e);
         }
     }
 }

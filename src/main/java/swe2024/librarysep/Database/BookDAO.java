@@ -14,7 +14,7 @@ public class BookDAO {
 
     public List<Book> getAllBooks(Connection connection) throws SQLException {
         List<Book> books = new ArrayList<>();
-        String sql = "SELECT b.bookId, b.title, b.author, b.releaseYear, b.state, b.genre, u.username AS userName " +
+        String sql = "SELECT b.bookId, b.title, b.author, b.releaseYear, b.state, b.genre, u.username AS username " +
                 "FROM books b LEFT JOIN users u ON b.user_id = u.id";
         try (PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
@@ -28,7 +28,7 @@ public class BookDAO {
                         resultSet.getString("genre")
                 );
                 book.setState(BookStateFactory.getStateFromString(resultSet.getString("state")));
-                book.setUsername(resultSet.getString("userName"));
+                book.setUsername(resultSet.getString("username"));
                 books.add(book);
             }
         }

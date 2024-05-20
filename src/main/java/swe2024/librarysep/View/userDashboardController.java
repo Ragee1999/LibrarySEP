@@ -65,6 +65,35 @@ public class userDashboardController {
             }
         });
 
+        // Bind confirmation properties to show dialogs
+        viewModelUser.borrowConfirmationRequestedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                showConfirmation("Are you sure you want to borrow this book?", viewModelUser::borrowBook);
+                viewModelUser.borrowConfirmationRequestedProperty().set(false);
+            }
+        });
+
+        viewModelUser.returnConfirmationRequestedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                showConfirmation("Are you sure you want to return this book?", viewModelUser::returnBook);
+                viewModelUser.returnConfirmationRequestedProperty().set(false);
+            }
+        });
+
+        viewModelUser.reserveConfirmationRequestedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                showConfirmation("Are you sure you want to reserve this book?", viewModelUser::reserveBook);
+                viewModelUser.reserveConfirmationRequestedProperty().set(false);
+            }
+        });
+
+        viewModelUser.cancelReservationConfirmationRequestedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                showConfirmation("Are you sure you want to cancel the reservation for this book?", viewModelUser::cancelReservation);
+                viewModelUser.cancelReservationConfirmationRequestedProperty().set(false);
+            }
+        });
+
         // Inserts genres into the filter dropdown menu
         for (String genre : viewModelUser.getGenres()) {
             MenuItem item = new MenuItem(genre);
@@ -108,12 +137,7 @@ public class userDashboardController {
         Book selectedBook = bookTableViewUser.getSelectionModel().getSelectedItem();
         User currentUser = SessionManager.getInstance().getCurrentUser();
         if (selectedBook != null && currentUser != null) {
-            Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to borrow this book?", ButtonType.YES, ButtonType.NO);
-            confirmAlert.showAndWait().ifPresent(response -> {
-                if (response == ButtonType.YES) {
-                    viewModelUser.borrowBook(selectedBook, currentUser);
-                }
-            });
+            viewModelUser.requestBorrowConfirmation(selectedBook, currentUser);
         } else {
             showAlert("No book selected.", Alert.AlertType.ERROR);
         }
@@ -124,12 +148,7 @@ public class userDashboardController {
         Book selectedBook = bookTableViewUser.getSelectionModel().getSelectedItem();
         User currentUser = SessionManager.getInstance().getCurrentUser();
         if (selectedBook != null && currentUser != null) {
-            Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to return this book?", ButtonType.YES, ButtonType.NO);
-            confirmAlert.showAndWait().ifPresent(response -> {
-                if (response == ButtonType.YES) {
-                    viewModelUser.returnBook(selectedBook, currentUser);
-                }
-            });
+            viewModelUser.requestReturnConfirmation(selectedBook, currentUser);
         } else {
             showAlert("No book selected.", Alert.AlertType.ERROR);
         }
@@ -140,12 +159,7 @@ public class userDashboardController {
         Book selectedBook = bookTableViewUser.getSelectionModel().getSelectedItem();
         User currentUser = SessionManager.getInstance().getCurrentUser();
         if (selectedBook != null && currentUser != null) {
-            Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to reserve this book?", ButtonType.YES, ButtonType.NO);
-            confirmAlert.showAndWait().ifPresent(response -> {
-                if (response == ButtonType.YES) {
-                    viewModelUser.reserveBook(selectedBook, currentUser);
-                }
-            });
+            viewModelUser.requestReserveConfirmation(selectedBook, currentUser);
         } else {
             showAlert("No book selected.", Alert.AlertType.ERROR);
         }
@@ -156,12 +170,7 @@ public class userDashboardController {
         Book selectedBook = bookTableViewUser.getSelectionModel().getSelectedItem();
         User currentUser = SessionManager.getInstance().getCurrentUser();
         if (selectedBook != null && currentUser != null) {
-            Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to cancel the reservation for this book?", ButtonType.YES, ButtonType.NO);
-            confirmAlert.showAndWait().ifPresent(response -> {
-                if (response == ButtonType.YES) {
-                    viewModelUser.cancelReservation(selectedBook, currentUser);
-                }
-            });
+            viewModelUser.requestCancelReservationConfirmation(selectedBook, currentUser);
         } else {
             showAlert("No book selected.", Alert.AlertType.ERROR);
         }
@@ -173,6 +182,15 @@ public class userDashboardController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    private void showConfirmation(String message, Runnable onConfirm) {
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION, message, ButtonType.YES, ButtonType.NO);
+        confirmAlert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.YES) {
+                onConfirm.run();
+            }
+        });
     }
 
     // Opens My profile view

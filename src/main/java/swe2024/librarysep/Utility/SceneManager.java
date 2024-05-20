@@ -33,6 +33,10 @@ public class SceneManager {
         primaryStage = stage;
     }
 
+    private static Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
     public static void showLogin() {
         try {
             Connection connection = DatabaseConnection.connect();
