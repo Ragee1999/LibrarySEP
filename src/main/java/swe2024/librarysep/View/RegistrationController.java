@@ -7,6 +7,10 @@ import javafx.scene.control.TextField;
 import swe2024.librarysep.Utility.SceneManager;
 import swe2024.librarysep.ViewModel.RegistrationViewModel;
 
+/**
+ * Controller for the Registration view.
+ * Handles user input and interactions for user registration.
+ */
 public class RegistrationController {
 
     @FXML
@@ -20,12 +24,18 @@ public class RegistrationController {
 
     private RegistrationViewModel viewModel;
 
-    public RegistrationController() {}
-
+    /**
+     * Sets the ViewModel for the Registration view.
+     *
+     * @param viewModel the RegistrationViewModel to be set
+     */
     public void setViewModel(RegistrationViewModel viewModel) {
         this.viewModel = viewModel;
     }
 
+    /**
+     * Initializes the controller. Binds UI components to the ViewModel properties and sets up event handlers.
+     */
     @FXML
     private void initialize() {
         // Property-binding with the RegistrationViewModel
@@ -48,14 +58,26 @@ public class RegistrationController {
         });
     }
 
+    /**
+     * Navigates back to the login view.
+     */
     private void goBackToLogin() {
         SceneManager.showLogin();
     }
 
+    /**
+     * Handles the action when the user clicks the create account button.
+     */
     private void handleCreateAccount() {
         viewModel.registerAccount();
     }
 
+    /**
+     * Shows an alert dialog for registration messages.
+     *
+     * @param title   the title of the alert
+     * @param message the message of the alert
+     */
     private void showRegistrationAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -64,3 +86,4 @@ public class RegistrationController {
         alert.showAndWait();
     }
 }
+

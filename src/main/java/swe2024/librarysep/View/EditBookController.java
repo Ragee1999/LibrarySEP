@@ -10,20 +10,39 @@ import swe2024.librarysep.ViewModel.EditBookViewModel;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
 
+/**
+ * Controller for the Edit Book view. Handles user input and interactions for editing a book.
+ */
 public class EditBookController {
-    @FXML private TextField titleField;
-    @FXML private TextField authorField;
-    @FXML private TextField releaseYearField;
-    @FXML private TextField genreField;
+
+    @FXML
+    private TextField titleField;
+    @FXML
+    private TextField authorField;
+    @FXML
+    private TextField releaseYearField;
+    @FXML
+    private TextField genreField;
 
     private EditBookViewModel viewModel;
 
+    /**
+     * Default constructor.
+     */
     public EditBookController() {}
 
+    /**
+     * Sets the view model for this controller.
+     *
+     * @param viewModel the view model to set
+     */
     public void setViewModel(EditBookViewModel viewModel) {
         this.viewModel = viewModel;
     }
 
+    /**
+     * Initializes the controller. Binds the UI fields to the view model properties if the view model is set.
+     */
     @FXML
     private void initialize() {
         if (viewModel != null) {
@@ -31,11 +50,19 @@ public class EditBookController {
         }
     }
 
+    /**
+     * Sets the book to be edited and binds the UI fields to the view model properties.
+     *
+     * @param book the book to be edited
+     */
     public void setBook(Book book) {
         viewModel.setBook(book);
         bindFields();
     }
 
+    /**
+     * Binds the UI fields to the view model properties for bidirectional data binding.
+     */
     private void bindFields() {
         titleField.textProperty().bindBidirectional(viewModel.titleProperty());
         authorField.textProperty().bindBidirectional(viewModel.authorProperty());
@@ -43,7 +70,9 @@ public class EditBookController {
         genreField.textProperty().bindBidirectional(viewModel.genreProperty());
     }
 
-
+    /**
+     * Handles the action of saving the edited book. Validates input and updates the book through the view model.
+     */
     @FXML
     private void handleBookSave() {
         try {
@@ -59,11 +88,21 @@ public class EditBookController {
         }
     }
 
+    /**
+     * Handles the action of canceling the edit operation. Navigates back to the admin dashboard.
+     */
     @FXML
     private void handleCancel() {
         SceneManager.showAdminDashboard();
     }
 
+    /**
+     * Shows an alert dialog with the specified type, title, and message.
+     *
+     * @param alertType the type of alert
+     * @param title     the title of the alert
+     * @param message   the message of the alert
+     */
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
@@ -72,3 +111,4 @@ public class EditBookController {
         alert.showAndWait();
     }
 }
+

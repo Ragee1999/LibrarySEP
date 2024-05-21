@@ -7,14 +7,14 @@ import swe2024.librarysep.Model.Book;
 import swe2024.librarysep.Model.User;
 import swe2024.librarysep.Utility.SceneManager;
 import swe2024.librarysep.Utility.SessionManager;
-import swe2024.librarysep.ViewModel.userDashboardViewModel;
+import swe2024.librarysep.ViewModel.UserDashboardViewModel;
 
 //
 // This class is almost similar to AdminDashboardController, the only main difference being constructor,
 // having 2 fewer columns, as well as no access to Admin features
 //
 
-public class userDashboardController {
+public class UserDashboardController {
     @FXML
     private TableView<Book> bookTableViewUser;
     @FXML
@@ -34,11 +34,11 @@ public class userDashboardController {
 
 
     // Declaration of DashboardViewModel Instance
-    private userDashboardViewModel viewModelUser;
+    private UserDashboardViewModel viewModelUser;
 
     private MenuItem currentSelectedItem;
 
-    public void setViewModel(userDashboardViewModel viewModelUser) {
+    public void setViewModel(UserDashboardViewModel viewModelUser) {
         this.viewModelUser = viewModelUser;
         bookTableViewUser.setItems(viewModelUser.getBooks());
         viewModelUser.bindTableColumns(titleColumn, authorColumn, releaseYearColumn, stateColumn, genreColumn);

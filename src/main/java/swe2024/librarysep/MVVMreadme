@@ -1,0 +1,21 @@
+
+MVVM Concept:
+
+In our project we will have 2 view folders, one inside the resource folder for fxml files to separate concerns,
+as its not a java file.There is also better compatibility, syntax highlighting by using the resource folder
+Then another View file inside the java folder to delegate tasks etc. and to inject fxml annotations.
+
+
+ViewModel is the mediator it takes actions and tasks from View and uses data and logic from Model if needed
+to perform said tasks.
+
+The View imports the ViewModel to delegate tasks or receive data updates.
+The ViewModel imports the Model to access business logic and data operations.
+The Model remains independent or encapsulated of the ViewModel and the View.
+
+You can tell this by seeing that most Controller classes in View literally only have @FXML annotations which are
+injections from the fxml file. As well as the fact that any majority of code in ViewModels such as methods is ONLY
+from View or Model packages, it clearly shows how its a mediator.
+
+
+

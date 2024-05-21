@@ -2,9 +2,13 @@ package swe2024.librarysep.Model;
 
 import java.io.Serializable;
 
-public class Book implements Serializable { // We need to seralize book because of RMI
+/**
+ * Represents a book with its details and state.
+ * The book can be borrowed, returned, reserved, or have its reservation canceled.
+ * Implements Serializable for RMI purposes.
+ */
+public class Book implements Serializable {
     private static final long serialVersionUID = 1L;
-
 
     private Integer bookId;
     private String title;
@@ -15,41 +19,72 @@ public class Book implements Serializable { // We need to seralize book because 
     private String username;  // Tracks the username of the user who borrowed/reserved the book
     private Integer userId;   // Tracks the user ID of the user who borrowed/reserved the book
 
+    /**
+     * Constructs a new Book with the specified details.
+     *
+     * @param bookId      the ID of the book
+     * @param title       the title of the book
+     * @param author      the author of the book
+     * @param releaseYear the release year of the book
+     * @param genre       the genre of the book
+     */
     public Book(Integer bookId, String title, String author, Integer releaseYear, String genre) {
         this.bookId = bookId;
         this.title = title;
         this.author = author;
         this.releaseYear = releaseYear;
-        this.state = new AvailableState();
         this.genre = genre;
+        this.state = new AvailableState();
     }
 
-    // Constructor without bookId for adding new books, since books added are using Serial primal key
+    /**
+     * Constructs a new Book without an ID for adding new books, since book IDs are auto-generated.
+     *
+     * @param title       the title of the book
+     * @param author      the author of the book
+     * @param releaseYear the release year of the book
+     * @param genre       the genre of the book
+     */
     public Book(String title, String author, Integer releaseYear, String genre) {
         this(null, title, author, releaseYear, genre);
     }
 
-
     /**
-     * userId and username attributes are in the book class mainly to track the user during loan actions.
-     * userId's are stored in the book table in the database and linked to the users table.
-     * The username is  used to set the user_id in the book table during loan actions. Check database service for the relevant crud operations
+     * Gets the user ID associated with the book.
+     *
+     * @return the user ID
      */
-
     public Integer getUserId() {
         return userId;
     }
+
+    /**
+     * Sets the user ID associated with the book.
+     *
+     * @param userId the user ID to set
+     */
     public void setUserId(Integer userId) {
         this.userId = userId;
     }
+
+    /**
+     * Gets the username associated with the book.
+     *
+     * @return the username
+     */
     public String getUsername() {
         return username;
     }
+
+    /**
+     * Sets the username associated with the book.
+     * If the username is null, it sets it to an empty string instead.
+     *
+     * @param username the username to set
+     */
     public void setUsername(String username) {
-        // Check if username is null, and if so, set it to an empty string instead
         this.username = (username != null) ? username : "";
     }
-
 
     public Integer getBookId() {
         return bookId;
@@ -71,7 +106,6 @@ public class Book implements Serializable { // We need to seralize book because 
         return genre;
     }
 
-
     public void setTitle(String title) {
         this.title = title;
     }
@@ -88,31 +122,57 @@ public class Book implements Serializable { // We need to seralize book because 
         this.genre = genre;
     }
 
-    // for state string names
+    /**
+     * Gets the state name of the book as a string.
+     *
+     * @return the state name of the book
+     */
     public String getStateName() {
         return state.toString();
     }
 
+    /**
+     * Gets the current state of the book.
+     *
+     * @return the current state of the book
+     */
     public BookStates getState() {
         return this.state;
     }
 
+    /**
+     * Sets the state of the book.
+     *
+     * @param state the state to set
+     */
     public void setState(BookStates state) {
         this.state = state;
     }
 
+    /**
+     * Borrows the book, changing its state to borrow.
+     */
     public void borrow() {
         state.borrow(this);
     }
 
+    /**
+     * Returns the book, changing its state to available.
+     */
     public void returnBook() {
         state.returnBook(this);
     }
 
+    /**
+     * Reserves the book, changing its state to reserved.
+     */
     public void reserve() {
         state.reserve(this);
     }
 
+    /**
+     * Cancels the reservation of the book, changing its state to available.
+     */
     public void cancelReservation() {
         state.cancelReservation(this);
     }

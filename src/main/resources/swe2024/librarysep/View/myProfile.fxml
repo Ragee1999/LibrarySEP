@@ -13,7 +13,7 @@
                 <graphic>
                     <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                         <image>
-                            <Image url="@../images/7853767_kashifarif_user_profile_person_account_icon.png" />
+                            <Image url="@../images/person_24dp_FILL0_wght400_GRAD0_opsz24.png" />
                         </image>
                     </ImageView>
                 </graphic>
@@ -22,7 +22,7 @@
             <graphic>
                <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                   <image>
-                     <Image url="@../images/7853767_kashifarif_user_profile_person_account_icon.png" />
+                     <Image url="@../images/arrow_back_24dp_FILL0_wght400_GRAD0_opsz24.png" />
                   </image>
                </ImageView>
             </graphic>
