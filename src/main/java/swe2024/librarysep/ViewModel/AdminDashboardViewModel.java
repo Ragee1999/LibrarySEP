@@ -11,22 +11,18 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import swe2024.librarysep.Model.*;
 import swe2024.librarysep.Utility.ObserverManager;
+
 import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.List;
 
-//
-// This class is almost similar to DashboardViewModel, the only difference being constructor having 2 fewer columns and property-bindings
-//
-
-
-public class userDashboardViewModel {
+public class AdminDashboardViewModel  {
 
     private ObservableList<Book> books = FXCollections.observableArrayList();
     private BookService bookService;
     private FilteredList<Book> filteredBooks;
-    private StringProperty userSearchQuery = new SimpleStringProperty("");
-    private StringProperty userGenreFilter = new SimpleStringProperty(null);
+    private StringProperty searchQuery = new SimpleStringProperty("");
+    private StringProperty genreFilter = new SimpleStringProperty(null);
 
     private BooleanProperty borrowConfirmationRequested = new SimpleBooleanProperty(false);
     private BooleanProperty returnConfirmationRequested = new SimpleBooleanProperty(false);
@@ -35,24 +31,26 @@ public class userDashboardViewModel {
     private Book selectedBook;
     private User currentUser;
 
-    public userDashboardViewModel(BookService bookService) throws SQLException, RemoteException {
-        super();
+    public AdminDashboardViewModel(BookService bookService) throws SQLException, RemoteException {
         this.bookService = bookService;
+        loadBooks();
 
+        // Observer setup
         ObserverManager observerManager = new ObserverManager(this);
         bookService.addObserver(observerManager);
 
-
-        loadBooks();
         filteredBooks = new FilteredList<>(books, book -> true);
 
-        userSearchQuery.addListener((observable, oldValue, newValue) -> {
+        searchQuery.addListener((observable, oldValue, newValue) -> {
             updateFilter();
         });
+        genreFilter.addListener((observable, oldValue, newValue) -> {
+            updateFilter();
+        });
+    }
 
-        userGenreFilter.addListener((observable, oldValue, newValue) -> {
-            updateFilter();
-        });
+    public ObservableList<Book> getBooks() {
+        return books;
     }
 
     public void refreshBooks() throws RemoteException {
@@ -63,22 +61,20 @@ public class userDashboardViewModel {
         }
     }
 
+// Admin can additionally search by book id and state names, which they can't in the user dashboard
     private void updateFilter() {
         filteredBooks.setPredicate(book -> {
-            boolean matchesSearchQuery = userSearchQuery.get() == null || userSearchQuery.get().isEmpty() ||
-                    book.getTitle().toLowerCase().contains(userSearchQuery.get().toLowerCase()) ||
-                    book.getAuthor().toLowerCase().contains(userSearchQuery.get().toLowerCase()) ||
-                    book.getReleaseYear().toString().contains(userSearchQuery.get().toLowerCase()) ||
-                    book.getGenre().toLowerCase().contains(userSearchQuery.get().toLowerCase());
-            boolean matchesGenreFilter = userGenreFilter.get() == null || userGenreFilter.get().isEmpty() ||
-                    book.getGenre().equalsIgnoreCase(userGenreFilter.get());
+            boolean matchesSearchQuery = searchQuery.get() == null || searchQuery.get().isEmpty() ||
+                    book.getTitle().toLowerCase().contains(searchQuery.get().toLowerCase()) ||
+                    book.getAuthor().toLowerCase().contains(searchQuery.get().toLowerCase()) ||
+                    book.getReleaseYear().toString().contains(searchQuery.get().toLowerCase()) ||
+                    book.getGenre().toLowerCase().contains(searchQuery.get().toLowerCase()) ||
+                    book.getStateName().toLowerCase().contains(searchQuery.get().toLowerCase()) ||
+                    book.getBookId().toString().contains(searchQuery.get().toLowerCase());
+            boolean matchesGenreFilter = genreFilter.get() == null || genreFilter.get().isEmpty() ||
+                    book.getGenre().equalsIgnoreCase(genreFilter.get());
             return matchesSearchQuery && matchesGenreFilter;
         });
-    }
-
-
-    public ObservableList<Book> getBooks() {
-        return books;
     }
 
     // Bind properties
@@ -86,29 +82,31 @@ public class userDashboardViewModel {
             TableColumn<Book, String> titleColumn,
             TableColumn<Book, String> authorColumn,
             TableColumn<Book, Integer> releaseYearColumn,
+            TableColumn<Book, Integer> idColumn,
             TableColumn<Book, String> stateColumn,
+            TableColumn<Book, String> clientColumn,
             TableColumn<Book, String> genreColumn
-
     ) {
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
         releaseYearColumn.setCellValueFactory(new PropertyValueFactory<>("releaseYear"));
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("bookId"));
         stateColumn.setCellValueFactory(new PropertyValueFactory<>("stateName"));
+        clientColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
         genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
     }
 
-    private void loadBooks() throws SQLException, RemoteException { // Checks for accidentally duplicated books and updates after state change, so we don't ruin the database
+    public void loadBooks() throws SQLException, RemoteException {
         List<Book> updatedBooks = bookService.getAllBooks();
 
         books.removeIf(book -> updatedBooks.stream()
                 .noneMatch(updatedBook -> updatedBook.getBookId().equals(book.getBookId())));
 
         for (Book updatedBook : updatedBooks) {
-            // Check if the book already exists in the list
             boolean found = false;
             for (int i = 0; i < books.size(); i++) {
                 if (books.get(i).getBookId().equals(updatedBook.getBookId())) {
-                    books.set(i, updatedBook); // Update existing book
+                    books.set(i, updatedBook);
                     found = true;
                     break;
                 }
@@ -129,20 +127,22 @@ public class userDashboardViewModel {
     }
 
 
-    public void setUserSearchQuery(String searchQuery) {
-        this.userSearchQuery.set(searchQuery == null ? "" : searchQuery);
+    public void setSearchQuery(String searchQuery) {
+        this.searchQuery.set(searchQuery == null ? "" : searchQuery);
     }
 
+
     public void setGenreFilter(String genre) {
-        this.userGenreFilter.set(genre == null ? "" : genre);
+        this.genreFilter.set(genre == null ? "" : genre);
     }
 
     public String getGenreFilter() {
-        return userGenreFilter.get() == null ? "" : userGenreFilter.get();
+        return genreFilter.get() == null ? "" : genreFilter.get();
     }
 
     public List<String> getGenres() {
-        return List.of("Fiction", "Science Fiction", "Romance", "Political Satire", "Fantasy", "Modernist", "Gothic", "Adventure", "Satire");
+        return List.of("Fiction", "Science Fiction", "Romance", "Political Satire",
+                "Fantasy", "Modernist", "Gothic", "Adventure", "Satire");
     }
 
     // Bind errorMessage for the UI alerts
@@ -284,6 +284,21 @@ public class userDashboardViewModel {
             successMessage.set("Reservation cancelled successfully!");
         } catch (IllegalStateException | SQLException | RemoteException e) {
             errorMessage.set("Error cancelling reservation: " + e.getMessage());
+        }
+    }
+
+    public void deleteBook(Book book) {
+        if (book != null) {
+            try {
+                bookService.deleteBook(book.getBookId());
+                books.remove(book);  // Remove the book from the observable list to update UI
+            } catch (SQLException e) {
+                errorMessage.set("Failed to delete book: " + e.getMessage());
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            errorMessage.set("No book selected to delete.");
         }
     }
 }

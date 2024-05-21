@@ -12,7 +12,8 @@ public class Book implements Serializable { // We need to seralize book because 
     private Integer releaseYear;
     private String genre;
     private BookStates state;
-    private String userName;
+    private String username;  // Tracks the username of the user who borrowed/reserved the book
+    private Integer userId;   // Tracks the user ID of the user who borrowed/reserved the book
 
     public Book(Integer bookId, String title, String author, Integer releaseYear, String genre) {
         this.bookId = bookId;
@@ -23,37 +24,36 @@ public class Book implements Serializable { // We need to seralize book because 
         this.genre = genre;
     }
 
-
-    // Constructor without bookId for adding new books
+    // Constructor without bookId for adding new books, since books added are using Serial primal key
     public Book(String title, String author, Integer releaseYear, String genre) {
         this(null, title, author, releaseYear, genre);
     }
 
 
-
-    private Integer userId;
+    /**
+     * userId and username attributes are in the book class mainly to track the user during loan actions.
+     * userId's are stored in the book table in the database and linked to the users table.
+     * The username is  used to set the user_id in the book table during loan actions. Check database service for the relevant crud operations
+     */
 
     public Integer getUserId() {
         return userId;
     }
-
     public void setUserId(Integer userId) {
         this.userId = userId;
     }
-
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
+    }
+    public void setUsername(String username) {
+        // Check if username is null, and if so, set it to an empty string instead
+        this.username = (username != null) ? username : "";
     }
 
-    public void setUserName(String userName) {
-        // Check if userName is null, and if so, set it to an empty string instead
-        this.userName = (userName != null) ? userName : "";
-    }
 
     public Integer getBookId() {
         return bookId;
     }
-
 
     public String getTitle() {
         return title;
@@ -101,49 +101,19 @@ public class Book implements Serializable { // We need to seralize book because 
         this.state = state;
     }
 
-
-    // LOAN ACTIONS
-
-
-    // State to string for use in UI display
-    public static BookStates getStateFromString(String stateString) {
-        switch (stateString) {
-            case "Available":
-                return new AvailableState();
-            case "Borrowed":
-                return new BorrowedState();
-            case "Reserved":
-                return new ReservedState();
-            default:
-                throw new IllegalArgumentException("Unknown state: " + stateString);
-        }
-    }
-
     public void borrow() {
-        if (!(state instanceof AvailableState) && !(state instanceof ReservedState)) {
-            throw new IllegalStateException("Cannot borrow a book that is not available or reserved.");
-        }
         state.borrow(this);
     }
 
     public void returnBook() {
-        if (!(state instanceof BorrowedState)) {
-            throw new IllegalStateException("Cannot return a book that is not borrowed.");
-        }
         state.returnBook(this);
     }
 
     public void reserve() {
-        if (!(state instanceof AvailableState)) {
-            throw new IllegalStateException("Cannot reserve a book that is not available.");
-        }
         state.reserve(this);
     }
 
     public void cancelReservation() {
-        if (!(state instanceof ReservedState)) {
-            throw new IllegalStateException("Cannot cancel reservation for a book that is not reserved.");
-        }
         state.cancelReservation(this);
     }
 }

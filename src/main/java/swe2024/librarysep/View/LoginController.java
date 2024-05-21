@@ -4,9 +4,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import swe2024.librarysep.Utility.SessionManager;
-import swe2024.librarysep.Model.User;
-import swe2024.librarysep.Utility.SceneManager;
 import swe2024.librarysep.ViewModel.LoginViewModel;
 
 public class LoginController {
@@ -20,7 +17,6 @@ public class LoginController {
     @FXML
     private Button registerButton;
 
-
     private LoginViewModel loginViewModel;
 
     public LoginController(LoginViewModel loginViewModel) {
@@ -33,24 +29,13 @@ public class LoginController {
         usernameField.textProperty().bindBidirectional(loginViewModel.usernameProperty());
         passwordField.textProperty().bindBidirectional(loginViewModel.passwordProperty());
 
-        registerButton.setOnAction(event -> SceneManager.showRegistration());
+        registerButton.setOnAction(event -> loginViewModel.showRegistration());
         loginButton.setOnAction(event -> handleLogin());
     }
 
-
     private void handleLogin() {
-        User user = loginViewModel.authenticate();
-        if (user != null) {
-            if (user.getUsername().equals("Admin")) { // Check if the username is 'Admin'
-                SessionManager.loginUser(user);
-                System.out.println("Admin Successfully logged in");
-                SceneManager.showAdminDashboard(); // Navigate to the admin dashboard
-            } else {
-                SessionManager.loginUser(user);
-                System.out.println("User Successfully logged in");
-                SceneManager.showUserDashboard(); // Navigate to the user dashboard
-            }
-        } else {
+        boolean success = loginViewModel.authenticate();
+        if (!success) {
             showLoginAlert("Login Failed", "Invalid username or password");
         }
     }

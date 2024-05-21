@@ -6,11 +6,12 @@ import javafx.scene.control.*;
 import swe2024.librarysep.Model.Book;
 import swe2024.librarysep.Model.User;
 import swe2024.librarysep.Utility.SceneManager;
+import swe2024.librarysep.Utility.SessionManager;
 import swe2024.librarysep.ViewModel.userDashboardViewModel;
-import static swe2024.librarysep.Utility.SessionManager.getCurrentUser;
 
 //
-// This class is almost similar to DashboardController, the only difference being constructor having 2 fewer columns
+// This class is almost similar to AdminDashboardController, the only main difference being constructor,
+// having 2 fewer columns, as well as no access to Admin features
 //
 
 public class userDashboardController {
@@ -31,6 +32,7 @@ public class userDashboardController {
     @FXML
     private MenuButton userFilterDropdownMenu;
 
+
     // Declaration of DashboardViewModel Instance
     private userDashboardViewModel viewModelUser;
 
@@ -50,12 +52,49 @@ public class userDashboardController {
         // Binds the error message property to show alerts on changes
         this.viewModelUser.errorMessageProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && !newValue.isEmpty()) {
-                showStateAlert(newValue);
+                showAlert(newValue, Alert.AlertType.ERROR);
                 this.viewModelUser.errorMessageProperty().set(""); // Also resets the message to prevent repeated alerts
             }
         });
 
-        // Add genre filter items to the dropdown menu
+        // Binds the success message property to show alerts on changes
+        this.viewModelUser.successMessageProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && !newValue.isEmpty()) {
+                showAlert(newValue, Alert.AlertType.INFORMATION);
+                this.viewModelUser.successMessageProperty().set(""); // Also resets the message to prevent repeated alerts
+            }
+        });
+
+        // Bind confirmation properties to show dialogs
+        viewModelUser.borrowConfirmationRequestedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                showConfirmation("Are you sure you want to borrow this book?", viewModelUser::borrowBook);
+                viewModelUser.borrowConfirmationRequestedProperty().set(false);
+            }
+        });
+
+        viewModelUser.returnConfirmationRequestedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                showConfirmation("Are you sure you want to return this book?", viewModelUser::returnBook);
+                viewModelUser.returnConfirmationRequestedProperty().set(false);
+            }
+        });
+
+        viewModelUser.reserveConfirmationRequestedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                showConfirmation("Are you sure you want to reserve this book?", viewModelUser::reserveBook);
+                viewModelUser.reserveConfirmationRequestedProperty().set(false);
+            }
+        });
+
+        viewModelUser.cancelReservationConfirmationRequestedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                showConfirmation("Are you sure you want to cancel the reservation for this book?", viewModelUser::cancelReservation);
+                viewModelUser.cancelReservationConfirmationRequestedProperty().set(false);
+            }
+        });
+
+        // Inserts genres into the filter dropdown menu
         for (String genre : viewModelUser.getGenres()) {
             MenuItem item = new MenuItem(genre);
             item.setOnAction(event -> {
@@ -63,36 +102,24 @@ public class userDashboardController {
                 highlightSelectedItem(item);
                 updateTableViewItems();
             });
+            item.getStyleClass().add("menu-item-default"); // adds the color to all the dropdown menus
             userFilterDropdownMenu.getItems().add(item);
-
         }
 
-        // Add a "Clear Filter" item
+        // Adds a Clear Filter button item in dropdown menu and applies the css to it
         MenuItem clearFilter = new MenuItem("Clear Filter");
         clearFilter.setOnAction(event -> {
-                    viewModelUser.setGenreFilter(null);
-                    highlightSelectedItem(clearFilter);
-                    updateTableViewItems();
-                }
-        );
+            viewModelUser.setGenreFilter(null);
+            highlightSelectedItem(clearFilter);
+            updateTableViewItems();
+        });
+        clearFilter.getStyleClass().add("menu-item-default");
         userFilterDropdownMenu.getItems().add(clearFilter);
-
         highlightSelectedItem(clearFilter);
     }
 
     private void highlightSelectedItem(MenuItem selectedItem) {
-        if (currentSelectedItem != null) {
-            currentSelectedItem.setStyle(""); // Remove previous style
-        }
-        selectedItem.setStyle("-fx-background-color: #d3d3d3; -fx-text-fill: black; -fx-percent-width: 100%; -fx-percent-height: 100%;");
         currentSelectedItem = selectedItem;
-
-        // Update MenuButton text
-        if ("Clear Filter".equals(selectedItem.getText())) {
-            userFilterDropdownMenu.setText("Filter Books");
-        } else {
-            userFilterDropdownMenu.setText("Filter Books: " + selectedItem.getText());
-        }
     }
 
     private void updateTableViewItems() {
@@ -106,60 +133,69 @@ public class userDashboardController {
     }
 
     @FXML
-    private void handleOnClickOpenMyProfile() {
-        SceneManager.showMyProfile(getCurrentUser());
-    }
-
-    @FXML
     private void handleBorrowBook() {
         Book selectedBook = bookTableViewUser.getSelectionModel().getSelectedItem();
-        User currentUser = getCurrentUser();
+        User currentUser = SessionManager.getInstance().getCurrentUser();
         if (selectedBook != null && currentUser != null) {
-            viewModelUser.borrowBook(selectedBook, currentUser);
+            viewModelUser.requestBorrowConfirmation(selectedBook, currentUser);
         } else {
-            System.out.println("No book selected");
+            showAlert("No book selected.", Alert.AlertType.ERROR);
         }
     }
 
     @FXML
     private void handleReturnBook() {
         Book selectedBook = bookTableViewUser.getSelectionModel().getSelectedItem();
-        User currentUser = getCurrentUser();
+        User currentUser = SessionManager.getInstance().getCurrentUser();
         if (selectedBook != null && currentUser != null) {
-            viewModelUser.returnBook(selectedBook, currentUser);
+            viewModelUser.requestReturnConfirmation(selectedBook, currentUser);
         } else {
-            System.out.println("No book selected");
+            showAlert("No book selected.", Alert.AlertType.ERROR);
         }
     }
 
     @FXML
     private void handleReserveBook() {
         Book selectedBook = bookTableViewUser.getSelectionModel().getSelectedItem();
-        User currentUser = getCurrentUser();
+        User currentUser = SessionManager.getInstance().getCurrentUser();
         if (selectedBook != null && currentUser != null) {
-            viewModelUser.reserveBook(selectedBook, currentUser);
+            viewModelUser.requestReserveConfirmation(selectedBook, currentUser);
         } else {
-            System.out.println("No book selected");
+            showAlert("No book selected.", Alert.AlertType.ERROR);
         }
     }
 
     @FXML
     private void handleCancelBook() {
         Book selectedBook = bookTableViewUser.getSelectionModel().getSelectedItem();
-        User currentUser = getCurrentUser();
+        User currentUser = SessionManager.getInstance().getCurrentUser();
         if (selectedBook != null && currentUser != null) {
-            viewModelUser.cancelReservation(selectedBook, currentUser);
+            viewModelUser.requestCancelReservationConfirmation(selectedBook, currentUser);
         } else {
-            System.out.println("No book selected");
+            showAlert("No book selected.", Alert.AlertType.ERROR);
         }
     }
 
-
-    private void showStateAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
+    private void showAlert(String message, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(alertType == Alert.AlertType.ERROR ? "Error" : "Information");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    private void showConfirmation(String message, Runnable onConfirm) {
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION, message, ButtonType.YES, ButtonType.NO);
+        confirmAlert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.YES) {
+                onConfirm.run();
+            }
+        });
+    }
+
+    // Opens My profile view
+    @FXML
+    private void handleOnClickOpenMyProfile() {
+        SceneManager.showMyProfile(SessionManager.getInstance().getCurrentUser());
     }
 }

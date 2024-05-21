@@ -2,8 +2,10 @@ package swe2024.librarysep.ViewModel;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import swe2024.librarysep.Model.User;
 import swe2024.librarysep.Database.UserService;
+import swe2024.librarysep.Model.User;
+import swe2024.librarysep.Utility.SceneManager;
+import swe2024.librarysep.Utility.SessionManager;
 
 public class LoginViewModel {
     private StringProperty username = new SimpleStringProperty();
@@ -22,12 +24,23 @@ public class LoginViewModel {
         return password;
     }
 
-    public User authenticate() {
+    public boolean authenticate() {
         User user = userService.authenticateUser(username.get(), password.get());
         if (user != null) {
-            return user;
+            SessionManager.getInstance().loginUser(user);
+            if (user.getUsername().equals("Admin")) {
+                SceneManager.showAdminDashboard();
+            } else {
+                SceneManager.showUserDashboard();
+            }
+            return true;
         } else {
-            return null;
+            return false;
         }
     }
+
+    public void showRegistration() {
+        SceneManager.showRegistration();
+    }
+
 }

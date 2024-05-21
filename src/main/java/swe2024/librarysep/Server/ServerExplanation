@@ -1,0 +1,67 @@
+BookService: Defines the methods available for remote invocation. Basically the contracts between client and server.
+LibraryManager: Implements BookService on the server-side, performing the actual operations and interacting with database.
+RMIBookService: acts as a client-side proxy, delegating method calls to RMIClient.
+RMIBookServiceFactory: Provides a static method to create and return an instance of RMIBookService initialized with an RMIClient for remote communication.
+RMIClient: Looks up the `BookService and connects to the RMI registry as well as forwarding tasks to LibraryManager
+RMIServer: Sets up the RMI registry and binds LibraryManager to it.
+
+
+The client interacts with RMIBookService, which acts as a proxy.
+RMIBookService delegates method calls to RMIClient.
+RMIClient looks up BookService in the RMI registry and forwards method calls to LibraryManager.
+LibraryManager performs the actual operations and interacts with the database, then returns the results back through the chain to the client
+
+
+Client
+  |
+  v
+RMIBookService
+  |
+  v
+RMIClient ----> RMI Registry <---- RMIServer
+  |                            (binds LibraryManager)
+  v
+LibraryManager
+  |
+  v
+Database
+
+
++-------------------+                             +---------------------+
+|  <<interface>>    |<---------------------------|      RMIServer      |
+|    BookService    |                             +---------------------+
++-------------------+                             | + main(String[]): void |
+           ^                                       +---------------------+
+           |
+           |
+           +<---------------------------+
+           |                            |
++---------------------------+      +---------------------------+
+|      LibraryManager       |      |    RMIBookService         |
++---------------------------+      +---------------------------+
+| + getAllBooks(): List<Book>|     | + getAllBooks(): List<Book>|
+| + updateBookState(Book): void|   | + updateBookState(Book): void|
+| + deleteBook(int): void     |    | + deleteBook(int): void    |
+| + addBook(Book): void       |    | + addBook(Book): void      |
+| + editBook(Book): void      |    | + editBook(Book): void   |
++---------------------------+      +---------------------------+
+                                        |
+                                        v
+                                 +--------------------+
+                                 |     RMIClient      |
+                                 +--------------------+
+                                 | + getAllBooks(): List<Book>|
+                                 | + updateBookState(Book): void|
+                                 | + deleteBook(int): void    |
+                                 | + addBook(Book): void      |
+                                 | + editBook(Book): void   |
+                                 +--------------------+
+                                        ^
+                                        |
+                                        +----------------+
+                                        |                |
+                                  +---------------------------+
+                                  |  RMIBookServiceFactory    |
+                                  +---------------------------+
+                                  | + getBookService(): BookService |
+                                  +---------------------------+

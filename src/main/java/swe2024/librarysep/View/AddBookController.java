@@ -4,66 +4,57 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
-import swe2024.librarysep.Server.RMIBookServiceFactory;
 import swe2024.librarysep.Utility.SceneManager;
 import swe2024.librarysep.ViewModel.AddBookViewModel;
+
 import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.Optional;
 
 public class AddBookController {
-    @FXML private TextField titleField;
-    @FXML private TextField authorField;
-    @FXML private TextField releaseYearField;
-    @FXML private TextField genreField;
+    @FXML
+    private TextField titleField;
+    @FXML
+    private TextField authorField;
+    @FXML
+    private TextField releaseYearField;
+    @FXML
+    private TextField genreField;
 
     private AddBookViewModel viewModel;
 
-    public AddBookController() {
-        // Initialize the ViewModel with a BookService instance
-        this.viewModel = new AddBookViewModel(RMIBookServiceFactory.getBookService());
-    }
+    public AddBookController() {}
 
-   /* private void showConfirmationDialog() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setHeaderText("Add Book Confirmation");
-        alert.setContentText("The book has been added successfully");
-
-        alert.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK) {
-                SceneManager.showAdminDashboard();
-            }
-        });
+    public void setViewModel(AddBookViewModel viewModel) {
+        this.viewModel = viewModel;
     }
 
     @FXML
-    private void handleAddBook() throws SQLException, RemoteException {
-        String title = titleField.getText();
-        String author = authorField.getText();
-        int releaseYear = Integer.parseInt(releaseYearField.getText());
-        String genre = genreField.getText();
-        showConfirmationDialog();
-        viewModel.addBook(title, author, releaseYear, genre);
-    } */
-
-    @FXML
-    private void handleAddBook() throws SQLException, RemoteException {
+    private void handleAddBook() {
         try {
+            // Fetches user input from the UI elements
             String title = titleField.getText();
             String author = authorField.getText();
             int releaseYear = Integer.parseInt(releaseYearField.getText());
             String genre = genreField.getText();
 
-            showConfirmationDialog();
-            viewModel.addBook(title, author, releaseYear, genre);  // Call the ViewModel to add the book
+            // User confirmation
+            if (showConfirmationDialog()) {
+                viewModel.addBook(title, author, releaseYear, genre);  // Call the ViewModel to add the book
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Book added successfully!");
+                SceneManager.showAdminDashboard();
+            }
 
-            showAlert(Alert.AlertType.INFORMATION, "Success", "Book added successfully!");
+            // Error handling with UI alerts/feedback
         } catch (NumberFormatException e) {
             // Show error alert if release year is not a valid number
-            showAlert(Alert.AlertType.ERROR, "Invalid Input", "Make sure to fill out all fields and only number values in the release year field.");
-        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Invalid Input", "Make sure to fill out all fields and use only number values in the release year field.");
+        } catch (SQLException | RemoteException e) {
+            // Show error alert for SQL or Remote exceptions
+            showAlert(Alert.AlertType.ERROR, "Error", "An error occurred while adding the book: " + e.getMessage());
+        } catch (RuntimeException e) {
             // Show a generic error alert for any other exceptions
-            showAlert(Alert.AlertType.ERROR, "Error", "An error occurred: " + e.getMessage());
+            showAlert(Alert.AlertType.INFORMATION, "Cancelled", e.getMessage());
         }
     }
 
@@ -75,17 +66,14 @@ public class AddBookController {
         alert.showAndWait();
     }
 
-    private void showConfirmationDialog() {
+    private boolean showConfirmationDialog() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation");
         alert.setHeaderText(null);
         alert.setContentText("Are you sure you want to add this book?");
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-        } else {
-            throw new RuntimeException("Operation cancelled by user.");
-        }
+        return result.isPresent() && result.get() == ButtonType.OK;
     }
 
     @FXML

@@ -5,22 +5,22 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="461.0" prefWidth="250.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="swe2024.librarysep.View.AddBookController">
+<AnchorPane prefHeight="461.0" prefWidth="250.0" style="-fx-background-color: #5D76A9;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="swe2024.librarysep.View.AddBookController">
     <TextField fx:id="titleField" layoutX="52.0" layoutY="88.0" promptText="Title" />
     <TextField fx:id="authorField" layoutX="52.0" layoutY="152.0" promptText="Author" />
     <TextField fx:id="releaseYearField" layoutX="52.0" layoutY="214.0" promptText="Release year" />
     <TextField fx:id="genreField" layoutX="52.0" layoutY="280.0" promptText="Genre" />
-    <Button fx:id="addBookButton" layoutX="75.0" layoutY="333.0" mnemonicParsing="false" onAction="#handleAddBook" prefHeight="38.0" prefWidth="98.0" text="Add Book">
+    <Button fx:id="addBookButton" layoutX="75.0" layoutY="333.0" mnemonicParsing="false" onAction="#handleAddBook" prefHeight="38.0" prefWidth="98.0" style="-fx-background-color: #002244;" text="Add Book" textFill="WHITE">
         <effect>
             <DropShadow />
         </effect>
     </Button>
-    <Label layoutX="71.0" layoutY="28.0" text="Add book">
+    <Label layoutX="71.0" layoutY="28.0" text="Add book" textFill="WHITE">
         <font>
-            <Font name="Arial Nova Cond Light" size="24.0" />
+            <Font name="System Bold" size="24.0" />
         </font>
     </Label>
-   <Button layoutX="76.0" layoutY="396.0" mnemonicParsing="false" onAction="#handleCancel" prefHeight="38.0" prefWidth="98.0" text="Cancel">
+   <Button layoutX="76.0" layoutY="396.0" mnemonicParsing="false" onAction="#handleCancel" prefHeight="38.0" prefWidth="98.0" style="-fx-background-color: #002244;" text="Cancel" textFill="WHITE">
       <effect>
          <DropShadow />
       </effect>

@@ -6,25 +6,35 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import swe2024.librarysep.Database.DatabaseConnection;
 import swe2024.librarysep.Database.UserService;
+import swe2024.librarysep.Model.Book;
 import swe2024.librarysep.Model.BookService;
 import swe2024.librarysep.Model.User;
 import swe2024.librarysep.Server.RMIBookServiceFactory;
 import swe2024.librarysep.View.*;
-import swe2024.librarysep.ViewModel.DashboardViewModel;
-import swe2024.librarysep.ViewModel.LoginViewModel;
-import swe2024.librarysep.ViewModel.MyProfileViewModel;
-import swe2024.librarysep.ViewModel.userDashboardViewModel;
+import swe2024.librarysep.ViewModel.*;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+
+// SceneManager class is responsible for injecting dependencies into several of these scenes
+
+// Dependency Injection: By managing the injection of dependencies (like view models) into controllers,
+// the SceneManager helps maintain a clean separation of concerns and ensures that controllers are
+// decoupled from the specifics of dependency creation.
+
+@SuppressWarnings("CallToPrintStackTrace")
 public class SceneManager {
 
     private static Stage primaryStage;
 
     public static void setPrimaryStage(Stage stage) {
         primaryStage = stage;
+    }
+
+    private static Stage getPrimaryStage() {
+        return primaryStage;
     }
 
     public static void showLogin() {
@@ -58,17 +68,20 @@ public class SceneManager {
         try {
             FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource("/swe2024/librarysep/View/adminDashboard.fxml"));
             Parent root = loader.load();
-            DashboardController controller = loader.getController();
+            AdminDashboardController controller = loader.getController();
             BookService bookService = RMIBookServiceFactory.getBookService();
-            DashboardViewModel viewModel = new DashboardViewModel(bookService);
+            AdminDashboardViewModel viewModel = new AdminDashboardViewModel(bookService);
             controller.setViewModel(viewModel);
 
-            primaryStage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(SceneManager.class.getResource("/swe2024/librarysep/Css/styles.css").toExternalForm());
+            primaryStage.setScene(scene);
             primaryStage.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
     public static void showUserDashboard() {
         try {
@@ -79,7 +92,9 @@ public class SceneManager {
             userDashboardViewModel viewModelUser = new userDashboardViewModel(bookService);
             controller.setViewModel(viewModelUser);
 
-            primaryStage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(SceneManager.class.getResource("/swe2024/librarysep/Css/styles.css").toExternalForm());
+            primaryStage.setScene(scene);
             primaryStage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -88,45 +103,82 @@ public class SceneManager {
 
     public static void showRegistration() {
         try {
-            Parent root = FXMLLoader.load(SceneManager.class.getResource("/swe2024/librarysep/View/userRegistration.fxml"));
+            Connection connection = DatabaseConnection.connect();
+            UserService userService = new UserService(connection);
+            RegistrationViewModel registrationViewModel = new RegistrationViewModel(userService);
+
+            FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource("/swe2024/librarysep/View/userRegistration.fxml"));
+            loader.setControllerFactory(type -> {
+                if (type == RegistrationController.class) {
+                    RegistrationController controller = new RegistrationController();
+                    controller.setViewModel(registrationViewModel);
+                    return controller;
+                } else {
+                    try {
+                        return type.getDeclaredConstructor().newInstance();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
+
+            Parent root = loader.load();
             primaryStage.setScene(new Scene(root));
             primaryStage.show();
-        } catch (Exception e) {
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static void showEditBook(Book book) {
+        try {
+            FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource("/swe2024/librarysep/View/editBook.fxml"));
+            Parent root = loader.load();
+
+            EditBookController controller = loader.getController();
+            EditBookViewModel viewModel = new EditBookViewModel(RMIBookServiceFactory.getBookService());
+            controller.setViewModel(viewModel);
+            controller.setBook(book);
+
+            primaryStage.setScene(new Scene(root));
+            primaryStage.show();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public static void showAddBook() {
         try {
-            Parent root = FXMLLoader.load(SceneManager.class.getResource("/swe2024/librarysep/View/addBook.fxml"));
-            primaryStage.setScene(new Scene(root));
-            primaryStage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static EditBookController showEditBook() {
-        try {
-            FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource("/swe2024/librarysep/View/editBook.fxml"));
+            FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource("/swe2024/librarysep/View/addBook.fxml"));
             Parent root = loader.load();
-            EditBookController controller = loader.getController();
+
+            // Get the controller from the FXML loader
+            AddBookController controller = loader.getController();
+
+            // Create the ViewModel and inject it into the controller
+            AddBookViewModel viewModel = new AddBookViewModel(RMIBookServiceFactory.getBookService());
+            controller.setViewModel(viewModel);
+
             primaryStage.setScene(new Scene(root));
             primaryStage.show();
-
-            return controller;
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
-            return null;
         }
     }
 
     public static void showMyProfile(User currentUser) {
         try {
+            if (currentUser == null) {
+                // Handle the case where there is no current user (e.g., redirect to Login)
+                showLogin();
+                return;
+            }
+
             FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource("/swe2024/librarysep/View/myProfile.fxml"));
             Parent root = loader.load();
             MyProfileController controller = loader.getController();
-            MyProfileViewModel viewModel = new MyProfileViewModel(currentUser, RMIBookServiceFactory.getBookService());
+            MyProfileViewModel viewModel = new MyProfileViewModel(RMIBookServiceFactory.getBookService());
             controller.setViewModel(viewModel);
 
             primaryStage.setScene(new Scene(root));

@@ -1,10 +1,15 @@
+/* styles.css */
 
-.button {
-    -fx-background-color: #1E90FF;
-    -fx-text-fill: white;
-    -fx-font-size: 12px;
-    -fx-font-family: "Segoe UI";
-    -fx-effect: dropshadow(three-pass-box, #000000, 10, 0.5, 0, 0);
+
+.button-default:hover, .menu-button-default:hover, .menu-item-default:hover {
+    -fx-border-color: black;
 }
 
-/* currently not being used, was just for testing css on buttons and it worked */
+/* Style for the default menu items */
+.menu-item-default {
+    -fx-background-color: #5D76A9;
+    -fx-text-fill: #FFFFFF; /* White text for menu items */
+    -fx-pref-width: 220px; /* Ensure items match the menu button width */
+    -fx-pref-height: 40px; /* Set preferred height */
+
+}

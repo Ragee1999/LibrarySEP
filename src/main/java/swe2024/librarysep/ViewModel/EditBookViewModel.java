@@ -15,7 +15,7 @@ public class EditBookViewModel {
     private final StringProperty genre = new SimpleStringProperty();
 
     private Book currentBook;
-    private BookService bookService;
+    private final BookService bookService;
 
     public EditBookViewModel(BookService service) {
         this.bookService = service;
@@ -35,12 +35,23 @@ public class EditBookViewModel {
     public StringProperty releaseYearProperty() { return releaseYear; }
     public StringProperty genreProperty() { return genre; }
 
-
-    public void updateBook() throws RemoteException, SQLException {
+    public void editBook() throws RemoteException, SQLException {
+        validateInputs();
         currentBook.setTitle(title.get());
         currentBook.setAuthor(author.get());
         currentBook.setReleaseYear(Integer.parseInt(releaseYear.get()));
         currentBook.setGenre(genre.get());
-        bookService.updateBook(currentBook);
+        bookService.editBook(currentBook);
+    }
+
+    private void validateInputs() throws IllegalArgumentException {
+        if (title.get().isEmpty() || author.get().isEmpty() || genre.get().isEmpty() || releaseYear.get().isEmpty()) {
+            throw new IllegalArgumentException("All fields must be filled out");
+        }
+        try {
+            Integer.parseInt(releaseYear.get());
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("Release Year must be a valid number");
+        }
     }
 }
