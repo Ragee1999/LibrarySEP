@@ -20,7 +20,7 @@ import java.util.List;
 //
 
 
-public class userDashboardViewModel {
+public class UserDashboardViewModel {
 
     private ObservableList<Book> books = FXCollections.observableArrayList();
     private BookService bookService;
@@ -35,7 +35,7 @@ public class userDashboardViewModel {
     private Book selectedBook;
     private User currentUser;
 
-    public userDashboardViewModel(BookService bookService) throws SQLException, RemoteException {
+    public UserDashboardViewModel(BookService bookService) throws SQLException, RemoteException {
         super();
         this.bookService = bookService;
 

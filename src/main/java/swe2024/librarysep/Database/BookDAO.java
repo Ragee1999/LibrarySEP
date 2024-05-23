@@ -10,8 +10,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data Access Object (DAO) for managing {@link Book} entities in the database.
+ */
 public class BookDAO {
 
+    /**
+     * Retrieves all books from the database.
+     *
+     * @param connection the {@link Connection} object to the database
+     * @return a list of {@link Book} objects
+     * @throws SQLException if a database access error occurs
+     */
     public List<Book> getAllBooks(Connection connection) throws SQLException {
         List<Book> books = new ArrayList<>();
         String sql = "SELECT b.bookId, b.title, b.author, b.releaseYear, b.state, b.genre, u.username AS username " +
@@ -35,6 +45,13 @@ public class BookDAO {
         return books;
     }
 
+    /**
+     * Updates the state of a book in the database.
+     *
+     * @param connection the {@link Connection} object to the database
+     * @param book       the {@link Book} object with updated state
+     * @throws SQLException if a database access error occurs or if the update fails
+     */
     public void updateBookState(Connection connection, Book book) throws SQLException {
         PreparedStatement ps;
         if (book.getUsername() != null) {
@@ -51,6 +68,13 @@ public class BookDAO {
         }
     }
 
+    /**
+     * Deletes a book from the database.
+     *
+     * @param connection the {@link Connection} object to the database
+     * @param bookId     the ID of the book to be deleted
+     * @throws SQLException if a database access error occurs or if the delete fails
+     */
     public void deleteBook(Connection connection, int bookId) throws SQLException {
         String sql = "DELETE FROM books WHERE bookId = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -62,6 +86,13 @@ public class BookDAO {
         }
     }
 
+    /**
+     * Adds a new book to the database.
+     *
+     * @param connection the {@link Connection} object to the database
+     * @param book       the {@link Book} object to be added
+     * @throws SQLException if a database access error occurs
+     */
     public void addBook(Connection connection, Book book) throws SQLException {
         String sql = "INSERT INTO books (title, author, releaseYear, genre) VALUES (?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -73,6 +104,13 @@ public class BookDAO {
         }
     }
 
+    /**
+     * Updates an existing book in the database.
+     *
+     * @param connection the {@link Connection} object to the database
+     * @param book       the {@link Book} object with updated information
+     * @throws SQLException if a database access error occurs or if the update fails
+     */
     public void editBook(Connection connection, Book book) throws SQLException {
         String sql = "UPDATE books SET title = ?, author = ?, releaseYear = ?, genre = ? WHERE bookId = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {

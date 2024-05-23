@@ -7,13 +7,27 @@ import java.sql.SQLException;
 
 import swe2024.librarysep.Model.User;
 
+/**
+ * Provides services for user registration and authentication.
+ */
 public class UserService {
     private final Connection connection;
 
+    /**
+     * Constructs a UserService with the provided database connection.
+     *
+     * @param connection the {@link Connection} object to the database
+     */
     public UserService(Connection connection) {
         this.connection = connection;
     }
 
+    /**
+     * Registers a new user in the database.
+     *
+     * @param user the {@link User} object to be registered
+     * @throws SQLException if a database access error occurs
+     */
     public void registerUser(User user) throws SQLException {
         String sql = "INSERT INTO users (username, password) VALUES (?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -21,10 +35,17 @@ public class UserService {
             statement.setString(2, user.getPassword());
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLException("An error occurred while registering: " + e.getMessage());
+            throw new SQLException("An error occurred while registering: " + e.getMessage(), e);
         }
     }
 
+    /**
+     * Authenticates a user based on the provided username and password.
+     *
+     * @param username the username of the user
+     * @param password the password of the user
+     * @return the authenticated {@link User} object, or null if authentication fails
+     */
     public User authenticateUser(String username, String password) {
         Connection connection = null;
         try {

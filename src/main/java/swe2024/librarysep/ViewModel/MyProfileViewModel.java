@@ -17,11 +17,22 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * ViewModel for the MyProfile view.
+ * Manages the user's profile information and book data displayed in the profile.
+ */
 public class MyProfileViewModel {
     private StringProperty username = new SimpleStringProperty();
     private ObservableList<Book> userBooks = FXCollections.observableArrayList();
-    private BookService bookService;
+    private final BookService bookService;
 
+    /**
+     * Constructs a MyProfileViewModel with the specified {@link BookService}.
+     *
+     * @param bookService the {@link BookService} used to fetch user's books
+     * @throws SQLException    if an SQL exception occurs
+     * @throws RemoteException if a remote exception occurs
+     */
     public MyProfileViewModel(BookService bookService) throws SQLException, RemoteException {
         this.bookService = bookService;
         User currentUser = SessionManager.getInstance().getCurrentUser();
@@ -33,6 +44,13 @@ public class MyProfileViewModel {
         }
     }
 
+    /**
+     * Fetches the books belonging to the current user.
+     *
+     * @param currentUser the current user
+     * @throws SQLException    if an SQL exception occurs
+     * @throws RemoteException if a remote exception occurs
+     */
     private void fetchUserBooks(User currentUser) throws SQLException, RemoteException {
         List<Book> allBooks = bookService.getAllBooks();
         List<Book> filteredBooks = allBooks.stream()
@@ -41,15 +59,33 @@ public class MyProfileViewModel {
         userBooks.setAll(filteredBooks);
     }
 
+    /**
+     * Gets the username property.
+     *
+     * @return the username property
+     */
     public StringProperty usernameProperty() {
         return username;
     }
 
+    /**
+     * Gets the list of user's books.
+     *
+     * @return the list of user's books
+     */
     public ObservableList<Book> getUserBooks() {
         return userBooks;
     }
 
-    // Bind properties
+    /**
+     * Binds profile table columns to the properties of the Book objects.
+     *
+     * @param titleColumn      the table column for book titles
+     * @param authorColumn     the table column for book authors
+     * @param releaseYearColumn the table column for book release years
+     * @param stateColumn      the table column for book states
+     * @param genreColumn      the table column for book genres
+     */
     public void bindProfileTableColumns(
             TableColumn<Book, String> titleColumn,
             TableColumn<Book, String> authorColumn,
@@ -64,6 +100,9 @@ public class MyProfileViewModel {
         genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
     }
 
+    /**
+     * Navigates back to the appropriate dashboard based on the user's role.
+     */
     public void handleBackToDashboard() {
         User currentUser = SessionManager.getInstance().getCurrentUser();
         if (currentUser != null && "Admin".equals(currentUser.getUsername())) {

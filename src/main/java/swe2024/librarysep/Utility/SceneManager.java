@@ -17,26 +17,41 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-
-// SceneManager class is responsible for injecting dependencies into several of these scenes
-
-// Dependency Injection: By managing the injection of dependencies (like view models) into controllers,
-// the SceneManager helps maintain a clean separation of concerns and ensures that controllers are
-// decoupled from the specifics of dependency creation.
+/**
+ * SceneManager class is responsible for injecting dependencies into various scenes.
+ * <p>
+ * Dependency Injection: By managing the injection of dependencies (like view models) into controllers,
+ * the SceneManager helps maintain a clean separation of concerns and ensures that controllers are
+ * decoupled from the specifics of dependency creation.
+ */
 
 @SuppressWarnings("CallToPrintStackTrace")
+
 public class SceneManager {
 
     private static Stage primaryStage;
 
+    /**
+     * Sets the primary stage for the application.
+     *
+     * @param stage the primary stage to set
+     */
     public static void setPrimaryStage(Stage stage) {
         primaryStage = stage;
     }
 
+    /**
+     * Gets the primary stage of the application.
+     *
+     * @return the primary stage
+     */
     private static Stage getPrimaryStage() {
         return primaryStage;
     }
 
+    /**
+     * Shows the login scene.
+     */
     public static void showLogin() {
         try {
             Connection connection = DatabaseConnection.connect();
@@ -64,6 +79,9 @@ public class SceneManager {
         }
     }
 
+    /**
+     * Shows the admin dashboard scene.
+     */
     public static void showAdminDashboard() {
         try {
             FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource("/swe2024/librarysep/View/adminDashboard.fxml"));
@@ -82,14 +100,16 @@ public class SceneManager {
         }
     }
 
-
+    /**
+     * Shows the user dashboard scene.
+     */
     public static void showUserDashboard() {
         try {
             FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource("/swe2024/librarysep/View/userDashboard.fxml"));
             Parent root = loader.load();
-            userDashboardController controller = loader.getController();
+            UserDashboardController controller = loader.getController();
             BookService bookService = RMIBookServiceFactory.getBookService();
-            userDashboardViewModel viewModelUser = new userDashboardViewModel(bookService);
+            UserDashboardViewModel viewModelUser = new UserDashboardViewModel(bookService);
             controller.setViewModel(viewModelUser);
 
             Scene scene = new Scene(root);
@@ -101,6 +121,9 @@ public class SceneManager {
         }
     }
 
+    /**
+     * Shows the registration scene.
+     */
     public static void showRegistration() {
         try {
             Connection connection = DatabaseConnection.connect();
@@ -130,7 +153,11 @@ public class SceneManager {
         }
     }
 
-
+    /**
+     * Shows the edit book scene with the specified book.
+     *
+     * @param book the book to edit
+     */
     public static void showEditBook(Book book) {
         try {
             FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource("/swe2024/librarysep/View/editBook.fxml"));
@@ -148,15 +175,15 @@ public class SceneManager {
         }
     }
 
+    /**
+     * Shows the add book scene.
+     */
     public static void showAddBook() {
         try {
             FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource("/swe2024/librarysep/View/addBook.fxml"));
             Parent root = loader.load();
 
-            // Get the controller from the FXML loader
             AddBookController controller = loader.getController();
-
-            // Create the ViewModel and inject it into the controller
             AddBookViewModel viewModel = new AddBookViewModel(RMIBookServiceFactory.getBookService());
             controller.setViewModel(viewModel);
 
@@ -167,10 +194,14 @@ public class SceneManager {
         }
     }
 
+    /**
+     * Shows the my profile scene for the specified user.
+     *
+     * @param currentUser the current user
+     */
     public static void showMyProfile(User currentUser) {
         try {
             if (currentUser == null) {
-                // Handle the case where there is no current user (e.g., redirect to Login)
                 showLogin();
                 return;
             }

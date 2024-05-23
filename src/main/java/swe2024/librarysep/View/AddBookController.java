@@ -11,7 +11,11 @@ import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.Optional;
 
+/**
+ * Controller for the Add Book view. Handles user input and interactions for adding a new book.
+ */
 public class AddBookController {
+
     @FXML
     private TextField titleField;
     @FXML
@@ -23,12 +27,24 @@ public class AddBookController {
 
     private AddBookViewModel viewModel;
 
+    /**
+     * Default constructor.
+     */
     public AddBookController() {}
 
+    /**
+     * Sets the view model for this controller.
+     *
+     * @param viewModel the view model to set
+     */
     public void setViewModel(AddBookViewModel viewModel) {
         this.viewModel = viewModel;
     }
 
+    /**
+     * Handles the action of adding a book. Fetches user input, validates it,
+     * and interacts with the view model to add the book.
+     */
     @FXML
     private void handleAddBook() {
         try {
@@ -58,6 +74,13 @@ public class AddBookController {
         }
     }
 
+    /**
+     * Shows an alert dialog with the specified type, title, and message.
+     *
+     * @param alertType the type of alert
+     * @param title     the title of the alert
+     * @param message   the message of the alert
+     */
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
@@ -66,6 +89,11 @@ public class AddBookController {
         alert.showAndWait();
     }
 
+    /**
+     * Shows a confirmation dialog to confirm the action of adding a book.
+     *
+     * @return true if the user confirms, false otherwise
+     */
     private boolean showConfirmationDialog() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation");
@@ -76,6 +104,10 @@ public class AddBookController {
         return result.isPresent() && result.get() == ButtonType.OK;
     }
 
+    /**
+     * Handles the action of canceling the add book operation.
+     * Navigates back to the admin dashboard.
+     */
     @FXML
     private void handleCancel() {
         SceneManager.showAdminDashboard();
