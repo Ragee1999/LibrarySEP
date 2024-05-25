@@ -10,7 +10,7 @@ import swe2024.librarysep.ViewModel.AdminDashboardViewModel;
 import swe2024.librarysep.Utility.SessionManager;
 
 
-public class AdminDashboardController {
+public class AdminDashboardView {
     @FXML
     private TableView<Book> bookTableView;
     @FXML

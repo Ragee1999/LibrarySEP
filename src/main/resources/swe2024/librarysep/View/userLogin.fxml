@@ -4,7 +4,11 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="545.0" style="-fx-background-color: #5D76A9;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="swe2024.librarysep.View.LoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+            prefWidth="545.0" style="-fx-background-color: #5D76A9;" xmlns="http://javafx.com/javafx/17.0.2-ea"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="swe2024.librarysep.View.LoginView">
+
     <children>
         <TextField fx:id="usernameField" layoutX="155.0" layoutY="131.0" prefHeight="26.0" prefWidth="218.0" promptText="User Name" />
         <TextField fx:id="passwordField" layoutX="155.0" layoutY="202.0" prefHeight="26.0" prefWidth="218.0" promptText="Password" />

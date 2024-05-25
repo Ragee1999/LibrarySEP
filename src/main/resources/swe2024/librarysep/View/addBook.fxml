@@ -7,7 +7,7 @@
 
 <AnchorPane prefHeight="461.0" prefWidth="250.0" style="-fx-background-color: #5D76A9;" xmlns="http://javafx.com/javafx/17.0.2-ea"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="swe2024.librarysep.View.AddBookController">
+            fx:controller="swe2024.librarysep.View.AddBookView">
 
     <TextField fx:id="titleField" layoutX="52.0" layoutY="88.0" promptText="Title" />
     <TextField fx:id="authorField" layoutX="52.0" layoutY="152.0" promptText="Author" />

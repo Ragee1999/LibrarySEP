@@ -11,9 +11,9 @@ import java.rmi.RemoteException;
 import java.sql.SQLException;
 
 /**
- * Controller for the Edit Book view. Handles user input and interactions for editing a book.
+ * View for the Edit Book view. Handles user input and interactions for editing a book.
  */
-public class EditBookController {
+public class EditBookView {
 
     @FXML
     private TextField titleField;
@@ -29,10 +29,10 @@ public class EditBookController {
     /**
      * Default constructor.
      */
-    public EditBookController() {}
+    public EditBookView() {}
 
     /**
-     * Sets the view model for this controller.
+     * Sets the view model for this view
      *
      * @param viewModel the view model to set
      */
@@ -41,7 +41,7 @@ public class EditBookController {
     }
 
     /**
-     * Initializes the controller. Binds the UI fields to the view model properties if the view model is set.
+     * Initializes the View. Binds the UI fields to the view model properties if the view model is set.
      */
     @FXML
     private void initialize() {

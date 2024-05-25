@@ -8,10 +8,10 @@ import swe2024.librarysep.Utility.SceneManager;
 import swe2024.librarysep.ViewModel.RegistrationViewModel;
 
 /**
- * Controller for the Registration view.
+ * View for the Registration view.
  * Handles user input and interactions for user registration.
  */
-public class RegistrationController {
+public class RegistrationView {
 
     @FXML
     private TextField usernameRegister;
@@ -34,7 +34,7 @@ public class RegistrationController {
     }
 
     /**
-     * Initializes the controller. Binds UI components to the ViewModel properties and sets up event handlers.
+     * Initializes the View. Binds UI components to the ViewModel properties and sets up event handlers.
      */
     @FXML
     private void initialize() {

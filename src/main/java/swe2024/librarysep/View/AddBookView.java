@@ -12,9 +12,9 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 /**
- * Controller for the Add Book view. Handles user input and interactions for adding a new book.
+ * View for the Add Book view. Handles user input and interactions for adding a new book.
  */
-public class AddBookController {
+public class AddBookView {
 
     @FXML
     private TextField titleField;
@@ -30,10 +30,10 @@ public class AddBookController {
     /**
      * Default constructor.
      */
-    public AddBookController() {}
+    public AddBookView() {}
 
     /**
-     * Sets the view model for this controller.
+     * Sets the view model for this View.
      *
      * @param viewModel the view model to set
      */

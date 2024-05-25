@@ -10,11 +10,11 @@ import swe2024.librarysep.Utility.SessionManager;
 import swe2024.librarysep.ViewModel.UserDashboardViewModel;
 
 //
-// This class is almost similar to AdminDashboardController, the only main difference being constructor,
+// This class is almost similar to AdminDashboardView, the only main difference being constructor,
 // having 2 fewer columns, as well as no access to Admin features
 //
 
-public class UserDashboardController {
+public class UserDashboardView {
     @FXML
     private TableView<Book> bookTableViewUser;
     @FXML

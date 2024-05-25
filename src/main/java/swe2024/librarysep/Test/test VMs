@@ -1,0 +1,31 @@
+Copy paste these into the VMs of a new J-unit testing class
+Step 1. Right click on a unit class and access "More run/debug"
+Step 2. While hovering "More run/debug" click on Modify run "configurations"
+Step 3. Copy paste the below 4 lines right after the -ea in the vm command line.
+Step 4. Apply and then run your tests
+
+--add-reads swe2024.librarysep=ALL-UNNAMED
+--add-opens swe2024.librarysep/swe2024.librarysep.Test=ALL-UNNAMED
+--add-opens org.junit.platform.commons/org.junit.platform.commons.logging=ALL-UNNAMED
+--add-opens org.junit.platform.commons/org.junit.platform.commons.util=ALL-UNNAMED
+
+
+Some information regarding the command lines:
+
+-ea: Enables assertions. This is generally useful for testing to ensure that any assert statements
+in your code are active and will trigger an error if their conditions are not met.
+
+--add-reads swe2024.librarysep=ALL-UNNAMED: This option allows the swe2024.librarysep module to read all unnamed
+modules. This is necessary because the test classes are typically placed in the unnamed module by the test runner.
+
+--add-opens swe2024.librarysep/swe2024.librarysep.Test=ALL-UNNAMED: Opens the swe2024.librarysep.Test package to all
+unnamed modules. This is necessary to allow reflection-based frameworks (like JUnit and Mockito) to access classes
+and methods within this package.
+
+--add-opens org.junit.platform.commons/org.junit.platform.commons.logging=ALL-UNNAMED:
+Opens the org.junit.platform.commons.logging package to all unnamed modules. This is required because JUnit uses
+internal logging mechanisms that may need to be accessed during test execution.
+
+--add-opens org.junit.platform.commons/org.junit.platform.commons.util=ALL-UNNAMED: Similar to the above, this opens
+the org.junit.platform.commons.util package to all unnamed modules. This ensures that JUnit's utility classes
+can be accessed as needed.

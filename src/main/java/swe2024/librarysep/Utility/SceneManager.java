@@ -20,13 +20,12 @@ import java.sql.SQLException;
 /**
  * SceneManager class is responsible for injecting dependencies into various scenes.
  * <p>
- * Dependency Injection: By managing the injection of dependencies (like view models) into controllers,
- * the SceneManager helps maintain a clean separation of concerns and ensures that controllers are
+ * Dependency Injection: By managing the injection of dependencies (like view models) into views,
+ * the SceneManager helps maintain a clean separation of concerns and ensures that views are
  * decoupled from the specifics of dependency creation.
  */
 
 @SuppressWarnings("CallToPrintStackTrace")
-
 public class SceneManager {
 
     private static Stage primaryStage;
@@ -60,8 +59,8 @@ public class SceneManager {
 
             FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource("/swe2024/librarysep/View/userLogin.fxml"));
             loader.setControllerFactory(type -> {
-                if (type == LoginController.class) {
-                    return new LoginController(loginViewModel);
+                if (type == LoginView.class) {
+                    return new LoginView(loginViewModel);
                 } else {
                     try {
                         return type.getDeclaredConstructor().newInstance();
@@ -86,10 +85,10 @@ public class SceneManager {
         try {
             FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource("/swe2024/librarysep/View/adminDashboard.fxml"));
             Parent root = loader.load();
-            AdminDashboardController controller = loader.getController();
+            AdminDashboardView adminDashboardView = loader.getController();
             BookService bookService = RMIBookServiceFactory.getBookService();
             AdminDashboardViewModel viewModel = new AdminDashboardViewModel(bookService);
-            controller.setViewModel(viewModel);
+            adminDashboardView.setViewModel(viewModel);
 
             Scene scene = new Scene(root);
             scene.getStylesheets().add(SceneManager.class.getResource("/swe2024/librarysep/Css/styles.css").toExternalForm());
@@ -107,10 +106,10 @@ public class SceneManager {
         try {
             FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource("/swe2024/librarysep/View/userDashboard.fxml"));
             Parent root = loader.load();
-            UserDashboardController controller = loader.getController();
+            UserDashboardView userDashboardView = loader.getController();
             BookService bookService = RMIBookServiceFactory.getBookService();
             UserDashboardViewModel viewModelUser = new UserDashboardViewModel(bookService);
-            controller.setViewModel(viewModelUser);
+            userDashboardView.setViewModel(viewModelUser);
 
             Scene scene = new Scene(root);
             scene.getStylesheets().add(SceneManager.class.getResource("/swe2024/librarysep/Css/styles.css").toExternalForm());
@@ -132,10 +131,10 @@ public class SceneManager {
 
             FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource("/swe2024/librarysep/View/userRegistration.fxml"));
             loader.setControllerFactory(type -> {
-                if (type == RegistrationController.class) {
-                    RegistrationController controller = new RegistrationController();
-                    controller.setViewModel(registrationViewModel);
-                    return controller;
+                if (type == RegistrationView.class) {
+                    RegistrationView registrationView = new RegistrationView();
+                    registrationView.setViewModel(registrationViewModel);
+                    return registrationView;
                 } else {
                     try {
                         return type.getDeclaredConstructor().newInstance();
@@ -163,10 +162,10 @@ public class SceneManager {
             FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource("/swe2024/librarysep/View/editBook.fxml"));
             Parent root = loader.load();
 
-            EditBookController controller = loader.getController();
+            EditBookView editBookView = loader.getController();
             EditBookViewModel viewModel = new EditBookViewModel(RMIBookServiceFactory.getBookService());
-            controller.setViewModel(viewModel);
-            controller.setBook(book);
+            editBookView.setViewModel(viewModel);
+            editBookView.setBook(book);
 
             primaryStage.setScene(new Scene(root));
             primaryStage.show();
@@ -183,9 +182,9 @@ public class SceneManager {
             FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource("/swe2024/librarysep/View/addBook.fxml"));
             Parent root = loader.load();
 
-            AddBookController controller = loader.getController();
+            AddBookView addBookView = loader.getController();
             AddBookViewModel viewModel = new AddBookViewModel(RMIBookServiceFactory.getBookService());
-            controller.setViewModel(viewModel);
+            addBookView.setViewModel(viewModel);
 
             primaryStage.setScene(new Scene(root));
             primaryStage.show();
@@ -195,7 +194,7 @@ public class SceneManager {
     }
 
     /**
-     * Shows the my profile scene for the specified user.
+     * Shows my profile scene for the specified user.
      *
      * @param currentUser the current user
      */
@@ -208,9 +207,9 @@ public class SceneManager {
 
             FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource("/swe2024/librarysep/View/myProfile.fxml"));
             Parent root = loader.load();
-            MyProfileController controller = loader.getController();
+            MyProfileView myProfileView = loader.getController();
             MyProfileViewModel viewModel = new MyProfileViewModel(RMIBookServiceFactory.getBookService());
-            controller.setViewModel(viewModel);
+            myProfileView.setViewModel(viewModel);
 
             primaryStage.setScene(new Scene(root));
             primaryStage.show();
@@ -219,3 +218,4 @@ public class SceneManager {
         }
     }
 }
+

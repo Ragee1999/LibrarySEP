@@ -101,7 +101,6 @@ public class DatabaseConnection {
                     Connection connection = pool.poll();
                     if (connection != null && !connection.isClosed()) {
                         connection.close();
-                        // System.out.println("Connection closed");
                     }
                 } catch (SQLException e) {
                     System.err.println("Error closing connection: " + e.getMessage());
