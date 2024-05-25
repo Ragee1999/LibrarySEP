@@ -19,7 +19,6 @@ import java.sql.SQLException;
 
 /**
  * SceneManager class is responsible for injecting dependencies into various scenes.
- * <p>
  * Dependency Injection: By managing the injection of dependencies (like view models) into views,
  * the SceneManager helps maintain a clean separation of concerns and ensures that views are
  * decoupled from the specifics of dependency creation.
@@ -194,7 +193,7 @@ public class SceneManager {
     }
 
     /**
-     * Shows my profile scene for the specified user.
+     * Shows the my profile scene for the specified user.
      *
      * @param currentUser the current user
      */

@@ -12,43 +12,18 @@ import java.util.Queue;
  */
 public class DatabaseConnection {
 
-    private static final Queue<Connection> pool = new LinkedList<>(); // Queue to hold database connections
-    private static final int MAX_POOL_SIZE = 10;
-    private static final Object lock = new Object(); // Object for synchronization
+    private static final Queue<Connection> pool = new LinkedList<>();
+    private static final int MAX_POOL_SIZE = 15;
+    private static int activeConnections = 0; // Track active connections
+    private static boolean poolClosed = false; // Track if the pool is closed
+    private static final Object lock = new Object();
 
     private static final String url = "jdbc:postgresql://database2024sep.postgres.database.azure.com:5432/postgres";
     private static final String user = "via";
     private static final String password = "group6!%";
 
-
-    // Change the details accordingly if you wish to use a localhost.
-    /*
-    private static final String url = "jdbc:postgresql://localhost:5432/postgres";
-    private static final String user = "postgres";
-    private static final String password = "1234";
-    */
-
-    // Static initializer to initialize the connection pool
-    static {
-        initializeConnectionPool();
-    }
-
     // Private constructor to prevent instantiation
-    private DatabaseConnection() {
-    }
-
-    /**
-     * Initializes the connection pool with the maximum number of connections.
-     */
-    private static void initializeConnectionPool() {
-        try {
-            for (int i = 0; i < MAX_POOL_SIZE; i++) {
-                pool.add(createNewConnection());
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error initializing the connection pool", e);
-        }
-    }
+    private DatabaseConnection() {}
 
     /**
      * Creates a new database connection.
@@ -64,10 +39,17 @@ public class DatabaseConnection {
      * Retrieves a connection from the pool.
      *
      * @return a {@link Connection} object from the pool
-     * @throws SQLException if all connections are in use
+     * @throws SQLException if all connections are in use or the pool is closed
      */
     public static Connection connect() throws SQLException {
         synchronized (lock) {
+            if (poolClosed) {
+                throw new SQLException("Connection pool is closed.");
+            }
+            if (pool.isEmpty() && activeConnections < MAX_POOL_SIZE) {
+                pool.add(createNewConnection());
+                activeConnections++;
+            }
             if (pool.isEmpty()) {
                 throw new SQLException("All connections are in use.");
             }
@@ -101,12 +83,15 @@ public class DatabaseConnection {
                     Connection connection = pool.poll();
                     if (connection != null && !connection.isClosed()) {
                         connection.close();
+                        activeConnections--;
                     }
                 } catch (SQLException e) {
                     System.err.println("Error closing connection: " + e.getMessage());
                 }
             }
+            poolClosed = true;
         }
     }
 }
+
 

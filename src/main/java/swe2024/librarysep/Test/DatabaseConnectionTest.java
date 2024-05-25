@@ -5,9 +5,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import swe2024.librarysep.Database.DatabaseConnection;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Queue;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,10 +17,8 @@ public class DatabaseConnectionTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        // Access and invoke the private static method to initialize the pool
-        Method initializeMethod = DatabaseConnection.class.getDeclaredMethod("initializeConnectionPool");
-        initializeMethod.setAccessible(true);
-        initializeMethod.invoke(null);
+        // Reinitialize the connection pool before each test
+        resetConnectionPool();
     }
 
     @AfterEach
@@ -27,6 +27,21 @@ public class DatabaseConnectionTest {
         Method closeAllConnectionsMethod = DatabaseConnection.class.getDeclaredMethod("closeAllConnections");
         closeAllConnectionsMethod.setAccessible(true);
         closeAllConnectionsMethod.invoke(null);
+    }
+
+    private void resetConnectionPool() throws Exception {
+        // Reset the pool state by setting the poolClosed flag to false and clearing the pool
+        Field poolClosedField = DatabaseConnection.class.getDeclaredField("poolClosed");
+        poolClosedField.setAccessible(true);
+        poolClosedField.setBoolean(null, false);
+
+        Field poolField = DatabaseConnection.class.getDeclaredField("pool");
+        poolField.setAccessible(true);
+        ((Queue<Connection>) poolField.get(null)).clear();
+
+        Field activeConnectionsField = DatabaseConnection.class.getDeclaredField("activeConnections");
+        activeConnectionsField.setAccessible(true);
+        activeConnectionsField.setInt(null, 0);
     }
 
     @Test
@@ -61,7 +76,7 @@ public class DatabaseConnectionTest {
     public void testConnectionPoolExhaustion() {
         try {
             // Exhaust the connection pool
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 15; i++) {
                 Connection connection = DatabaseConnection.connect();
                 assertNotNull(connection, "Connection should not be null");
             }
@@ -112,3 +127,4 @@ public class DatabaseConnectionTest {
         }
     }
 }
+

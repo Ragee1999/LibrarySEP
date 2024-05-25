@@ -4,6 +4,7 @@ Step 2. While hovering "More run/debug" click on Modify run "configurations"
 Step 3. Copy paste the below 4 lines right after the -ea in the vm command line.
 Step 4. Apply and then run your tests
 
+(To copy and paste into VM-command lines)
 --add-reads swe2024.librarysep=ALL-UNNAMED
 --add-opens swe2024.librarysep/swe2024.librarysep.Test=ALL-UNNAMED
 --add-opens org.junit.platform.commons/org.junit.platform.commons.logging=ALL-UNNAMED
