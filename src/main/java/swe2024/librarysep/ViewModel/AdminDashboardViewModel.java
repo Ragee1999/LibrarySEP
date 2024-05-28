@@ -329,6 +329,8 @@ public class AdminDashboardViewModel {
             return true;
         } else if (book.getUsername().equals(user.getUsername())) {
             errorMessage.set("You already borrowed this book.");
+        } else if (book.getState() instanceof ReservedState) {
+            errorMessage.set("Book is reserved by another user.");
         } else {
             errorMessage.set("Book is already borrowed by another user.");
         }
