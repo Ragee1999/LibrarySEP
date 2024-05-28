@@ -10,18 +10,3 @@ The client interacts with RMIBookService, which acts as a proxy.
 RMIBookService delegates method calls to RMIClient.
 RMIClient looks up BookService in the RMI registry and forwards method calls to LibraryManager.
 LibraryManager performs the actual operations and interacts with the database, then returns the results back through the chain to the client
-
-
-Client
-  |
-  v
-RMIBookService
-  |
-  v
-RMIClient ----> RMI Registry <---- RMIServer
-  |                            (binds LibraryManager)
-  v
-LibraryManager
-  |
-  v
-Database

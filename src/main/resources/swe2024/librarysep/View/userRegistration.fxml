@@ -11,7 +11,7 @@
 
 
     <children>
-        <TextField fx:id="usernameRegister" layoutX="74.0" layoutY="135.0" prefHeight="26.0" prefWidth="210.0" promptText="User Name" />
+        <TextField fx:id="usernameRegister" layoutX="74.0" layoutY="135.0" prefHeight="26.0" prefWidth="210.0" promptText="Username" />
         <TextField fx:id="passwordRegister" layoutX="75.0" layoutY="194.0" prefHeight="26.0" prefWidth="210.0" promptText="Password" />
         <Text fill="WHITE" layoutX="108.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Registration " wrappingWidth="144.8359375">
             <font>

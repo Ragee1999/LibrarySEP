@@ -9,12 +9,12 @@ import swe2024.librarysep.Utility.SceneManager;
 import swe2024.librarysep.Utility.SessionManager;
 import swe2024.librarysep.ViewModel.UserDashboardViewModel;
 
-//
-// This class is almost similar to AdminDashboardView, the only main difference being constructor,
-// having 2 fewer columns, as well as no access to Admin features
-//
-
+/**
+ * Controller class for the User Dashboard view.
+ * This class handles user interactions and binds the UI components to the UserDashboardViewModel.
+ */
 public class UserDashboardView {
+
     @FXML
     private TableView<Book> bookTableViewUser;
     @FXML
@@ -32,12 +32,14 @@ public class UserDashboardView {
     @FXML
     private MenuButton userFilterDropdownMenu;
 
-
-    // Declaration of DashboardViewModel Instance
     private UserDashboardViewModel viewModelUser;
-
     private MenuItem currentSelectedItem;
 
+    /**
+     * Sets the ViewModel for this view and binds UI components to it.
+     *
+     * @param viewModelUser the ViewModel instance to bind
+     */
     public void setViewModel(UserDashboardViewModel viewModelUser) {
         this.viewModelUser = viewModelUser;
         bookTableViewUser.setItems(viewModelUser.getBooks());
@@ -49,19 +51,19 @@ public class UserDashboardView {
             updateTableViewItems();
         });
 
-        // Binds the error message property to show alerts on changes
+        // Bind error message property to show alerts on changes
         this.viewModelUser.errorMessageProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && !newValue.isEmpty()) {
                 showAlert(newValue, Alert.AlertType.ERROR);
-                this.viewModelUser.errorMessageProperty().set(""); // Also resets the message to prevent repeated alerts
+                this.viewModelUser.errorMessageProperty().set(""); // Reset the message to prevent repeated alerts
             }
         });
 
-        // Binds the success message property to show alerts on changes
+        // Bind success message property to show alerts on changes
         this.viewModelUser.successMessageProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && !newValue.isEmpty()) {
                 showAlert(newValue, Alert.AlertType.INFORMATION);
-                this.viewModelUser.successMessageProperty().set(""); // Also resets the message to prevent repeated alerts
+                this.viewModelUser.successMessageProperty().set(""); // Reset the message to prevent repeated alerts
             }
         });
 
@@ -94,7 +96,7 @@ public class UserDashboardView {
             }
         });
 
-        // Inserts genres into the filter dropdown menu
+        // Populate filter dropdown menu with genres
         for (String genre : viewModelUser.getGenres()) {
             MenuItem item = new MenuItem(genre);
             item.setOnAction(event -> {
@@ -102,11 +104,11 @@ public class UserDashboardView {
                 highlightSelectedItem(item);
                 updateTableViewItems();
             });
-            item.getStyleClass().add("menu-item-default"); // adds the color to all the dropdown menus
+            item.getStyleClass().add("menu-item-default"); // Adds the color to all the dropdown menus
             userFilterDropdownMenu.getItems().add(item);
         }
 
-        // Adds a Clear Filter button item in dropdown menu and applies the css to it
+        // Add a Clear Filter button item in dropdown menu and apply the CSS to it
         MenuItem clearFilter = new MenuItem("Clear Filter");
         clearFilter.setOnAction(event -> {
             viewModelUser.setGenreFilter(null);
@@ -118,10 +120,18 @@ public class UserDashboardView {
         highlightSelectedItem(clearFilter);
     }
 
+    /**
+     * Highlights the currently selected item in the filter dropdown menu.
+     *
+     * @param selectedItem the item to highlight
+     */
     private void highlightSelectedItem(MenuItem selectedItem) {
         currentSelectedItem = selectedItem;
     }
 
+    /**
+     * Updates the items in the TableView based on the current search query and genre filter.
+     */
     private void updateTableViewItems() {
         if (userSearchTextField.getText().isEmpty() && viewModelUser.getGenreFilter().isEmpty()) {
             bookTableViewUser.setItems(viewModelUser.getBooks());
@@ -132,6 +142,10 @@ public class UserDashboardView {
         }
     }
 
+    /**
+     * Handles the action of borrowing a book.
+     * Shows an alert if no book is selected.
+     */
     @FXML
     private void handleBorrowBook() {
         Book selectedBook = bookTableViewUser.getSelectionModel().getSelectedItem();
@@ -143,6 +157,10 @@ public class UserDashboardView {
         }
     }
 
+    /**
+     * Handles the action of returning a book.
+     * Shows an alert if no book is selected.
+     */
     @FXML
     private void handleReturnBook() {
         Book selectedBook = bookTableViewUser.getSelectionModel().getSelectedItem();
@@ -154,6 +172,10 @@ public class UserDashboardView {
         }
     }
 
+    /**
+     * Handles the action of reserving a book.
+     * Shows an alert if no book is selected.
+     */
     @FXML
     private void handleReserveBook() {
         Book selectedBook = bookTableViewUser.getSelectionModel().getSelectedItem();
@@ -165,6 +187,10 @@ public class UserDashboardView {
         }
     }
 
+    /**
+     * Handles the action of canceling a book reservation.
+     * Shows an alert if no book is selected.
+     */
     @FXML
     private void handleCancelBook() {
         Book selectedBook = bookTableViewUser.getSelectionModel().getSelectedItem();
@@ -176,6 +202,12 @@ public class UserDashboardView {
         }
     }
 
+    /**
+     * Shows an alert with the specified message and alert type.
+     *
+     * @param message the message to display
+     * @param alertType the type of alert to show
+     */
     private void showAlert(String message, Alert.AlertType alertType) {
         Alert alert = new Alert(alertType);
         alert.setTitle(alertType == Alert.AlertType.ERROR ? "Error" : "Information");
@@ -184,6 +216,12 @@ public class UserDashboardView {
         alert.showAndWait();
     }
 
+    /**
+     * Shows a confirmation dialog with the specified message and action on confirmation.
+     *
+     * @param message the message to display
+     * @param onConfirm the action to perform on confirmation
+     */
     private void showConfirmation(String message, Runnable onConfirm) {
         Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION, message, ButtonType.YES, ButtonType.NO);
         confirmAlert.showAndWait().ifPresent(response -> {
@@ -193,7 +231,9 @@ public class UserDashboardView {
         });
     }
 
-    // Opens My profile view
+    /**
+     * Opens the My Profile view.
+     */
     @FXML
     private void handleOnClickOpenMyProfile() {
         SceneManager.showMyProfile(SessionManager.getInstance().getCurrentUser());
