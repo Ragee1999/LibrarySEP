@@ -3,6 +3,7 @@ Step 1. Right click on a unit class and access "More run/debug"
 Step 2. While hovering "More run/debug" click on Modify run "configurations"
 Step 3. Copy paste the below 4 lines right after the -ea in the vm command line.
 Step 4. Apply and then run your tests
+Additionally you can run all the tests as well by right clicking the Test folder. and Following step 2.
 
 (To copy and paste into VM-command lines)
 --add-reads swe2024.librarysep=ALL-UNNAMED
