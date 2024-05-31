@@ -10,7 +10,6 @@ import swe2024.librarysep.Utility.SessionManager;
 import swe2024.librarysep.ViewModel.UserDashboardViewModel;
 
 /**
- * Controller class for the User Dashboard view.
  * This class handles user interactions and binds the UI components to the UserDashboardViewModel.
  */
 public class UserDashboardView {

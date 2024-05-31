@@ -22,8 +22,8 @@ import java.util.List;
  * including loading books, filtering books, and handling user actions
  * such as borrowing, returning, reserving, and canceling reservations.
  *
- * TODO: Implement a design pattern to reduce code duplication between the admin
- * TODO: and user dashboard setup, this includes the relevant two controllers and two viewmodels.
+ * TODO: Implement a design pattern(probably Template design pattern) to reduce code duplication between the admin
+ * TODO: and user dashboard setup, this includes the relevant two views and two viewmodels.
  */
 public class UserDashboardViewModel {
 

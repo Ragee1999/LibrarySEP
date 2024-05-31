@@ -10,7 +10,6 @@ import swe2024.librarysep.ViewModel.AdminDashboardViewModel;
 import swe2024.librarysep.Utility.SessionManager;
 
 /**
- * Controller class for the Admin Dashboard view.
  * This class handles user interactions and binds the UI components to the AdminDashboardViewModel.
  */
 public class AdminDashboardView {

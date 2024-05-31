@@ -28,7 +28,7 @@ public class AddBookView {
     private AddBookViewModel viewModel;
 
     /**
-     * Default constructor.
+     * Default constructor to create an instance.
      */
     public AddBookView() {}
 
