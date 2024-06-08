@@ -7,9 +7,9 @@ import javafx.scene.control.TextField;
 import swe2024.librarysep.ViewModel.LoginViewModel;
 
 /**
- * Controller for the login view. Handles user input and interactions for logging in.
+ * View for the login view. Handles user input and interactions for logging in.
  */
-public class LoginController {
+public class LoginView {
 
     @FXML
     private TextField usernameField;
@@ -23,16 +23,16 @@ public class LoginController {
     private LoginViewModel loginViewModel;
 
     /**
-     * Constructs a LoginController with the specified {@link LoginViewModel}.
+     * Constructs a LoginView with the specified {@link LoginViewModel}.
      *
      * @param loginViewModel the {@link LoginViewModel} to use for login operations
      */
-    public LoginController(LoginViewModel loginViewModel) {
+    public LoginView(LoginViewModel loginViewModel) {
         this.loginViewModel = loginViewModel;
     }
 
     /**
-     * Initializes the controller. Binds the UI fields to the view model properties and sets up event handlers.
+     * Initializes the View. Binds the UI fields to the view model properties and sets up event handlers.
      */
     @FXML
     private void initialize() {

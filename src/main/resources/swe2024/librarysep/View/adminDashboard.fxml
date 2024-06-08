@@ -8,7 +8,7 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="555.0"
             prefWidth="1005.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="swe2024.librarysep.View.AdminDashboardController">
+            fx:controller="swe2024.librarysep.View.AdminDashboardView">
 
     <left>
         <VBox prefHeight="555.0" prefWidth="222.0" style="-fx-background-color: #5D76A9;">

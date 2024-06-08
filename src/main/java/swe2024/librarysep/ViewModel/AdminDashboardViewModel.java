@@ -16,7 +16,19 @@ import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.List;
 
-public class AdminDashboardViewModel  {
+/*
+TODO: Implement a design pattern to reduce code duplication between the admin
+TODO: and user dashboard setup, this includes the relevant two controllers and two viewmodels
+*/
+
+/**
+ * ViewModel class for the Admin Dashboard in the library system.
+ * This class manages the state and behavior of the Admin Dashboard,
+ * including loading books, filtering books, handling user actions
+ * such as borrowing, returning, reserving, and deleting books.
+ */
+
+public class AdminDashboardViewModel {
 
     private ObservableList<Book> books = FXCollections.observableArrayList();
     private BookService bookService;
@@ -28,9 +40,18 @@ public class AdminDashboardViewModel  {
     private BooleanProperty returnConfirmationRequested = new SimpleBooleanProperty(false);
     private BooleanProperty reserveConfirmationRequested = new SimpleBooleanProperty(false);
     private BooleanProperty cancelReservationConfirmationRequested = new SimpleBooleanProperty(false);
+
     private Book selectedBook;
     private User currentUser;
 
+    /**
+     * Constructor to initialize the AdminDashboardViewModel with a BookService instance.
+     * It sets up observers and listeners for filtering books.
+     *
+     * @param bookService the service to interact with book data
+     * @throws SQLException if there is an error accessing the database
+     * @throws RemoteException if there is an error with remote communication
+     */
     public AdminDashboardViewModel(BookService bookService) throws SQLException, RemoteException {
         this.bookService = bookService;
         loadBooks();
@@ -41,18 +62,24 @@ public class AdminDashboardViewModel  {
 
         filteredBooks = new FilteredList<>(books, book -> true);
 
-        searchQuery.addListener((observable, oldValue, newValue) -> {
-            updateFilter();
-        });
-        genreFilter.addListener((observable, oldValue, newValue) -> {
-            updateFilter();
-        });
+        searchQuery.addListener((observable, oldValue, newValue) -> updateFilter());
+        genreFilter.addListener((observable, oldValue, newValue) -> updateFilter());
     }
 
+    /**
+     * Gets the observable list of books.
+     *
+     * @return the observable list of books
+     */
     public ObservableList<Book> getBooks() {
         return books;
     }
 
+    /**
+     * Refreshes the list of books by reloading them from the book service.
+     *
+     * @throws RemoteException if there is an error with remote communication
+     */
     public void refreshBooks() throws RemoteException {
         try {
             loadBooks();
@@ -61,7 +88,9 @@ public class AdminDashboardViewModel  {
         }
     }
 
-// Admin can additionally search by book id and state names, which they can't in the user dashboard
+    /**
+     * Updates the filter applied to the list of books based on search query and genre filter.
+     */
     private void updateFilter() {
         filteredBooks.setPredicate(book -> {
             boolean matchesSearchQuery = searchQuery.get() == null || searchQuery.get().isEmpty() ||
@@ -70,14 +99,27 @@ public class AdminDashboardViewModel  {
                     book.getReleaseYear().toString().contains(searchQuery.get().toLowerCase()) ||
                     book.getGenre().toLowerCase().contains(searchQuery.get().toLowerCase()) ||
                     book.getStateName().toLowerCase().contains(searchQuery.get().toLowerCase()) ||
-                    book.getBookId().toString().contains(searchQuery.get().toLowerCase());
+                    // Admin specific
+                    book.getBookId().toString().contains(searchQuery.get().toLowerCase()) ||
+                    book.getUsername().toLowerCase().contains(searchQuery.get().toLowerCase());
+
             boolean matchesGenreFilter = genreFilter.get() == null || genreFilter.get().isEmpty() ||
                     book.getGenre().equalsIgnoreCase(genreFilter.get());
             return matchesSearchQuery && matchesGenreFilter;
         });
     }
 
-    // Bind properties
+    /**
+     * Binds the table columns to the properties of the Book class.
+     *
+     * @param titleColumn the title column
+     * @param authorColumn the author column
+     * @param releaseYearColumn the release year column
+     * @param idColumn the ID column
+     * @param stateColumn the state column
+     * @param clientColumn the client (username) column
+     * @param genreColumn the genre column
+     */
     public void bindTableColumns(
             TableColumn<Book, String> titleColumn,
             TableColumn<Book, String> authorColumn,
@@ -96,6 +138,12 @@ public class AdminDashboardViewModel  {
         genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
     }
 
+    /**
+     * Loads the list of books from the book service and updates the observable list.
+     *
+     * @throws SQLException if there is an error accessing the database
+     * @throws RemoteException if there is an error with remote communication
+     */
     public void loadBooks() throws SQLException, RemoteException {
         List<Book> updatedBooks = bookService.getAllBooks();
 
@@ -117,42 +165,81 @@ public class AdminDashboardViewModel  {
         }
     }
 
+    /**
+     * Updates the state of a given book and reloads the list of books.
+     *
+     * @param book the book to update
+     * @throws SQLException if there is an error accessing the database
+     * @throws RemoteException if there is an error with remote communication
+     */
     public void updateBookState(Book book) throws SQLException, RemoteException {
         bookService.updateBookState(book);
         loadBooks();
     }
 
+    /**
+     * Gets the filtered list of books based on the search query and genre filter.
+     *
+     * @return the filtered list of books
+     */
     public ObservableList<Book> getFilteredBooks() {
         return filteredBooks;
     }
 
-
+    /**
+     * Sets the search query for filtering books.
+     *
+     * @param searchQuery the search query
+     */
     public void setSearchQuery(String searchQuery) {
         this.searchQuery.set(searchQuery == null ? "" : searchQuery);
     }
 
-
+    /**
+     * Sets the genre filter for filtering books.
+     *
+     * @param genre the genre filter
+     */
     public void setGenreFilter(String genre) {
         this.genreFilter.set(genre == null ? "" : genre);
     }
 
+    /**
+     * Gets the genre filter.
+     *
+     * @return the genre filter
+     */
     public String getGenreFilter() {
         return genreFilter.get() == null ? "" : genreFilter.get();
     }
 
+    /**
+     * Gets the list of available genres for filtering.
+     *
+     * @return the list of genres
+     */
     public List<String> getGenres() {
         return List.of("Fiction", "Science Fiction", "Romance", "Political Satire",
                 "Fantasy", "Modernist", "Gothic", "Adventure", "Satire");
     }
 
-    // Bind errorMessage for the UI alerts
     private StringProperty successMessage = new SimpleStringProperty();
     private StringProperty errorMessage = new SimpleStringProperty();
 
+    /**
+     * Gets the property for error messages to be bound to UI elements.
+     *
+     * @return the error message property
+     */
     public StringProperty errorMessageProperty() {
         return errorMessage;
     }
 
+    /**
+     * Gets the property for success messages to be bound to UI elements.
+     *
+     * @return the success message property
+     */
     public StringProperty successMessageProperty() {
         return successMessage;
     }
@@ -173,6 +260,12 @@ public class AdminDashboardViewModel  {
         return cancelReservationConfirmationRequested;
     }
 
+    /**
+     * Requests confirmation for borrowing a book.
+     *
+     * @param book the book to be borrowed
+     * @param user the user requesting the borrow
+     */
     public void requestBorrowConfirmation(Book book, User user) {
         if (canBorrow(book, user)) {
             selectedBook = book;
@@ -181,6 +274,12 @@ public class AdminDashboardViewModel  {
         }
     }
 
+    /**
+     * Requests confirmation for returning a book.
+     *
+     * @param book the book to be returned
+     * @param user the user requesting the return
+     */
     public void requestReturnConfirmation(Book book, User user) {
         if (canReturn(book, user)) {
             selectedBook = book;
@@ -189,6 +288,12 @@ public class AdminDashboardViewModel  {
         }
     }
 
+    /**
+     * Requests confirmation for reserving a book.
+     *
+     * @param book the book to be reserved
+     * @param user the user requesting the reservation
+     */
     public void requestReserveConfirmation(Book book, User user) {
         if (canReserve(book, user)) {
             selectedBook = book;
@@ -197,6 +302,12 @@ public class AdminDashboardViewModel  {
         }
     }
 
+    /**
+     * Requests confirmation for canceling a reservation.
+     *
+     * @param book the book to cancel reservation for
+     * @param user the user requesting the cancellation
+     */
     public void requestCancelReservationConfirmation(Book book, User user) {
         if (canCancelReservation(book, user)) {
             selectedBook = book;
@@ -205,18 +316,34 @@ public class AdminDashboardViewModel  {
         }
     }
 
+    /**
+     * Checks if a book can be borrowed by a user.
+     *
+     * @param book the book to check
+     * @param user the user requesting to borrow the book
+     * @return true if the book can be borrowed, false otherwise
+     */
     private boolean canBorrow(Book book, User user) {
         if (book.getUsername() == null || book.getUsername().isEmpty() ||
                 (book.getState() instanceof ReservedState && book.getUsername().equals(user.getUsername()))) {
             return true;
         } else if (book.getUsername().equals(user.getUsername())) {
             errorMessage.set("You already borrowed this book.");
+        } else if (book.getState() instanceof ReservedState) {
+            errorMessage.set("Book is reserved by another user.");
         } else {
             errorMessage.set("Book is already borrowed by another user.");
         }
         return false;
     }
 
+    /**
+     * Checks if a book can be returned by a user.
+     *
+     * @param book the book to check
+     * @param user the user requesting to return the book
+     * @return true if the book can be returned, false otherwise
+     */
     private boolean canReturn(Book book, User user) {
         if (book.getUsername() != null && book.getUsername().equals(user.getUsername()) && book.getState() instanceof BorrowedState) {
             return true;
@@ -225,6 +352,13 @@ public class AdminDashboardViewModel  {
         return false;
     }
 
+    /**
+     * Checks if a book can be reserved by a user.
+     *
+     * @param book the book to check
+     * @param user the user requesting to reserve the book
+     * @return true if the book can be reserved, false otherwise
+     */
     private boolean canReserve(Book book, User user) {
         if (book.getState() instanceof AvailableState) {
             return true;
@@ -233,6 +367,13 @@ public class AdminDashboardViewModel  {
         return false;
     }
 
+    /**
+     * Checks if a book reservation can be canceled by a user.
+     *
+     * @param book the book to check
+     * @param user the user requesting to cancel the reservation
+     * @return true if the reservation can be canceled, false otherwise
+     */
     private boolean canCancelReservation(Book book, User user) {
         if (book.getUsername() != null && book.getUsername().equals(user.getUsername()) && book.getState() instanceof ReservedState) {
             return true;
@@ -241,6 +382,9 @@ public class AdminDashboardViewModel  {
         return false;
     }
 
+    /**
+     * Borrows a book for the current user.
+     */
     public void borrowBook() {
         try {
             selectedBook.borrow();
@@ -253,6 +397,9 @@ public class AdminDashboardViewModel  {
         }
     }
 
+    /**
+     * Returns a book from the current user.
+     */
     public void returnBook() {
         try {
             selectedBook.returnBook();
@@ -264,6 +411,9 @@ public class AdminDashboardViewModel  {
         }
     }
 
+    /**
+     * Reserves a book for the current user.
+     */
     public void reserveBook() {
         try {
             selectedBook.reserve();
@@ -276,6 +426,9 @@ public class AdminDashboardViewModel  {
         }
     }
 
+    /**
+     * Cancels a reservation for a book by the current user.
+     */
     public void cancelReservation() {
         try {
             selectedBook.cancelReservation();
@@ -287,6 +440,11 @@ public class AdminDashboardViewModel  {
         }
     }
 
+    /**
+     * Deletes a book from the system.
+     *
+     * @param book the book to be deleted
+     */
     public void deleteBook(Book book) {
         if (book != null) {
             try {
@@ -302,3 +460,4 @@ public class AdminDashboardViewModel  {
         }
     }
 }
+

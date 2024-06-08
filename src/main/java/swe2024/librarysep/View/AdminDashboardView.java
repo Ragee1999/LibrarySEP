@@ -9,8 +9,11 @@ import swe2024.librarysep.Utility.SceneManager;
 import swe2024.librarysep.ViewModel.AdminDashboardViewModel;
 import swe2024.librarysep.Utility.SessionManager;
 
+/**
+ * This class handles user interactions and binds the UI components to the AdminDashboardViewModel.
+ */
+public class AdminDashboardView {
 
-public class AdminDashboardController {
     @FXML
     private TableView<Book> bookTableView;
     @FXML
@@ -32,11 +35,14 @@ public class AdminDashboardController {
     @FXML
     private MenuButton filterDropdownMenu;
 
-    // Declaration of DashboardViewModel Instance
     private AdminDashboardViewModel viewModel;
-
     private MenuItem currentSelectedItem;
 
+    /**
+     * Sets the ViewModel for this view and binds UI components to it.
+     *
+     * @param viewModel the ViewModel instance to bind
+     */
     public void setViewModel(AdminDashboardViewModel viewModel) {
         this.viewModel = viewModel;
         bookTableView.setItems(viewModel.getBooks());
@@ -48,19 +54,19 @@ public class AdminDashboardController {
             updateTableViewItems();
         });
 
-        // Binds the error message property to show alerts on changes
+        // Bind error message property to show alerts on changes
         this.viewModel.errorMessageProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && !newValue.isEmpty()) {
                 showAlert(newValue, Alert.AlertType.ERROR);
-                this.viewModel.errorMessageProperty().set(""); // Also resets the message to prevent repeated alerts
+                this.viewModel.errorMessageProperty().set(""); // Reset the message to prevent repeated alerts
             }
         });
 
-        // Binds the success message property to show alerts on changes
+        // Bind success message property to show alerts on changes
         this.viewModel.successMessageProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && !newValue.isEmpty()) {
                 showAlert(newValue, Alert.AlertType.INFORMATION);
-                this.viewModel.successMessageProperty().set(""); // Also resets the message to prevent repeated alerts
+                this.viewModel.successMessageProperty().set(""); // Reset the message to prevent repeated alerts
             }
         });
 
@@ -93,7 +99,7 @@ public class AdminDashboardController {
             }
         });
 
-        // Inserts genres into the filter dropdown menu
+        // Populate filter dropdown menu with genres
         for (String genre : viewModel.getGenres()) {
             MenuItem item = new MenuItem(genre);
             item.setOnAction(event -> {
@@ -101,11 +107,11 @@ public class AdminDashboardController {
                 highlightSelectedItem(item);
                 updateTableViewItems();
             });
-            item.getStyleClass().add("menu-item-default"); // adds the color to all the dropdown menus
+            item.getStyleClass().add("menu-item-default"); // Adds the color to all the dropdown menus
             filterDropdownMenu.getItems().add(item);
         }
 
-        // Adds a Clear Filter button item in dropdown menu and applies the css to it
+        // Add a Clear Filter button item in dropdown menu and apply the CSS to it
         MenuItem clearFilter = new MenuItem("Clear Filter");
         clearFilter.setOnAction(event -> {
             viewModel.setGenreFilter(null);
@@ -117,10 +123,18 @@ public class AdminDashboardController {
         highlightSelectedItem(clearFilter);
     }
 
+    /**
+     * Highlights the currently selected item in the filter dropdown menu.
+     *
+     * @param selectedItem the item to highlight
+     */
     private void highlightSelectedItem(MenuItem selectedItem) {
         currentSelectedItem = selectedItem;
     }
 
+    /**
+     * Updates the items in the TableView based on the current search query and genre filter.
+     */
     private void updateTableViewItems() {
         if (searchTextField.getText().isEmpty() && viewModel.getGenreFilter().isEmpty()) {
             bookTableView.setItems(viewModel.getBooks());
@@ -131,7 +145,10 @@ public class AdminDashboardController {
         }
     }
 
-
+    /**
+     * Handles the action of borrowing a book.
+     * Shows an alert if no book is selected.
+     */
     @FXML
     private void handleBorrowBook() {
         Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
@@ -143,6 +160,10 @@ public class AdminDashboardController {
         }
     }
 
+    /**
+     * Handles the action of returning a book.
+     * Shows an alert if no book is selected.
+     */
     @FXML
     private void handleReturnBook() {
         Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
@@ -154,6 +175,10 @@ public class AdminDashboardController {
         }
     }
 
+    /**
+     * Handles the action of reserving a book.
+     * Shows an alert if no book is selected.
+     */
     @FXML
     private void handleReserveBook() {
         Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
@@ -165,6 +190,10 @@ public class AdminDashboardController {
         }
     }
 
+    /**
+     * Handles the action of canceling a book reservation.
+     * Shows an alert if no book is selected.
+     */
     @FXML
     private void handleCancelBook() {
         Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
@@ -176,6 +205,12 @@ public class AdminDashboardController {
         }
     }
 
+    /**
+     * Shows an alert with the specified message and alert type.
+     *
+     * @param message the message to display
+     * @param alertType the type of alert to show
+     */
     private void showAlert(String message, Alert.AlertType alertType) {
         Alert alert = new Alert(alertType);
         alert.setTitle(alertType == Alert.AlertType.ERROR ? "Error" : "Information");
@@ -184,6 +219,12 @@ public class AdminDashboardController {
         alert.showAndWait();
     }
 
+    /**
+     * Shows a confirmation dialog with the specified message and action on confirmation.
+     *
+     * @param message the message to display
+     * @param onConfirm the action to perform on confirmation
+     */
     private void showConfirmation(String message, Runnable onConfirm) {
         Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION, message, ButtonType.YES, ButtonType.NO);
         confirmAlert.showAndWait().ifPresent(response -> {
@@ -193,7 +234,9 @@ public class AdminDashboardController {
         });
     }
 
-    // Opens My profile view
+    /**
+     * Opens the My Profile view.
+     */
     @FXML
     private void handleOnClickOpenMyProfile() {
         SceneManager.showMyProfile(SessionManager.getInstance().getCurrentUser());
@@ -203,13 +246,18 @@ public class AdminDashboardController {
     //  ADMIN SPECIFIC FEATURES   //
     /*----------------------------*/
 
-    // Opens Add book view
+    /**
+     * Opens the Add Book view.
+     */
     @FXML
     private void handleOnClickAddBook() {
         SceneManager.showAddBook();
     }
 
-
+    /**
+     * Handles the action of deleting a book.
+     * Shows a confirmation dialog before deletion.
+     */
     @FXML
     private void handleDeleteBook() {
         Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
@@ -230,7 +278,10 @@ public class AdminDashboardController {
         }
     }
 
-    // Selects a book to edit and then opens the edit book UI.
+    /**
+     * Handles the action of editing a book.
+     * Opens the Edit Book UI if a book is selected.
+     */
     @FXML
     private void handleOnClickEditBook() {
         Book selectedBook = bookTableView.getSelectionModel().getSelectedItem();
@@ -241,7 +292,12 @@ public class AdminDashboardController {
         }
     }
 
-    // Specific alert for edit book Button
+    /**
+     * Shows a specific alert for the Edit Book button.
+     *
+     * @param title the title of the alert
+     * @param message the message to display
+     */
     private void showEditButtonAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle(title);
@@ -250,3 +306,4 @@ public class AdminDashboardController {
         alert.showAndWait();
     }
 }
+

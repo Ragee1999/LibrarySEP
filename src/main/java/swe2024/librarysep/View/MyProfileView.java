@@ -8,10 +8,10 @@ import swe2024.librarysep.Model.Book;
 import swe2024.librarysep.ViewModel.MyProfileViewModel;
 
 /**
- * Controller for the MyProfile view.
+ * View for the MyProfile view.
  * Handles the user interface interactions and binds the view to the corresponding ViewModel.
  */
-public class MyProfileController {
+public class MyProfileView {
     @FXML
     private Label showUsername;
     @FXML

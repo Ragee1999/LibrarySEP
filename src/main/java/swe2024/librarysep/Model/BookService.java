@@ -20,6 +20,7 @@ public interface BookService extends Remote {
      */
     List<Book> getAllBooks() throws RemoteException, SQLException;
 
+
     /**
      * Updates the state of a book in the database.
      *
@@ -28,6 +29,7 @@ public interface BookService extends Remote {
      * @throws SQLException    if a database access error occurs
      */
     void updateBookState(Book book) throws RemoteException, SQLException;
+
 
     /**
      * Deletes a book from the database.
@@ -38,6 +40,7 @@ public interface BookService extends Remote {
      */
     void deleteBook(int bookId) throws RemoteException, SQLException;
 
+
     /**
      * Adds a new book to the database.
      *
@@ -46,6 +49,7 @@ public interface BookService extends Remote {
      * @throws SQLException    if a database access error occurs
      */
     void addBook(Book book) throws RemoteException, SQLException;
+
 
     /**
      * Updates an existing book in the database.
@@ -56,6 +60,7 @@ public interface BookService extends Remote {
      */
     void editBook(Book book) throws RemoteException, SQLException;
 
+
     /**
      * Loads all books from the database.
      *
@@ -65,6 +70,7 @@ public interface BookService extends Remote {
      */
     List<Book> loadBooks() throws RemoteException, SQLException;
 
+
     /**
      * Adds an observer to the service.
      *
@@ -72,6 +78,7 @@ public interface BookService extends Remote {
      * @throws RemoteException if a remote communication error occurs
      */
     void addObserver(ClientObserver observer) throws RemoteException;
+
 
     /**
      * Removes an observer from the service.
